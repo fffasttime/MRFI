@@ -1,0 +1,32 @@
+FI_enable: false
+sub_modules:
+  conv1:
+    observer:
+      pre_hook: true
+      map: maxabs
+      reduce: max
+  conv2:
+    observer:
+      pre_hook: true
+      map: maxabs
+      reduce: max
+  conv3:
+    observer:
+      pre_hook: true
+      map: maxabs
+      reduce: max
+  conv4:
+    observer:
+      pre_hook: true
+      map: maxabs
+      reduce: max
+  conv5:
+    observer:
+      pre_hook: true
+      map: maxabs
+      reduce: max
+  conv6:
+    observer:
+      pre_hook: true
+      map: maxabs
+      reduce: max
