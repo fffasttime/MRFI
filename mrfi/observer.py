@@ -11,6 +11,9 @@ def mapper_maxabs(x, golden):
 def mapper_minmax(x, golden):
     return np.array(np.min(x), np.max(x))
 
+def mapper_var(x, golden):
+    return np.var(x)
+
 def mapper_diff(x, golden):
     return x-golden
 
@@ -36,6 +39,7 @@ Mapper_Dict = {
     'identity': mapper_identity,
     'maxabs': mapper_maxabs,
     'minmax': mapper_minmax,
+    'var': mapper_var,
     'diff': mapper_diff,
     'maxdiff': mapper_maxdiff,
     'mse': mapper_mse,

@@ -1,0 +1,72 @@
+FI_activation: false
+FI_enable: false
+FI_weight: true
+flip_mode: flip_int_hightest
+flip_mode_args:
+  bit_width: 8
+layerwise_quantization:
+  bit_width: 8
+  dynamic_range: auto
+observer:
+  map: mse
+  reduce: sum
+selector: RandomPositionSelector_Rate
+selector_args:
+  poisson: true
+  rate: 0.001
+sub_modules:
+  conv1:
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 4
+  bn11:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: sum
+  conv2:
+    FI_enable: true
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 16
+  bn12:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: sum
+  conv3:
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 16
+  bn21:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: sum
+  conv4:
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 16
+  bn22:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: sum
+  conv5:
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 16
+  bn31:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: sum
+  conv6:
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 16
+  bn32:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: sum

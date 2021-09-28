@@ -3,30 +3,30 @@ sub_modules:
   conv1:
     observer:
       pre_hook: true
-      map: maxabs
-      reduce: max
+      map: var
+      reduce: sum
   conv2:
     observer:
       pre_hook: true
-      map: maxabs
-      reduce: max
+      map: var
+      reduce: sum
   conv3:
     observer:
       pre_hook: true
-      map: maxabs
-      reduce: max
+      map: var
+      reduce: sum
   conv4:
     observer:
       pre_hook: true
-      map: maxabs
-      reduce: max
+      map: var
+      reduce: sum
   conv5:
     observer:
       pre_hook: true
-      map: maxabs
-      reduce: max
+      map: var
+      reduce: sum
   conv6:
     observer:
       pre_hook: true
-      map: maxabs
-      reduce: max
+      map: var
+      reduce: sum

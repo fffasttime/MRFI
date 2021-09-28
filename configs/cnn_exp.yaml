@@ -6,7 +6,7 @@ flip_mode_args:
   bit_width: 8
 layerwise_quantization:
   bit_width: 8
-  bound: auto
+  dynamic_range: auto
 observer:
   map: mse
   reduce: sum
