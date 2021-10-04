@@ -1,0 +1,30 @@
+FI_activation: true
+FI_enable: false
+FI_weight: false
+flip_mode: flip_int_highest
+flip_mode_args:
+  bit_width: 8
+layerwise_quantization:
+  bit_width: 8
+  dynamic_range: auto
+selector: RandomPositionSelector_FixN
+selector_args:
+  n: 1
+sub_modules:
+  conv2:
+    FI_enable: true
+    observer:
+      map: sumdiff
+      reduce: no_reduce
+  fc1:
+    observer:
+      map: sumdiff
+      reduce: no_reduce
+  fc2:
+    observer:
+      map: sumdiff
+      reduce: no_reduce
+  fc3:
+    observer:
+      map: sumdiff
+      reduce: no_reduce

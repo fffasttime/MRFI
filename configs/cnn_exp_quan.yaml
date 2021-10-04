@@ -1,7 +1,7 @@
 FI_activation: false
 FI_enable: false
 FI_weight: true
-flip_mode: flip_int_hightest
+flip_mode: flip_int_highest
 flip_mode_args:
   bit_width: 8
 layerwise_quantization:

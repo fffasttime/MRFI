@@ -20,6 +20,9 @@ def mapper_diff(x, golden):
 def mapper_maxdiff(x, golden):
     return np.max(x-golden)
 
+def mapper_sumdiff(x, golden):
+    return np.sum(x-golden)
+    
 def mapper_mse(x, golden):
     return np.mean((x-golden)**2)
 
@@ -33,7 +36,13 @@ def mapper_sae(x, golden):
     return np.sum(np.abs(x-golden))
 
 def mapper_accurancy(x, golden):
-    return x==golden
+    return np.all(x==golden)
+
+def mapper_equalcount(x, golden):
+    return np.sum(x==golden)
+
+def mapper_equalrate(x, golden):
+    return np.mean(x==golden)
     
 Mapper_Dict = {
     'identity': mapper_identity,
@@ -42,11 +51,14 @@ Mapper_Dict = {
     'var': mapper_var,
     'diff': mapper_diff,
     'maxdiff': mapper_maxdiff,
+    'sumdiff': mapper_sumdiff,
     'mse': mapper_mse,
     'sse': mapper_sse,
     'mae': mapper_mae,
     'sae': mapper_sae,
     'accurancy': mapper_accurancy,
+    'equalcount': mapper_equalcount,
+    'equalrate': mapper_equalrate,
 }
 
 Reducer_Dict = {

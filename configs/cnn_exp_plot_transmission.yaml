@@ -1,0 +1,53 @@
+FI_activation: false
+FI_enable: false
+FI_weight: true
+flip_mode: flip_int_highest
+flip_mode_args:
+  bit_width: 8
+layerwise_quantization:
+  bit_width: 8
+  dynamic_range: auto
+selector: RandomPositionSelector_FixN
+selector_args:
+  n: 1
+sub_modules:
+  conv1:
+    FI_enable: true
+  bn11:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+  bn12:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+  bn21:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+  bn22:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+  bn31:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+  bn32:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+  globalavgpool:
+    FI_enable: false
+    observer:
+      map: mse
+      reduce: no_reduce
+observer:
+  map: mse
+  reduce: no_reduce

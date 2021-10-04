@@ -17,7 +17,7 @@ default_config={
         'poisson': True
     },
     'layerwise_quantization': {'bit_width': 8, 'bound':'auto'},
-    'flip_mode': 'flip_int_hightest',
+    'flip_mode': 'flip_int_highest',
     'flip_mode_args': {'bit_width': 8},
     'sub_modules': dict(),
     'observer': default_observer_config,

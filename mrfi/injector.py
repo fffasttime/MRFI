@@ -111,6 +111,8 @@ class ModuleInjector:
             self.layerwise_quantization = True
             self.layerwise_quantization_bit_width: int = config['layerwise_quantization']['bit_width']
             self.layerwise_quantization_dynamic_range = config['layerwise_quantization'].get('dynamic_range', None)
+            if self.layerwise_quantization_dynamic_range == 'auto':
+                self.layerwise_quantization_dynamic_range = None
         
         self.weight_original = None
         
@@ -143,6 +145,8 @@ class ModuleInjector:
 
 
     def __set_sub_injector(self, cur_config, sub_module, sub_config, name):
+        if sub_config is None:
+            sub_config = {}
         # merge config (inherit from parent)
         for (key, val) in cur_config.items():
             if key == 'observer' or key == 'sub_modules':  # observer is not inherted

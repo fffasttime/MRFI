@@ -25,7 +25,7 @@ def set_value(x, value):
 
 FlipMode_Dict={
     None: None,
-    'flip_int_hightest': flip_int_highest,
+    'flip_int_highest': flip_int_highest,
     'flip_int_random': flip_int_random,
     'flip_int_fixbit': flip_int_fixbit,
     'set_0': set_0,
