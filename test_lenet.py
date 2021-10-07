@@ -1,3 +1,4 @@
+from numpy.core.fromnumeric import size
 from torch.nn.modules.module import T
 from configs.configurator import Configurator
 from model.lenet_cifar import Net, testset
@@ -68,7 +69,7 @@ def coverage_test():
 def errorplot():
     '''
     inject on conv2 activation
-    map: sumdiff/var
+    map: sumdiff/var/first
     reduce: no_reduce
     '''
     with open("configs/lenet_cifar_errorplot.yaml") as f:
@@ -85,13 +86,17 @@ def errorplot():
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
 
-    total = 1000
+    total = 10000
 
     for i in range(total):
         images, labels = next(data)
         FI_network(images, golden=True)
         FI_network(images)
 
+    # # use identity map
+    np.save("lenet_outerror_10000x10.npy",FI_network.fc3.observe_value)
+    return 
+    
     observes=FI_network.get_observes()
     i=0
     for name, value in observes.items():
@@ -115,4 +120,63 @@ def errorplot():
         plt.title(name)
     plt.show()
 
-lenet_default()
+
+
+def WandAplot():
+    mrfi.observer.Mapper_Dict['custom'] = lambda x, golden: np.random.choice(x.reshape(-1), 10)
+
+    with open("configs/lenet_cifar_custom.yaml") as f:
+        config = yaml.full_load(f)
+
+    net=Net()
+    net.load_state_dict(torch.load('_data/cifar10.pth'))
+    net.eval()
+
+    FI_network = ModuleInjector(net, config)
+
+    total = 1000
+    testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
+    data=iter(testloader)
+
+    for i in range(total):
+        images, labels = next(data)
+        FI_network(images)
+
+    observes=FI_network.get_observes()
+    plt.xticks(size=5)
+    i=0
+    for layer in ['conv1', 'conv2', 'fc1', 'fc2', 'fc3']:
+        i+=1
+        plt.subplot(3,3,i)
+        value=getattr(FI_network.module, layer).weight.data.numpy().reshape(-1)
+        plt.hist(value,31)
+        
+        mean=np.mean(value)
+        std=np.std(value)
+        min,max=np.min(value),np.max(value)
+        cx=np.linspace(min,max,100)
+        cy=(stats.norm.pdf((cx-mean)/std))/std*(value.size/31*(max-min))
+        plt.plot(cx,cy,color='orange')
+        plt.title(layer+'.weight', fontdict={'size':10})
+        plt.yticks(size=8)
+        plt.xticks(size=8)
+
+    for name, value in observes.items():
+        i+=1
+        plt.subplot(3,3,i)
+        plt.hist(value,31,color='green')
+
+        mean=np.mean(value)
+        std=np.std(value)
+        min,max=np.min(value),np.max(value)
+        cx=np.linspace(min,max,100)
+        cy=(stats.norm.pdf((cx-mean)/std))/std*(total/31*(max-min)*10)
+        plt.plot(cx,cy,color='orange')
+        plt.title(name+'.activation', fontdict={'size':10})
+        plt.yticks(size=8)
+        plt.xticks(size=8)
+    plt.subplots_adjust(None, None, None, None, 0.4, 0.55)
+    plt.show()
+
+
+errorplot()

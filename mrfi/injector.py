@@ -25,7 +25,6 @@ def layerwise_dequantization(x, bit_width, dynamic_range):
 
 def input_hook_func(self, module, input):
     input, = input  # unpack
-
     if self.FI_enable and self.FI_activation and self.layerwise_quantization:
         if self.layerwise_quantization_dynamic_range is None:
             dynamic_range = input.abs().max()
@@ -60,7 +59,7 @@ def input_hook_func(self, module, input):
 
 
 def observer_hook_func(self, value: torch.Tensor):
-    value = value.numpy()
+    value = value.numpy().copy()
     if self.root.record_golden:
         self.golden_value = value
         return

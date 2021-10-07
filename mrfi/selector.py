@@ -25,7 +25,7 @@ class RandomPositionSelector_Rate:
         if len(shape) > 1:
             shape=reduce(operator.mul, shape)
 
-        n=int(shape * self.rate)
+        n=shape * self.rate
         if self.poisson:
             n=scipy.stats.poisson.rvs(n)
         else:

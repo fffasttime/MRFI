@@ -1,0 +1,48 @@
+FI_activation: false
+FI_enable: false
+FI_weight: false
+flip_mode: set_value
+flip_mode_args:
+  value: 100 
+observer:
+  map: custom
+  reduce: no_reduce
+selector: RandomPositionSelector_FixN
+selector_args:
+  n: 1
+sub_modules:
+  conv1:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce
+  conv2:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce
+  conv3:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce
+  conv4:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce
+  conv5:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce
+  conv6:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce
+  globalavgpool:
+    observer:
+      pre_hook: true
+      map: custom
+      reduce: no_reduce

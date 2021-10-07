@@ -1,4 +1,4 @@
-FI_activation: true
+FI_activation: false
 FI_enable: false
 FI_weight: false
 flip_mode: flip_int_highest
@@ -14,17 +14,17 @@ sub_modules:
   conv2:
     FI_enable: true
     observer:
-      map: sumdiff
+      map: custom
       reduce: no_reduce
   fc1:
     observer:
-      map: sumdiff
+      map: custom
       reduce: no_reduce
   fc2:
     observer:
-      map: sumdiff
+      map: custom
       reduce: no_reduce
   fc3:
     observer:
-      map: diff
+      map: custom
       reduce: no_reduce

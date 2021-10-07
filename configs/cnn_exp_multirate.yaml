@@ -1,0 +1,27 @@
+FI_activation: true
+FI_enable: true
+FI_weight: false
+flip_mode: flip_int_highest
+flip_mode_args:
+  bit_width: 16
+layerwise_quantization:
+  bit_width: 16
+  dynamic_range: 64
+observer:
+  map: mse
+  reduce: sum
+selector: RandomPositionSelector_Rate
+selector_args:
+  rate: 0.001
+sub_modules:
+  conv1:
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 4
+    FI_enable: false
+  conv2:
+  conv3:
+  conv4:
+  conv5:
+  conv6:
+    FI_enable: false
