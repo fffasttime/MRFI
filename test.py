@@ -98,7 +98,7 @@ def quan_inject():
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
 
-    total = 1
+    total = 10000
     for i in range(total):
         images, labels = next(data)
         FI_network(images, golden=True)
@@ -197,7 +197,7 @@ def multilayertest():
 
     total = 10000
 
-    for mode in range(2):
+    for mode in range(0,2):
         if mode==0:
             selector = mrfi.selector.RandomPositionSelector_FixN
             selector_args = {'n': 1}
@@ -287,7 +287,7 @@ def multirate_test():
 
     total = 10000
 
-    rates=np.logspace(-5, -2, 30)
+    rates=np.logspace(-6, -2, 41)
 
     for mode in [mrfi.flip_mode.flip_int_highest, mrfi.flip_mode.flip_int_random]:
         for rate in rates:
@@ -311,7 +311,7 @@ def multirate_test():
 
             observes=FI_network.get_observes()
 
-            print('%.6f'%rate, end='\t')
+            print('%.10f'%rate, end='\t')
             for name, value in observes.items():
                 print("%.4f"%np.sqrt(value/total), end='\t')
             print('%.2f%%'%(acc/total*100), flush=True)
@@ -356,4 +356,4 @@ def WandAplot():
     plt.subplots_adjust(None, None, None, None, 0.4, 0.55)
     plt.show()
 
-multirate_test()
+quan_inject()

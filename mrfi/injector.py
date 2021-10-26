@@ -1,4 +1,4 @@
-from typing import Callable, OrderedDict
+from typing import Callable
 from numpy import mod
 import torch.nn as nn
 import torch
@@ -90,8 +90,13 @@ class ModuleInjector:
             self.__set_FI(module, config)
 
         for (sub_module_name, sub_config) in config['sub_modules'].items():
-            sub_injector = self.__set_sub_injector(config, getattr(module, sub_module_name), sub_config, sub_module_name)
-            setattr(self, sub_module_name, sub_injector)
+            try:
+                val=int(sub_module_name)
+                sub_module=module[val]
+            except ValueError:
+                sub_module=getattr(module, sub_module_name)
+            sub_injector = self.__set_sub_injector(config, sub_module, sub_config, str(sub_module_name))
+            setattr(self, str(sub_module_name), sub_injector)
 
     def __set_FI(self, module, config):
         self.FI_enable = config.get('FI_enable', False)
@@ -165,12 +170,12 @@ class ModuleInjector:
         for subinjector in self.subinjectors:
             subinjector.reset_observe_value()
 
-    def get_observes(self):
+    def get_observes(self, parname=''):
         observes_dict = {}
         for subinjector in self.subinjectors:
-            observes_dict.update(subinjector.get_observes())
+            observes_dict.update(subinjector.get_observes(parname+str(self.name)+'.'))
         if not(self.observe_value is None):
-            observes_dict[self.name] = self.observe_value
+            observes_dict[parname + self.name] = self.observe_value
         return observes_dict
 
     def __call__(self, x, golden=False):
