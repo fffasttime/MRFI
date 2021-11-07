@@ -20,7 +20,9 @@ sub_modules:
       dynamic_range: 4
     FI_enable: false
   conv2:
+    FI_enable: false
   conv3:
+    FI_enable: false
   conv4:
   conv5:
   conv6:

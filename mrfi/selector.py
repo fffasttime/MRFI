@@ -30,6 +30,7 @@ class RandomPositionSelector_Rate:
             n=scipy.stats.poisson.rvs(n)
         else:
             n=int(n)
+        #print(shape, n)
         return np.random.randint(0, shape, n)
 
 Selector_Dict = {

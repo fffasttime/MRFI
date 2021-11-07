@@ -185,7 +185,7 @@ def plot_transmission():
 
 def multilayertest():
     with open("configs/cnn_exp_quan.yaml") as f:
-        config = yaml.full_load(f)
+        config = yaml.load(f)
 
     net=Net()
     net.load_state_dict(torch.load('_data/cifar_vgg.pth'))
@@ -275,7 +275,7 @@ def quan_test():
 
 def multirate_test():
     with open("configs/cnn_exp_multirate.yaml") as f:
-        config = yaml.full_load(f)
+        config = yaml.load(f)
 
     net=Net()
     net.load_state_dict(torch.load('_data/cifar_vgg.pth'))
@@ -356,4 +356,4 @@ def WandAplot():
     plt.subplots_adjust(None, None, None, None, 0.4, 0.55)
     plt.show()
 
-quan_inject()
+multirate_test()

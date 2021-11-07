@@ -11,32 +11,120 @@ yamlcfg='''
 FI_enable: false
 sub_modules:
   conv1:
+    FI_enable: true
+    layerwise_quantization:
+      bit_width: 8
+      dynamic_range: 1
     observer:
       pre_hook: true
-      map: var
+      map: maxabs
       reduce: sum
   layer1:
-    observer:
-      pre_hook: true
-      map: var
-      reduce: sum
+    sub_modules:
+      0:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+      1:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
   layer2:
-    observer:
-      pre_hook: true
-      map: var
-      reduce: sum
+    sub_modules:
+      0:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+      1:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
   layer3:
-    observer:
-      pre_hook: true
-      map: var
-      reduce: sum
+    sub_modules:
+      0:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+      1:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
   layer4:
-    observer:
-      pre_hook: true
-      map: var
-      reduce: sum
+    sub_modules:
+      0:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+      1:
+        sub_modules:
+          conv1:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
+          conv2:
+            observer:
+              pre_hook: true
+              map: maxabs
+              reduce: sum
 observer:
-    map: var
+    map: maxabs
     reduce: sum
 '''
 
@@ -50,7 +138,7 @@ def experiment(total = 10000):
 
     FI_network = ModuleInjector(net, config)
 
-    print("4x var layer")
+    print("max layer")
     data=iter(testloader)
     acc=0
     for i in range(total):
@@ -60,19 +148,5 @@ def experiment(total = 10000):
 
     observes=FI_network.get_observes()
     for name, value in observes.items():
-        print(name, 4*np.sqrt(value/total))
-    print("%.2f%%"%(acc/total*100))
-
-    print("max layer")
-    FI_network.reset_observe_value()
-    data=iter(testloader)
-    for layer in FI_network.subinjectors:
-        layer.mapper=mrfi.observer.mapper_maxabs
-    
-    for i in range(total):
-        images, labels = next(data)
-        FI_network(images)
-
-    observes=FI_network.get_observes()
-    for name, value in observes.items():
         print(name, value/total)
+    print("%.2f%%"%(acc/total*100))

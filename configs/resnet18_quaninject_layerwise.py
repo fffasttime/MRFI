@@ -23,9 +23,6 @@ selector_args:
 sub_modules:
   conv1:
     FI_enable: true
-    layerwise_quantization:
-      bit_width: 8
-      dynamic_range: 1
     observer:
       map: mse
       reduce: sum
@@ -33,6 +30,10 @@ sub_modules:
     sub_modules:
       0:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -43,6 +44,10 @@ sub_modules:
               reduce: sum
       1:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -58,6 +63,10 @@ sub_modules:
     sub_modules:
       0:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -68,6 +77,10 @@ sub_modules:
               reduce: sum
       1:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -83,6 +96,10 @@ sub_modules:
     sub_modules:
       0:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -93,6 +110,10 @@ sub_modules:
               reduce: sum
       1:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -108,6 +129,10 @@ sub_modules:
     sub_modules:
       0:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -118,6 +143,10 @@ sub_modules:
               reduce: sum
       1:
         sub_modules:
+          conv1:
+            FI_enable: true
+          conv2:
+            FI_enable: true
           bn1:
             observer:
               map: mse
@@ -144,17 +173,41 @@ def experiment(total = 10000):
 
     FI_network = ModuleInjector(net, config)
 
-    testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
-    data=iter(testloader)
+    layers=[
+    FI_network.conv1,
+    getattr(FI_network.layer1,'0').conv1,
+    getattr(FI_network.layer1,'0').conv2,
+    getattr(FI_network.layer1,'1').conv1,
+    getattr(FI_network.layer1,'1').conv2,
+    getattr(FI_network.layer2,'0').conv1,
+    getattr(FI_network.layer2,'0').conv2,
+    getattr(FI_network.layer2,'1').conv1,
+    getattr(FI_network.layer2,'1').conv2,
+    getattr(FI_network.layer3,'0').conv1,
+    getattr(FI_network.layer3,'0').conv2,
+    getattr(FI_network.layer3,'1').conv1,
+    getattr(FI_network.layer3,'1').conv2,
+    getattr(FI_network.layer4,'0').conv1,
+    getattr(FI_network.layer4,'0').conv2,
+    getattr(FI_network.layer4,'1').conv1,
+    getattr(FI_network.layer4,'1').conv2,
+    ]
 
-    acc=0
-    for i in range(total):
-        images, labels = next(data)
-        FI_network(images, golden=True)
-        out=FI_network(images)
-        acc+=(np.argmax(out[0])==labels[0])
+    for i, inject_layer in enumerate(layers):
+        data=iter(testloader)
+        FI_network.reset_observe_value()
+        for layer in layers:
+            layer.FI_enable = False
+        inject_layer.FI_enable = True
+        print("%2d "%i, end=' ')
+        acc=0
+        for i in range(total):
+            images, labels = next(data)
+            FI_network(images, golden=True)
+            out=FI_network(images)
+            acc+=(np.argmax(out[0])==labels[0])
 
-    observes=FI_network.get_observes()
-    for name, value in observes.items():
-        print(name, np.sqrt(value/total))
-    print("%.2f%%"%(acc/total*100))
+        observes=FI_network.get_observes()
+        for name, value in observes.items():
+            print("%.5f "%np.sqrt(value/total), end='')
+        print("%.2f%%"%(acc/total*100), flush=True)
