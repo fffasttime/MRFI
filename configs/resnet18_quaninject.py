@@ -1,3 +1,4 @@
+from numpy.lib.type_check import imag
 import yaml
 import logging
 import torch
@@ -57,9 +58,9 @@ def experiment(total = 10000):
     config = yaml.load(yamlcfg)
 
     net=Net(pretrained=True)
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    net.to(device)
     net.eval()
-
-    testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
 
     FI_network = ModuleInjector(net, config)
 
@@ -69,9 +70,10 @@ def experiment(total = 10000):
     acc=0
     for i in range(total):
         images, labels = next(data)
+        images=images.to(device)
         FI_network(images, golden=True)
-        out=FI_network(images)
-        acc+=(np.argmax(out[0])==labels[0])
+        out=FI_network(images).cpu().numpy()
+        acc+=(np.argmax(out[0])==labels[0].numpy())
 
     observes=FI_network.get_observes()
     for name, value in observes.items():

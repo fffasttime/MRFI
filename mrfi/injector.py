@@ -14,7 +14,7 @@ def layerwise_quantization(x, bit_width, dynamic_range):
     x += dynamic_range
     x *= (up_limit - down_limit) / (dynamic_range*2)
     x += down_limit
-    x.clip_(down_limit, up_limit)
+    x.clamp_(down_limit, up_limit)
     x.round_()
 
 def layerwise_dequantization(x, bit_width, dynamic_range):
@@ -42,7 +42,10 @@ def input_hook_func(self, module, input):
     
     if self.FI_enable and self.FI_weight:  # get original weight
         if self.weight_original is None:  # fisrt run, backup
-            self.dynamic_range_weight = module.weight.abs().max()
+            if self.layerwise_quantization_dynamic_range_weight is None:
+                self.dynamic_range_weight = module.weight.abs().max()
+            else:
+                self.dynamic_range_weight = self.layerwise_quantization_dynamic_range_weight
             logger.info(self.name + ' weight quantization range %f'%self.dynamic_range_weight)
             if self.layerwise_quantization:
                 layerwise_quantization(module.weight, self.layerwise_quantization_bit_width, self.dynamic_range_weight)
@@ -59,7 +62,7 @@ def input_hook_func(self, module, input):
 
 
 def observer_hook_func(self, value: torch.Tensor):
-    value = value.numpy().copy()
+    value = value.cpu().numpy().copy()
     if self.root.record_golden:
         self.golden_value = value
         return
@@ -115,8 +118,11 @@ class ModuleInjector:
             self.layerwise_quantization = True
             self.layerwise_quantization_bit_width: int = config['layerwise_quantization']['bit_width']
             self.layerwise_quantization_dynamic_range = config['layerwise_quantization'].get('dynamic_range', None)
+            self.layerwise_quantization_dynamic_range_weight = config['layerwise_quantization'].get('dynamic_range_weight', None)
             if self.layerwise_quantization_dynamic_range == 'auto':
                 self.layerwise_quantization_dynamic_range = None
+            if self.layerwise_quantization_dynamic_range_weight == 'auto':
+                self.layerwise_quantization_dynamic_range_weight = None
         
         self.weight_original = None
         

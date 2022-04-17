@@ -95,7 +95,7 @@ flip_mode: flip_int_highest
 flip_mode_args:
   bit_width: 8
 layerwise_quantization:
-  bit_width: 8
+  bit_width: 16
   dynamic_range: auto
 selector: RandomPositionSelector_Rate
 selector_args:

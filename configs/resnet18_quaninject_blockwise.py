@@ -13,10 +13,10 @@ FI_enable: false
 FI_weight: true
 flip_mode: flip_int_highest
 flip_mode_args:
-  bit_width: 8
+  bit_width: 14
 layerwise_quantization:
-  bit_width: 8
-  dynamic_range: auto
+  bit_width: 14
+  dynamic_range: 4
 selector: RandomPositionSelector_Rate
 selector_args:
   rate: 0.00001
@@ -158,58 +158,61 @@ sub_modules:
     observer:
       map: mse
       reduce: sum
+  fc:
+    FI_enable: true
+
 observer:
     map: mse
     reduce: sum
 '''
 
 def experiment(total = 10000):
-    torch.set_num_threads(16)
     config = yaml.load(yamlcfg)
 
     net=Net(pretrained=True)
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    net.to(device)
     net.eval()
 
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
 
     FI_network = ModuleInjector(net, config)
 
-    layers=[
-    FI_network.conv1,
+    blocks=[
+    [FI_network.conv1],
+    [
     getattr(FI_network.layer1,'0').conv1,
     getattr(FI_network.layer1,'0').conv2,
     getattr(FI_network.layer1,'1').conv1,
-    getattr(FI_network.layer1,'1').conv2,
-    getattr(FI_network.layer2,'0').conv1,
+    getattr(FI_network.layer1,'1').conv2],
+    [getattr(FI_network.layer2,'0').conv1,
     getattr(FI_network.layer2,'0').conv2,
     getattr(FI_network.layer2,'1').conv1,
-    getattr(FI_network.layer2,'1').conv2,
-    getattr(FI_network.layer3,'0').conv1,
+    getattr(FI_network.layer2,'1').conv2],
+    [getattr(FI_network.layer3,'0').conv1,
     getattr(FI_network.layer3,'0').conv2,
     getattr(FI_network.layer3,'1').conv1,
-    getattr(FI_network.layer3,'1').conv2,
-    getattr(FI_network.layer4,'0').conv1,
+    getattr(FI_network.layer3,'1').conv2],
+    [getattr(FI_network.layer4,'0').conv1,
     getattr(FI_network.layer4,'0').conv2,
     getattr(FI_network.layer4,'1').conv1,
-    getattr(FI_network.layer4,'1').conv2,
+    getattr(FI_network.layer4,'1').conv2],
+    [FI_network.fc],
     ]
 
-    for i, inject_layer in enumerate(layers):
+    for i, inject_block in enumerate(blocks):
         data=iter(testloader)
         FI_network.reset_observe_value()
-        for layer in layers:
-            layer.FI_enable = False
-        inject_layer.FI_enable = True
+        for block in blocks:
+            for layer in block:
+                layer.FI_enable = False
+        for inject_layer in inject_block:
+            inject_layer.FI_enable = True
         print("%2d "%i, end=' ')
         acc=0
         for i in range(total):
             images, labels = next(data)
-            images=images.to(device)
             FI_network(images, golden=True)
-            out=FI_network(images).cpu().numpy()
-            acc+=(np.argmax(out[0])==labels.numpy()[0])
+            out=FI_network(images)
+            acc+=(np.argmax(out[0])==labels[0])
 
         observes=FI_network.get_observes()
         for name, value in observes.items():

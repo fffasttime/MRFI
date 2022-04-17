@@ -17,4 +17,4 @@ tf=transforms.Compose([
             normalize,
         ])
 
-testset=datasets.ImageFolder('/home/ict/datasets/data.imagenet/val', tf)
+testset=datasets.ImageFolder('~/dataset/val', tf)

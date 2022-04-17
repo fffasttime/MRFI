@@ -79,9 +79,10 @@ def errorplot():
     net.load_state_dict(torch.load('_data/cifar10.pth'))
     net.eval()
 
-    FI_network = ModuleInjector(net, config)
-
     first_neuron_diff = lambda x, golden: x.reshape(-1)[0]-golden.reshape(-1)[0]
+    mrfi.observer.Mapper_Dict['custom'] = first_neuron_diff
+
+    FI_network = ModuleInjector(net, config)
 
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
@@ -94,8 +95,8 @@ def errorplot():
         FI_network(images)
 
     # # use identity map
-    np.save("lenet_outerror_10000x10.npy",FI_network.fc3.observe_value)
-    return 
+    # np.save("lenet_outerror_10000x10.npy",FI_network.fc3.observe_value)
+    # return 
     
     observes=FI_network.get_observes()
     i=0
@@ -117,7 +118,7 @@ def errorplot():
         #print(stats.kstest(value, 'norm'))
         #print(stats.shapiro(value))
         #print(stats.normaltest(value))
-        plt.title(name)
+        plt.title(name.split('.')[1])
     plt.show()
 
 

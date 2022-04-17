@@ -21,13 +21,16 @@ import torch.nn.functional as F
 import numpy as np
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, trained = False):
         super(Net,self).__init__()
         self.conv1 = nn.Conv2d(3,6,5)
         self.conv2 = nn.Conv2d(6,16,5)
         self.fc1 = nn.Linear(16*5*5,120)
         self.fc2 = nn.Linear(120,84)
         self.fc3 = nn.Linear(84,10)
+        if trained:
+            self.load_state_dict(torch.load('./_data/cifar10.pth'))
+
     def forward(self,x):
         x = F.max_pool2d(F.relu(self.conv1(x)),(2,2))
         x = F.max_pool2d(F.relu(self.conv2(x)),2)

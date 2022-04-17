@@ -356,4 +356,61 @@ def WandAplot():
     plt.subplots_adjust(None, None, None, None, 0.4, 0.55)
     plt.show()
 
-multirate_test()
+def exp_coverage():
+    with open("configs/cnn_exp_multirate.yaml") as f:
+        config = yaml.load(f)
+
+    net=Net()
+    net.load_state_dict(torch.load('_data/cifar_vgg.pth'))
+    net.eval()
+
+    testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
+
+    FI_network = ModuleInjector(net, config)
+
+    acc, acc_golden=0, 0
+    for _ in range(5):
+        data=iter(testloader)
+        for i in range(10000):
+            images, labels = next(data)
+            out_golden=FI_network(images, golden=True)
+            out=FI_network(images)
+            acc+=(np.argmax(out[0])==labels[0])
+            acc_golden+=(np.argmax(out_golden[0])==labels[0])
+            print(acc.numpy(), acc_golden.numpy(), FI_network.observe_value, flush=True)
+
+def exp_combination():
+    with open("configs/cnn_exp_combination.yaml") as f:
+        config = yaml.load(f)
+    
+    net=Net()
+    net.load_state_dict(torch.load('_data/cifar_vgg.pth'))
+    net.eval()
+
+    FI_network = ModuleInjector(net, config)
+
+    testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
+
+    total = 10000
+
+    for mode in range(64):
+        for i in range(1,7):
+            layer=getattr(FI_network,"conv"+str(i))
+            layer.FI_enable=bool(mode>>(i-1) & 1)
+
+        FI_network.reset_observe_value()
+        data=iter(testloader)
+        acc=0
+        for i in range(total):
+            images, labels = next(data)
+            FI_network(images, golden=True)
+            out=FI_network(images)
+            acc+=(np.argmax(out[0])==labels[0])
+        observes=FI_network.get_observes()
+
+        print("%2d"%mode, end='\t')
+        for name, value in observes.items():
+            print("%.4f"%np.sqrt(value/total), end='\t')
+        print('%.2f%%'%(acc/total*100), flush=True)
+
+exp_combination()

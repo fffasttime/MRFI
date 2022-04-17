@@ -12,7 +12,7 @@ observer:
   reduce: sum
 selector: RandomPositionSelector_Rate
 selector_args:
-  rate: 0.001
+  rate: 0.0001
 sub_modules:
   conv1:
     layerwise_quantization:
@@ -20,9 +20,7 @@ sub_modules:
       dynamic_range: 4
     FI_enable: false
   conv2:
-    FI_enable: false
   conv3:
-    FI_enable: false
   conv4:
   conv5:
   conv6:
