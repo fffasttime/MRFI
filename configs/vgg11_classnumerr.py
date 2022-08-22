@@ -2,6 +2,7 @@ import yaml
 import logging
 import torch
 import numpy as np
+from scipy.stats import hypergeom
 
 import mrfi.observer
 from model.vgg11 import Net, testset
@@ -37,6 +38,13 @@ observer:
     reduce: sum
 '''
 
+def classprederr(out, label):
+    # 平均正确率：在M=999个非label输出中有n个大于label的值，但随机选N个都没选到大于label的数的情况，N+1为实际需要的分类数量。
+    # 即超几何分布中k=0
+    n = np.count_nonzero(out>out[label])
+    prob = hypergeom.pmf(0, 999, n, np.arange(1000))
+    return prob
+
 def exp(total = 10000):
     torch.set_num_threads(16)
     config = yaml.load(yamlcfg)
@@ -55,9 +63,7 @@ def exp(total = 10000):
 
     for mode in [mrfi.flip_mode.flip_int_highest]:
 
-        golden_class = np.ndarray((len(rates), total), np.int)
-        inject_class = np.ndarray((len(rates), total), np.int)
-        label_class = np.ndarray((len(rates), total), np.int)
+        classnum_err = np.zeros((len(rates), 1000))
 
         for ri, rate in enumerate(rates):
             data=iter(testloader)
@@ -78,9 +84,9 @@ def exp(total = 10000):
                 out=FI_network(images).cpu().numpy()
                 acc+=(np.argmax(out[0])==labels.numpy()[0])
 
-                golden_class[ri, i] = np.argmax(out_free[0])
-                inject_class[ri, i] = np.argmax(out[0])
-                label_class[ri, i] = labels.numpy()[0]
+                classnum_err[ri, :] += classprederr(out[0], labels.item()) # sum
+
+            classnum_err[ri]/=total # average acc
             
             observes=FI_network.get_observes()
 
@@ -89,4 +95,4 @@ def exp(total = 10000):
                 print("%.4f"%np.sqrt(value/total), end='\t')
             print('%.2f%%'%(acc/total*100), flush=True)
 
-            # np.save('vgg11_multirate_classout.npy', [golden_class, inject_class, label_class])
+            np.save('vgg11_classnumerr.npy', classnum_err)

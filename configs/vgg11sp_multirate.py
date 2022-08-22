@@ -59,8 +59,17 @@ def exp(total = 10000):
         inject_class = np.ndarray((len(rates), total), np.int)
         label_class = np.ndarray((len(rates), total), np.int)
 
+        data=iter(testloader)
+        images, labels = next(data) # single picture 0
+        images, labels = next(data) # single picture 1
+        images, labels = next(data) # single picture 2
+        images=images.to(device)
+
+        out_free=FI_network(images, golden=True).cpu().numpy()
+
+        print(np.std(out_free))
+
         for ri, rate in enumerate(rates):
-            data=iter(testloader)
 
             for layer in FI_network.features.subinjectors:
                 layer.selector_args['rate']=rate
@@ -72,9 +81,6 @@ def exp(total = 10000):
 
             acc=0
             for i in range(total):
-                images, labels = next(data)
-                images=images.to(device)
-                out_free=FI_network(images, golden=True).cpu().numpy()
                 out=FI_network(images).cpu().numpy()
                 acc+=(np.argmax(out[0])==labels.numpy()[0])
 

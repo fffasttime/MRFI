@@ -13,63 +13,31 @@ FI_enable: false
 FI_weight: false
 flip_mode: flip_int_highest
 flip_mode_args:
-  bit_width: 8
+  bit_width: 6
 layerwise_quantization:
-  bit_width: 8
+  bit_width: 6
   dynamic_range: 64
-selector: RandomPositionSelector_FixN
+selector: RandomPositionSelector_Rate
 selector_args:
-  n: 1
+  rate: 0.0001
+  poisson: True
 sub_modules:
   features:
     sub_modules:
-      0:
-        observer:
-          map: mse
-          reduce: sum
       3:
         FI_enable: true
-        observer:
-          map: mse
-          reduce: sum
       6:
-        observer:
-          map: mse
-          reduce: sum
+        FI_enable: true
       8:
-        observer:
-          map: mse
-          reduce: sum
+        FI_enable: true
       11:
-        observer:
-          map: mse
-          reduce: sum
+        FI_enable: true
       13:
-        observer:
-          map: mse
-          reduce: sum
+        FI_enable: true
       16:
-        observer:
-          map: mse
-          reduce: sum
+        FI_enable: true
       18:
-        observer:
-          map: mse
-          reduce: sum
-  classifier:
-    sub_modules:
-      0:
-        observer:
-          map: mse
-          reduce: sum
-      3:
-        observer:
-          map: mse
-          reduce: sum
-      6:
-        observer:
-          map: mse
-          reduce: sum
+        FI_enable: true
 observer:
     map: mse
     reduce: sum
@@ -88,14 +56,16 @@ def exp(total = 10000):
 
     FI_network = ModuleInjector(net, config)
 
-    ranges=np.concatenate([np.arange(0.4, 1, 0.2), np.arange(1, 1.5, 0.25), np.arange(1.5, 3, 0.5), np.arange(3, 6, 1), np.arange(6, 12, 2), np.arange(12,24,4), np.arange(24,65,8)])
+    ranges=np.concatenate([np.arange(2, 4, 0.5), np.arange(4, 8, 1), np.arange(8,64,4)])
     print(ranges)
 
     for r in ranges:
         data=iter(testloader)
         FI_network.reset_observe_value()
-        layer = getattr(FI_network.features,'3')
-        layer.layerwise_quantization_dynamic_range = r
+        lnum = [3,6,8]
+        for l in lnum:
+            layer = getattr(FI_network.features,str(l))
+            layer.layerwise_quantization_dynamic_range = r
 
         print("%2.2f "%r, end=' ')
         acc, acc_g = 0, 0
@@ -104,6 +74,7 @@ def exp(total = 10000):
             images=images.to(device)
             out_g = FI_network(images, golden=True).cpu().numpy()
             out=FI_network(images).cpu().numpy()  
+            #out=out_g
             acc_g += (np.argmax(out_g[0])==labels.numpy()[0])
             acc+=(np.argmax(out[0])==labels.numpy()[0])
 

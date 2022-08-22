@@ -1,7 +1,10 @@
+import math
 import yaml
 import logging
 import torch
 import numpy as np
+from scipy.special import erf
+from scipy.stats import hypergeom
 
 import mrfi.observer
 from model.vgg11 import Net, testset
@@ -37,6 +40,27 @@ observer:
     reduce: sum
 '''
 
+def bacc(out, label):
+    return np.count_nonzero(out<out[label])/999
+
+def bRRMSEacc(out, out_free, label):
+    se = (out-out_free)**2
+    # rmse(c0, clabel) + rmse(c1, clabel) + ...
+    # = sqrt(se(c0)+se(clabel))/sqrt(2) + ...
+    rmses = np.sqrt((se))
+    rmse = np.sqrt(np.sum(rmses**2) / 1000)
+    stds = np.abs(out_free - out_free[label])/2 + 0.01
+    pracc = erf(1/(rmses/stds))/2 + 1/2
+    return (np.sum(pracc)-pracc[label])/999
+
+def bRRMSE(out, out_free, label):
+    se = (out-out_free)**2
+    # rmse(c0, clabel) + rmse(c1, clabel) + ...
+    # = sqrt(se(c0)+se(clabel))/sqrt(2) + ...
+    rmses = np.sqrt((se + se[label])/2)
+    stds = np.abs(out_free - out_free[label])/2
+    return (np.sum(rmses) - rmses[label]) /999, np.sum(stds) / 999
+
 def exp(total = 10000):
     torch.set_num_threads(16)
     config = yaml.load(yamlcfg)
@@ -52,14 +76,11 @@ def exp(total = 10000):
 
     rates=np.logspace(-6, -3, 31)
 
+    np.random.seed(0)
 
     for mode in [mrfi.flip_mode.flip_int_highest]:
 
-        golden_class = np.ndarray((len(rates), total), np.int)
-        inject_class = np.ndarray((len(rates), total), np.int)
-        label_class = np.ndarray((len(rates), total), np.int)
-
-        for ri, rate in enumerate(rates):
+        for ri, rate in enumerate(rates[-1:]):
             data=iter(testloader)
 
             for layer in FI_network.features.subinjectors:
@@ -69,24 +90,31 @@ def exp(total = 10000):
                 layer.flip_mode = mode
 
             FI_network.reset_observe_value()
+            diff = []
 
-            acc=0
+            acc, bracc = 0, 0
+            rmse, std = .0, .0
             for i in range(total):
                 images, labels = next(data)
                 images=images.to(device)
-                out_free=FI_network(images, golden=True).cpu().numpy()
-                out=FI_network(images).cpu().numpy()
-                acc+=(np.argmax(out[0])==labels.numpy()[0])
-
-                golden_class[ri, i] = np.argmax(out_free[0])
-                inject_class[ri, i] = np.argmax(out[0])
-                label_class[ri, i] = labels.numpy()[0]
+                out_free=FI_network(images, golden=True).cpu().numpy()[0]
+                out=FI_network(images).cpu().numpy()[0]
+                label = labels.numpy()[0]
+                acc+=bacc(out, label)
+                bracc+=bRRMSEacc(out, out_free, label)
+                rr = bRRMSE(out, out_free, label)
+                diff.append(out-out_free)
+                rmse+=rr[0]
+                std+=rr[1]
             
             observes=FI_network.get_observes()
 
+            rrmse = rmse/std
+            pracc = math.erf(1/rrmse)/2 + 0.5
+
             print('%.10f'%rate, end='\t')
             for name, value in observes.items():
-                print("%.4f"%np.sqrt(value/total), end='\t')
+                print("%.4f"%np.sqrt(value/total), "%.4f"%(rmse/total), "%.4f"%(std/total), "%.2f%%"%(pracc*100), "%.2f%%"%(bracc/total*100), sep='\t', end='\t')
             print('%.2f%%'%(acc/total*100), flush=True)
 
-            # np.save('vgg11_multirate_classout.npy', [golden_class, inject_class, label_class])
+            np.save('tempdiff.npy', diff)

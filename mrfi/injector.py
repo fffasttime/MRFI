@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger('mrfi')
 
 def layerwise_quantization(x, bit_width, dynamic_range):
-    down_limit, up_limit = -1<<bit_width-1, (1<<bit_width-1)-1
+    down_limit, up_limit = -(1<<bit_width-1)+1, (1<<bit_width-1)-1
     x += dynamic_range
     x *= (up_limit - down_limit) / (dynamic_range*2)
     x += down_limit
@@ -18,10 +18,20 @@ def layerwise_quantization(x, bit_width, dynamic_range):
     x.round_()
 
 def layerwise_dequantization(x, bit_width, dynamic_range):
-    down_limit, up_limit = -1<<bit_width-1, (1<<bit_width-1)-1
+    down_limit, up_limit = -(1<<bit_width-1)+1, (1<<bit_width-1)-1
     x -= down_limit
     x *= (dynamic_range*2)/(up_limit - down_limit)
     x -= dynamic_range
+
+def layerwise_quantization_pos(x, bit_width, dynamic_range):
+    up_limit = (1<<bit_width)-1
+    x *= (up_limit) / (dynamic_range)
+    x.clamp_(0, up_limit)
+    x.round_()
+
+def layerwise_dequantization_pos(x, bit_width, dynamic_range):
+    up_limit = (1<<bit_width)-1
+    x *= (dynamic_range)/(up_limit)
 
 def input_hook_func(self, module, input):
     input, = input  # unpack

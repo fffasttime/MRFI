@@ -2,6 +2,7 @@ import yaml
 import logging
 import torch
 import numpy as np
+import time
 
 import mrfi.observer
 from model.vgg11 import Net, testset
@@ -50,10 +51,11 @@ def exp(total = 10000):
 
     FI_network = ModuleInjector(net, config)
 
-    rates=np.logspace(-6, -3, 31)
+    rates=np.logspace(-4, -3, 11)
 
 
-    for mode in [mrfi.flip_mode.flip_int_highest]:
+    for mode in [mrfi.flip_mode.flip_int_highest, mrfi.flip_mode.flip_int_random]:
+        T0 = time.time()
 
         golden_class = np.ndarray((len(rates), total), np.int)
         inject_class = np.ndarray((len(rates), total), np.int)
@@ -90,3 +92,5 @@ def exp(total = 10000):
             print('%.2f%%'%(acc/total*100), flush=True)
 
             # np.save('vgg11_multirate_classout.npy', [golden_class, inject_class, label_class])
+
+        print('done in %.2f s'%(time.time()-T0))

@@ -1,3 +1,5 @@
+from asyncio import FastChildWatcher
+from operator import mod
 import yaml
 import logging
 import torch
@@ -23,9 +25,14 @@ selector_args:
 sub_modules:
   features:
     sub_modules:
-      0:
-        FI_enable: false
-      3:
+      0:      
+        layerwise_quantization:
+          bit_width: 16
+          dynamic_range: 16
+      3:      
+        layerwise_quantization:
+          bit_width: 16
+          dynamic_range: 32
       6:
       8:
       11:
@@ -52,21 +59,29 @@ def exp(total = 10000):
 
     rates=np.logspace(-6, -3, 31)
 
+    selectedlayers=[
+      [0],
+      [1],
+      [2],
+      [3,4],
+      [5,6,7],
+      [1,2,3,4,5,6,7],
+    ]
 
-    for mode in [mrfi.flip_mode.flip_int_highest]:
-
-        golden_class = np.ndarray((len(rates), total), np.int)
-        inject_class = np.ndarray((len(rates), total), np.int)
-        label_class = np.ndarray((len(rates), total), np.int)
-
+    for mode in selectedlayers:
+        print(mode)
         for ri, rate in enumerate(rates):
             data=iter(testloader)
 
-            for layer in FI_network.features.subinjectors:
+            for ri, layer in enumerate(FI_network.features.subinjectors):
+                if ri in mode:
+                    layer.FI_enable=True
+                else:
+                    layer.FI_enable=False
+
                 layer.selector_args['rate']=rate
                 layer.selector_args['poisson']=True
                 layer.update_selector()
-                layer.flip_mode = mode
 
             FI_network.reset_observe_value()
 
@@ -77,10 +92,6 @@ def exp(total = 10000):
                 out_free=FI_network(images, golden=True).cpu().numpy()
                 out=FI_network(images).cpu().numpy()
                 acc+=(np.argmax(out[0])==labels.numpy()[0])
-
-                golden_class[ri, i] = np.argmax(out_free[0])
-                inject_class[ri, i] = np.argmax(out[0])
-                label_class[ri, i] = labels.numpy()[0]
             
             observes=FI_network.get_observes()
 
@@ -89,4 +100,3 @@ def exp(total = 10000):
                 print("%.4f"%np.sqrt(value/total), end='\t')
             print('%.2f%%'%(acc/total*100), flush=True)
 
-            # np.save('vgg11_multirate_classout.npy', [golden_class, inject_class, label_class])
