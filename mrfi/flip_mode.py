@@ -1,27 +1,30 @@
 from typing import Callable
 import numpy as np
+import torch
 
-def flip_int_highest(x, bit_width):
-    return int(x) ^ -(1<<bit_width-1)
+def flip_int_highest(x_in, bit_width):
+    x=x_in.int()
+    return (x ^ torch.full_like(x, -(1<<bit_width-1))).to(x_in.dtype)
 
-def flip_int_random(x, bit_width):
-    bit = np.random.randint(0, bit_width)
+def flip_int_random(x_in, bit_width):
+    x=x_in.int()
+    bit = torch.randint_like(x, 0, bit_width)
+    bitmask = torch.ones_like(x) << bit
+    bitmask[bit == bit_width-1] = - bitmask[bit == bit_width-1]
+    return (x ^ bitmask).to(x_in.dtype)
+
+def flip_int_fixbit(x_in, bit_width, bit):
+    x=x.int()
     bitmask = 1 << bit
     if bit == bit_width-1:
         bitmask = - bitmask
-    return int(x) ^ bitmask
-
-def flip_int_fixbit(x, bit_width, bit):
-    bitmask = 1 << bit
-    if bit == bit_width-1:
-        bitmask = - bitmask
-    return int(x) ^ bitmask
+    return (x ^ torch.full_like(x, bitmask)).to(x_in.dtype)
 
 def set_0(x):
-    return 0
+    return torch.zeros_like(x)
 
 def set_value(x, value):
-    return value
+    return torch.full_like(x, value)
 
 FlipMode_Dict={
     None: None,

@@ -13,9 +13,9 @@ FI_enable: false
 FI_weight: false
 flip_mode: flip_int_highest
 flip_mode_args:
-  bit_width: 6
+  bit_width: 8
 layerwise_quantization:
-  bit_width: 6
+  bit_width: 8
   dynamic_range: 64
 selector: RandomPositionSelector_Rate
 selector_args:
@@ -62,7 +62,7 @@ def exp(total = 10000):
     for r in ranges:
         data=iter(testloader)
         FI_network.reset_observe_value()
-        lnum = [3,6,8]
+        lnum = [3,6,8,11,13,16,18]
         for l in lnum:
             layer = getattr(FI_network.features,str(l))
             layer.layerwise_quantization_dynamic_range = r

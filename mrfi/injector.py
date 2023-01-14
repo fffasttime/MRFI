@@ -43,9 +43,10 @@ def input_hook_func(self, module, input):
         layerwise_quantization(input, self.layerwise_quantization_bit_width, dynamic_range)
     
     if self.FI_enable and self.FI_activation and not self.root.record_golden:
-        error_list = self.selector.gen_list(input.shape)
-        for p in error_list:
-            input.view(-1)[p] = self.flip_mode(input.view(-1)[p].item(), **self.flip_mode_args)
+        error_list = torch.as_tensor(self.selector.gen_list(input.shape))
+        if error_list.numel()>0:
+            values = input.view(-1)[error_list]
+            input.view(-1)[error_list] = self.flip_mode(values, **self.flip_mode_args)
 
     if self.FI_enable and self.FI_activation and self.layerwise_quantization:
         layerwise_dequantization(input, self.layerwise_quantization_bit_width, dynamic_range)
@@ -65,8 +66,9 @@ def input_hook_func(self, module, input):
             
         if not self.root.record_golden:
             error_list = self.selector.gen_list(module.weight.shape)
-            for p in error_list:
-                module.weight.view(-1)[p] = self.flip_mode(module.weight.view(-1)[p].item(), **self.flip_mode_args)
+            if error_list.numel()>0:
+                values = module.weight.view(-1)[error_list]
+                module.weight.view(-1)[error_list] = self.flip_mode(values, **self.flip_mode_args)
         if self.layerwise_quantization:
             layerwise_dequantization(module.weight, self.layerwise_quantization_bit_width, self.dynamic_range_weight)
 
@@ -77,11 +79,11 @@ def observer_hook_func(self, value: torch.Tensor):
         self.golden_value = value
         return
 
-    current_val = self.mapper(value, self.golden_value)
+    current_val = self.mapper(value.reshape(value.shape[0], -1), self.golden_value.reshape(self.golden_value.shape[0], -1))
     if self.observe_value is None:
-        self.observe_value = current_val
+        self.observe_value = self.reducer(current_val)
     else:
-        self.observe_value = self.reducer(self.observe_value, current_val)
+        self.observe_value = self.reducer([self.observe_value, self.reducer(current_val)])
 
 class ModuleInjector:
     def __init__(self, module: nn.Module, config: dict, root_injector = None, name='network'):

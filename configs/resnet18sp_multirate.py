@@ -82,7 +82,7 @@ observer:
     reduce: sum
 '''
 
-def experiment(total = 10000):
+def exp(total = 10000):
     torch.set_num_threads(16)
     config = yaml.load(yamlcfg)
 
@@ -96,18 +96,8 @@ def experiment(total = 10000):
     FI_network = ModuleInjector(net, config)
 
     rates=np.logspace(-6, -3, 31)
-    '''
-    selectedlayers=[
-      [0],
-      [1,2,3,4],
-      [5,6,7,8],
-      [9,10,11,12],
-      [13,14,15,16],
-    ]
-    '''
-    selectedlayers=[list(range(1,17))]
+
     layers=[
-    # FI_network.conv1,
     getattr(FI_network.layer1,'0').conv1,
     getattr(FI_network.layer1,'0').conv2,
     getattr(FI_network.layer1,'1').conv1,
@@ -126,34 +116,42 @@ def experiment(total = 10000):
     getattr(FI_network.layer4,'1').conv2,
     ]
 
-    for mode in selectedlayers:
-        print(mode)
+    for mode in [mrfi.flip_mode.flip_int_highest]:
+
+        data=iter(testloader)
+        images, labels = next(data) # single picture 0
+        images, labels = next(data) # single picture 1
+        images, labels = next(data) # single picture 2
+        images, labels = next(data) # single picture 3
+        images, labels = next(data) # single picture 4
+        images, labels = next(data) # single picture 5
+        images, labels = next(data) # single picture 6
+        images, labels = next(data) # single picture 7
+        images=images.to(device)
+
+        out_free=FI_network(images, golden=True).cpu().numpy()
+
+        print(np.std(out_free), np.argmax(out_free[0])==labels.numpy()[0])
+        # print(np.sort(out_free[0]))
+
         for ri, rate in enumerate(rates):
-            data=iter(testloader)
 
-            for ri, layer in enumerate(layers):
-                if ri in mode:
-                    layer.FI_enable=True
-                else:
-                    layer.FI_enable=False
-
+            for layer in layers:
                 layer.selector_args['rate']=rate
                 layer.selector_args['poisson']=True
                 layer.update_selector()
+                layer.flip_mode = mode
 
             FI_network.reset_observe_value()
 
             acc=0
             for i in range(total):
-                images, labels = next(data)
-                images=images.to(device)
-                out_free=FI_network(images, golden=True).cpu().numpy()
                 out=FI_network(images).cpu().numpy()
                 acc+=(np.argmax(out[0])==labels.numpy()[0])
-
+            
             observes=FI_network.get_observes()
 
             print('%.10f'%rate, end='\t')
             for name, value in observes.items():
                 print("%.4f"%np.sqrt(value/total), end='\t')
-            print("%.2f%%"%(acc/total*100), flush=True)
+            print('%.2f%%'%(acc/total*100), flush=True)

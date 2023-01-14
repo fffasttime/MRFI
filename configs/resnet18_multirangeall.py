@@ -11,15 +11,15 @@ yamlcfg='''
 FI_activation: true
 FI_enable: false
 FI_weight: false
-flip_mode: flip_int_highest
+flip_mode: flip_int_random
 flip_mode_args:
-  bit_width: 16
+  bit_width: 8
 layerwise_quantization:
-  bit_width: 16
+  bit_width: 8
   dynamic_range: 8
 selector: RandomPositionSelector_Rate
 selector_args:
-  rate: 0.00001
+  rate: 0.0001
 sub_modules:
   layer1:
     sub_modules:
@@ -126,34 +126,27 @@ def experiment(total = 10000):
     getattr(FI_network.layer4,'1').conv2,
     ]
 
-    for mode in selectedlayers:
-        print(mode)
-        for ri, rate in enumerate(rates):
-            data=iter(testloader)
+    ranges=np.concatenate([np.arange(2, 4, 0.5), np.arange(4, 8, 1), np.arange(8,24,2)])
+    print(ranges)
 
-            for ri, layer in enumerate(layers):
-                if ri in mode:
-                    layer.FI_enable=True
-                else:
-                    layer.FI_enable=False
+    for r in ranges:
+        data=iter(testloader)
+        FI_network.reset_observe_value()
+        for layer in layers:
+            layer.layerwise_quantization_dynamic_range = r
 
-                layer.selector_args['rate']=rate
-                layer.selector_args['poisson']=True
-                layer.update_selector()
+        print("%2.2f "%r, end=' ')
+        acc, acc_g = 0, 0
+        for i in range(total):
+            images, labels = next(data)
+            images=images.to(device)
+            out_g = FI_network(images, golden=True).cpu().numpy()
+            out=FI_network(images).cpu().numpy()  
+            #out=out_g
+            acc_g += (np.argmax(out_g[0])==labels.numpy()[0])
+            acc+=(np.argmax(out[0])==labels.numpy()[0])
 
-            FI_network.reset_observe_value()
-
-            acc=0
-            for i in range(total):
-                images, labels = next(data)
-                images=images.to(device)
-                out_free=FI_network(images, golden=True).cpu().numpy()
-                out=FI_network(images).cpu().numpy()
-                acc+=(np.argmax(out[0])==labels.numpy()[0])
-
-            observes=FI_network.get_observes()
-
-            print('%.10f'%rate, end='\t')
-            for name, value in observes.items():
-                print("%.4f"%np.sqrt(value/total), end='\t')
-            print("%.2f%%"%(acc/total*100), flush=True)
+        observes=FI_network.get_observes()
+        for name, value in observes.items():
+            print("%.5f "%np.sqrt(value/total), end='')
+        print("%.2f%% %.2f%%"%(acc_g/total*100, acc/total*100), flush=True)

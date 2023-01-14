@@ -2,6 +2,7 @@ import yaml
 import logging
 import torch
 import numpy as np
+from scipy.stats import hypergeom
 
 import mrfi.observer
 from model.resnet18 import Net, testset
@@ -16,7 +17,7 @@ flip_mode_args:
   bit_width: 16
 layerwise_quantization:
   bit_width: 16
-  dynamic_range: 8
+  dynamic_range: 6
 selector: RandomPositionSelector_Rate
 selector_args:
   rate: 0.00001
@@ -82,6 +83,13 @@ observer:
     reduce: sum
 '''
 
+def classprederr(out, label):
+    # 平均正确率：在M=999个非label输出中有n个大于label的值，但随机选N个都没选到大于label的数的情况，N+1为实际需要的分类数量。
+    # 即超几何分布中k=0
+    n = np.count_nonzero(out>out[label])
+    prob = hypergeom.pmf(0, 999, n, np.arange(1000))
+    return prob
+
 def experiment(total = 10000):
     torch.set_num_threads(16)
     config = yaml.load(yamlcfg)
@@ -96,16 +104,7 @@ def experiment(total = 10000):
     FI_network = ModuleInjector(net, config)
 
     rates=np.logspace(-6, -3, 31)
-    '''
-    selectedlayers=[
-      [0],
-      [1,2,3,4],
-      [5,6,7,8],
-      [9,10,11,12],
-      [13,14,15,16],
-    ]
-    '''
-    selectedlayers=[list(range(1,17))]
+    
     layers=[
     # FI_network.conv1,
     getattr(FI_network.layer1,'0').conv1,
@@ -126,20 +125,18 @@ def experiment(total = 10000):
     getattr(FI_network.layer4,'1').conv2,
     ]
 
-    for mode in selectedlayers:
-        print(mode)
+    for mode in [mrfi.flip_mode.flip_int_highest]:
+
+        classnum_err = np.zeros((len(rates), 1000))
+
         for ri, rate in enumerate(rates):
             data=iter(testloader)
 
-            for ri, layer in enumerate(layers):
-                if ri in mode:
-                    layer.FI_enable=True
-                else:
-                    layer.FI_enable=False
-
+            for layer in layers:
                 layer.selector_args['rate']=rate
                 layer.selector_args['poisson']=True
                 layer.update_selector()
+                layer.flip_mode = mode
 
             FI_network.reset_observe_value()
 
@@ -151,9 +148,15 @@ def experiment(total = 10000):
                 out=FI_network(images).cpu().numpy()
                 acc+=(np.argmax(out[0])==labels.numpy()[0])
 
+                classnum_err[ri, :] += classprederr(out[0], labels.item()) # sum
+
+            classnum_err[ri]/=total # average acc
+            
             observes=FI_network.get_observes()
 
             print('%.10f'%rate, end='\t')
             for name, value in observes.items():
                 print("%.4f"%np.sqrt(value/total), end='\t')
-            print("%.2f%%"%(acc/total*100), flush=True)
+            print('%.2f%%'%(acc/total*100), flush=True)
+
+            #np.save('resnet18_classnumerr.npy', classnum_err)
