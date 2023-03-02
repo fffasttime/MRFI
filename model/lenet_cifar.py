@@ -7,10 +7,17 @@ import torchvision.transforms as transforms
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
- 
-trainset = torchvision.datasets.CIFAR10(root='./_data', train=True,
+
+
+try:
+    import os
+    datapath = os.environ['DATASETS'] + '/cifar10'
+except Exception:
+    datapath = './_data'
+
+trainset = torchvision.datasets.CIFAR10(root=datapath, train=True,
                                         download=False, transform=transform)
-testset = torchvision.datasets.CIFAR10(root='./_data', train=False,
+testset = torchvision.datasets.CIFAR10(root=datapath, train=False,
                                        download=False, transform=transform)
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')

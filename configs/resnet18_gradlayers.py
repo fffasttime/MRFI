@@ -22,7 +22,7 @@ def layerwise_dequantization(x, bit_width, dynamic_range):
     x *= (dynamic_range*2)/(up_limit - down_limit)
     x -= dynamic_range
 
-def experiment(total = 10000):
+def experiment(total = 50000):
     torch.set_num_threads(8)
 
     net=Net(True)
@@ -63,6 +63,7 @@ def experiment(total = 10000):
     net.eval()
 
     gradsum=np.zeros(len(layers))
+    gradall=[np.zeros(w.shape) for w in layers]
     
     for i in range(total):
         images, labels = next(data)
@@ -81,10 +82,11 @@ def experiment(total = 10000):
         
         for l in range(len(layers)):
             gradsum[l]+=torch.sum(grad[l].cpu().detach().abs()).numpy().reshape(-1)/total
+            gradall[l]+=grad[l].cpu().detach().abs().numpy()/total
             
         if (i%500==0):
             print(i, end=' ', flush=True)
-    print()
+    
     for d in gradsum:
         print(d)
     #print("%.2f%%"%(acc/total*100))
@@ -92,4 +94,5 @@ def experiment(total = 10000):
     #plt.show()
     #print(acc_data, loss_data)
 
-    np.savetxt('_logs/resnet18_grad6_l1c4.txt', gradsum, fmt="%.5f")
+    #np.savetxt('_logs/resnet18_grad6_l1c4.txt', gradsum, fmt="%.5f")
+    np.savez_compressed('resnet18_gradallweight.npz', *gradall)

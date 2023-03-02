@@ -65,7 +65,7 @@ def input_hook_func(self, module, input):
             module.weight.data = self.weight_original.clone()
             
         if not self.root.record_golden:
-            error_list = self.selector.gen_list(module.weight.shape)
+            error_list = torch.as_tensor(self.selector.gen_list(module.weight.shape))
             if error_list.numel()>0:
                 values = module.weight.view(-1)[error_list]
                 module.weight.view(-1)[error_list] = self.flip_mode(values, **self.flip_mode_args)

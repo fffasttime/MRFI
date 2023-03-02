@@ -11,7 +11,7 @@ yamlcfg='''
 FI_activation: true
 FI_enable: false
 FI_weight: false
-flip_mode: flip_int_random
+flip_mode: flip_int_highest
 flip_mode_args:
   bit_width: 16
 layerwise_quantization:
@@ -21,6 +21,8 @@ selector: RandomPositionSelector_Rate
 selector_args:
   rate: 0.00001
 sub_modules:
+  conv1:
+    FI_enable: true
   layer1:
     sub_modules:
       0:
@@ -78,7 +80,7 @@ sub_modules:
           conv2:
             FI_enable: true
 observer:
-    map: mse
+    map: mae
     reduce: sum
 '''
 
@@ -95,19 +97,18 @@ def experiment(total = 10000):
 
     FI_network = ModuleInjector(net, config)
 
-    rates=np.logspace(-5, -3, 21)
-    '''
+    rates=np.logspace(-6, -3, 31)
+    
     selectedlayers=[
       [0],
       [1,2,3,4],
       [5,6,7,8],
       [9,10,11,12],
       [13,14,15,16],
+      list(range(1,17)),
     ]
-    '''
-    selectedlayers=[list(range(1,17))]
     layers=[
-    # FI_network.conv1,
+    FI_network.conv1,
     getattr(FI_network.layer1,'0').conv1,
     getattr(FI_network.layer1,'0').conv2,
     getattr(FI_network.layer1,'1').conv1,
@@ -155,5 +156,5 @@ def experiment(total = 10000):
 
             print('%.10f'%rate, end='\t')
             for name, value in observes.items():
-                print("%.4f"%np.sqrt(value/total), end='\t')
+                print("%.4f"%(value/total), end='\t')
             print("%.2f%%"%(acc/total*100), flush=True)

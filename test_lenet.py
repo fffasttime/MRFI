@@ -13,6 +13,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-m', '--mode', type=str, default='wa', help='wa/coverage/error')
+parser.add_argument('-w', '--weight', default='_data/cifar10.pth', help='weight file path')
+parser.add_argument('-n', '--number', type=int, default=10000, help='number of image to test')
+
+opt = parser.parse_args()
+
 def lenet_default():
     logging.basicConfig(level=logging.NOTSET)
 
@@ -20,7 +30,7 @@ def lenet_default():
         config = yaml.full_load(f)
 
     net=Net()
-    net.load_state_dict(torch.load('_data/cifar10.pth'))
+    net.load_state_dict(torch.load(opt.weight))
     net.eval()
 
     FI_network = ModuleInjector(net, config)
@@ -28,7 +38,7 @@ def lenet_default():
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
 
-    total = 10000
+    total = opt.number
 
     for i in range(total):
         images, labels = next(data)
@@ -46,7 +56,7 @@ def coverage_test():
         config = yaml.full_load(f)
 
     net=Net()
-    net.load_state_dict(torch.load('_data/cifar10.pth'))
+    net.load_state_dict(torch.load(opt.weight))
     net.eval()
 
     FI_network = ModuleInjector(net, config)
@@ -54,7 +64,7 @@ def coverage_test():
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
 
-    total = 10000
+    total = opt.number
 
     for i in range(total):
         images, labels = next(data)
@@ -76,7 +86,7 @@ def errorplot():
         config = yaml.full_load(f)
 
     net=Net()
-    net.load_state_dict(torch.load('_data/cifar10.pth'))
+    net.load_state_dict(torch.load(opt.weight))
     net.eval()
 
     first_neuron_diff = lambda x, golden: x.reshape(-1)[0]-golden.reshape(-1)[0]
@@ -87,7 +97,7 @@ def errorplot():
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
 
-    total = 10000
+    total = opt.number
 
     for i in range(total):
         images, labels = next(data)
@@ -121,7 +131,20 @@ def errorplot():
         plt.title(name.split('.')[1])
     plt.show()
 
+def AIC(data, dist, dargs = None, k = None):
+    args = dist.fit(data)
+    k = len(args) if k is None else k
+    if dargs is None:
+        logl = dist.logpdf(data, *args).sum()
+    else:
+        logl = dist.logpdf(data, *dargs).sum()
+    return -2*logl + 2 * k, -2*logl, args
 
+def fittest(data):
+    #dists = [stats.norm, stats.gamma, stats.lognorm, stats.t, stats.expon, stats.uniform, stats.beta]
+    dists = [stats.norm, stats.t]
+    for dist in dists:
+        print(str(type(dist)).split('.')[-1], *AIC(data, dist))
 
 def WandAplot():
     mrfi.observer.Mapper_Dict['custom'] = lambda x, golden: np.random.choice(x.reshape(-1), 10)
@@ -130,20 +153,22 @@ def WandAplot():
         config = yaml.full_load(f)
 
     net=Net()
-    net.load_state_dict(torch.load('_data/cifar10.pth'))
+    net.load_state_dict(torch.load(opt.weight))
     net.eval()
 
     FI_network = ModuleInjector(net, config)
 
-    total = 1000
+    total = opt.number
     testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False)
     data=iter(testloader)
 
     for i in range(total):
         images, labels = next(data)
+        FI_network(images, True)
         FI_network(images)
 
     observes=FI_network.get_observes()
+    
     plt.xticks(size=5)
     i=0
     for layer in ['conv1', 'conv2', 'fc1', 'fc2', 'fc3']:
@@ -151,6 +176,12 @@ def WandAplot():
         plt.subplot(3,3,i)
         value=getattr(FI_network.module, layer).weight.data.numpy().reshape(-1)
         plt.hist(value,31)
+        print(layer)
+        
+        vs = np.random.choice(value, 100)
+        fittest(vs)
+        desc_stats = stats.describe(value)
+        # print(desc_stats)
         
         mean=np.mean(value)
         std=np.std(value)
@@ -166,6 +197,12 @@ def WandAplot():
         i+=1
         plt.subplot(3,3,i)
         plt.hist(value,31,color='green')
+        print(name)
+
+        vs = np.random.choice(value, 100)
+        fittest(vs)
+        desc_stats = stats.describe(value)
+        # print(desc_stats)
 
         mean=np.mean(value)
         std=np.std(value)
@@ -179,5 +216,11 @@ def WandAplot():
     plt.subplots_adjust(None, None, None, None, 0.4, 0.55)
     plt.show()
 
-
-errorplot()
+if opt.mode == 'wa':
+    WandAplot()
+elif opt.mode == 'coverage':
+    coverage_test()
+elif opt.mode == 'error':
+    errorplot()
+else:
+    raise NotImplementedError

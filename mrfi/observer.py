@@ -61,8 +61,13 @@ Mapper_Dict = {
     'equalrate': mapper_equalrate,
 }
 
+def no_reduce(arg):
+    if isinstance(arg, list):
+        return np.concatenate(arg)
+    return arg
+
 Reducer_Dict = {
-    'no_reduce': np.append,
+    'no_reduce': no_reduce,
     'sum': np.sum,
     'max': np.max,
     'min': np.min,

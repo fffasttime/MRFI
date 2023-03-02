@@ -7,7 +7,7 @@ import mrfi.observer
 from model.vgg11 import Net, testset
 from mrfi.injector import ModuleInjector
 
-yamlcfg='''
+yamlcfg1='''
 FI_activation: true
 FI_enable: true
 FI_weight: false
@@ -16,7 +16,7 @@ flip_mode_args:
   bit_width: 8
 layerwise_quantization:
   bit_width: 8
-  dynamic_range: 32
+  dynamic_range: 48
 selector: RandomPositionSelector_Rate
 selector_args:
   rate: 0.0001
@@ -35,9 +35,37 @@ observer:
     reduce: sum
 '''
 
-def exp(total = 10000):
+yamlcfg2='''
+FI_activation: true
+FI_enable: true
+FI_weight: false
+flip_mode: flip_int_highest
+flip_mode_args:
+  bit_width: 16
+layerwise_quantization:
+  bit_width: 16
+  dynamic_range: 48
+selector: RandomPositionSelector_Rate
+selector_args:
+  rate: 0.0001
+sub_modules:
+  features:
+    sub_modules:
+      3:
+      6:
+      8:
+      11:
+      13:
+      16:
+      18:
+observer:
+    map: mse
+    reduce: sum
+'''
+
+def exp_cfg(cfg, total = 10000):
     torch.set_num_threads(16)
-    config = yaml.load(yamlcfg)
+    config = yaml.load(cfg)
 
     net=Net(pretrained=True)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -51,7 +79,7 @@ def exp(total = 10000):
     rates=np.logspace(-5, -3, 21)
 
 
-    for mode in [mrfi.flip_mode.flip_int_random, mrfi.flip_mode.flip_int_highest]:
+    for mode in [mrfi.flip_mode.flip_int_random]:
 
         golden_class = np.ndarray((len(rates), total), np.int)
         inject_class = np.ndarray((len(rates), total), np.int)
@@ -88,3 +116,7 @@ def exp(total = 10000):
             print('%.2f%%'%(acc/total*100), flush=True)
 
             # np.save('vgg11_multirate_classout.npy', [golden_class, inject_class, label_class])
+
+def exp(total = 10000):
+    exp_cfg(yamlcfg1, total)
+    exp_cfg(yamlcfg2, total)
