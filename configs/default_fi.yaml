@@ -1,0 +1,16 @@
+faultinject:
+  - type: activation
+    quantization:
+      method: SymmericQuantization
+      dynamic_range: auto
+      bit_width: 16
+    enabled: True
+    selector:
+      method: RandomPositionByRate
+      poisson_sample: True
+      rate: 1e-5
+    modifier:
+      method: FlipIntHighest
+      bit_width: 16
+
+    modulename: conv
