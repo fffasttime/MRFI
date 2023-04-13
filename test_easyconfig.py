@@ -7,3 +7,5 @@ from mrfi import MRFI, EasyConfig
 
 fi_model = MRFI(models.resnet18(pretrained = True), 
                 EasyConfig.load_file('configs/default_fi.yaml'))
+
+fi_model.save_config('configs/resnet18_default_fi.yaml')

@@ -1,6 +1,56 @@
 from typing import Callable
 import numpy as np
 import torch.nn as nn
+import torch
+
+class MinMax:
+    def __init__(self) -> None:
+        self.reset()
+
+    def reset(self):
+        self.min = self.max = None
+
+    def update(self, x, golden):
+        minv = torch.min(x).item()
+        maxv = torch.max(x).item()
+        if self.min is None:
+            self.min = minv
+        else:
+            self.min = min(self.min, minv)
+
+        if self.max is None:
+            self.max = maxv
+        else:
+            self.max = maxv
+    
+    def result(self):
+        return self.min, self.max
+
+class RMSE:
+    def __init__(self) -> None:
+        self.reset()
+
+    def reset(self):
+        self.golden_act = None
+        self.last_is_golden = False
+        self.MSE_sum = []
+
+    def update(self, x, golden):
+        if golden:
+            self.last_is_golden = True
+            self.golden_act = x
+        else:
+            if not self.last_is_golden:
+                raise ValueError('RMSE observer require golden run before FI run')
+            
+            mse = torch.sum((x-self.golden_act)**2)/x.numel()
+            self.MSE_sum.append(mse.item())
+
+            self.last_is_golden = False
+            self.golden_act = None
+    
+    def result(self):
+        return np.sqrt(np.sum(self.MSE_sum)/len(self.MSE_sum))
 
 def mapper_identity(x, golden):
     return x
@@ -43,32 +93,8 @@ def mapper_equalcount(x, golden):
 
 def mapper_equalrate(x, golden):
     return np.mean(x==golden, axis=1)
-    
-Mapper_Dict = {
-    'identity': mapper_identity,
-    'maxabs': mapper_maxabs,
-    'minmax': mapper_minmax,
-    'var': mapper_var,
-    'diff': mapper_diff,
-    'maxdiff': mapper_maxdiff,
-    'sumdiff': mapper_sumdiff,
-    'mse': mapper_mse,
-    'sse': mapper_sse,
-    'mae': mapper_mae,
-    'sae': mapper_sae,
-    'accurancy': mapper_accurancy,
-    'equalcount': mapper_equalcount,
-    'equalrate': mapper_equalrate,
-}
 
 def no_reduce(arg):
     if isinstance(arg, list):
         return np.concatenate(arg)
     return arg
-
-Reducer_Dict = {
-    'no_reduce': no_reduce,
-    'sum': np.sum,
-    'max': np.max,
-    'min': np.min,
-}

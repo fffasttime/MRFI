@@ -1,11 +1,34 @@
 import torch.nn as nn
 import torch
 import copy
+from importlib import import_module
 from enum import Enum
+
+named_functions = {}
+
+mrfi_packages = ['.observer', '.quantization', '.selector', '.error_mode']
+
+def load_package_functions(name):
+    if name[0] == '.':
+        mod = import_module(name, 'mrfi')
+        for k, v in mod.__dict__.items():
+            if callable(v) and v.__module__ == 'mrfi'+name:
+                named_functions[k] = v
+    else:
+        mod = import_module(name)
+        for k, v in mod.__dict__.items():
+            if callable(v) and v.__module__ == name:
+                named_functions[k] = v
+
+for package_name in mrfi_packages:
+    load_package_functions(package_name)
+
+def add_function(name, function_object):
+    named_functions[name] = function_object
 
 class FIConfig:...
 
-def config_loader(filename):
+def read_config(filename):
     extentname = filename.split('.')[-1]
     with open(filename) as f:
         if extentname == 'yml' or extentname=='yaml':
@@ -15,14 +38,24 @@ def config_loader(filename):
             raise NotImplementedError(extentname)
     return config
 
+def write_config(config: dict, filename):
+    extentname = filename.split('.')[-1]
+    with open(filename, 'w') as f:
+        if extentname == 'yml' or extentname=='yaml':
+            import yaml
+            config = yaml.dump(config, f)
+        else:
+            raise NotImplementedError(extentname)
+    return config
+
 class EasyConfig(FIConfig):
     def __init__(self, config: dict):
         self.filist = config.get('faultinject', [])
-        self.observerlist = config.get('observer', [])
+        self.observerlist = config.get('observe', [])
     
     @classmethod
     def load_file(cls, filename):
-        return cls(config_loader(filename))
+        return cls(read_config(filename))
 
 class ConfigEnv:
     def __init__(self) -> None:
@@ -48,8 +81,10 @@ def node_step(nodetype, name):
             return ConfigTreeNodeType.OBSERVER_LIST
         raise ValueError(name)
     elif nodetype == ConfigTreeNodeType.FI_ATTR:
-        if name in ('quantization', 'selector', 'modifier', 'enabled'):
+        if name in ('quantization', 'selector', 'error_mode'):
             return ConfigTreeNodeType.FI_STAGE
+        if name in ('enabled', 'name'):
+            return None
         raise ValueError(name)
     elif nodetype == ConfigTreeNodeType.FI_STAGE:
         if name == 'method':
@@ -82,6 +117,9 @@ class ConfigTree(FIConfig):
                     self.raw_dict[k] = ConfigTree(v, mrfi, subtype)
                 else:
                     self.raw_dict[k] = v
+        
+        self.weight_copy = None
+        self.object = None
     
     def __contains__(self, key):
         if self.raw_list is None:
@@ -101,19 +139,15 @@ class ConfigTree(FIConfig):
     def __getattr__(self, name):
         if name == 'golden':
             return self.__mrfi.golden
-        if self.raw_dict is None:
+        if self.__dict__['raw_dict'] is None:
             raise AttributeError(name)
         if name in self.raw_dict:
             return self.raw_dict[name]
         raise KeyError(name)
     
-    def get_dict(self):
-        return self.raw_dict
-
-    def get_list(self):
-        return self.raw_list
-    
     def state_dict(self):
+        if self.__nodetype == ConfigTreeNodeType.METHOD_ARGS:
+            return self.raw_dict
         if self.raw_list is None:
             rdict = {}
             for k, v in self.raw_dict.items():
@@ -126,37 +160,43 @@ class ConfigTree(FIConfig):
             assert self.raw_list is not None
             return [x.state_dict() if isinstance(x, ConfigTree) else x for x in self.raw_list]
 
+    def hasattr(self, name):
+        assert self.raw_dict is not None
+        return name in self.raw_dict
 
 def FI_activation(config, act):
-    if not config.enable: return
+    if not config.enabled: return
     
     layerwise_quantization, fi_quantization = False, False
-
+    
     if config.quantization:
-        if config.quantization.layerwise == False:
+        if config.quantization.hasattr('layerwise') and config.quantization.layerwise == False:
             fi_quantization = True
         else:
             layerwise_quantization = True
     
     if layerwise_quantization or fi_quantization:
-        quantization_method = named_functions(config.quantization.method)
-        quantization_args = copy.copy(config.quantization.args)
-        if quantization_args.dynamic_range == 'max' or quantization_args.dynamic_range == 'auto':
-            quantization_args.dynamic_range = act.abs().max()
+        quantization_method = named_functions[config.quantization.method]
+        quantization_args = config.quantization.args.raw_dict
+        if 'dynamic_range' in quantization_args:
+            if (quantization_args['dynamic_range'] == 'max' or 
+                quantization_args['dynamic_range'] == 'auto'):
+                quantization_args = copy.copy(quantization_args)
+                quantization_args['dynamic_range'] = act.abs().max()
     
     if layerwise_quantization:
-        quantization_method.quantization(input, **quantization_args)
+        quantization_method.quantization(act, **quantization_args)
     
     if not config.golden:
-        if config.selector is None:
-            selector = named_functions(config.selector.method)
-            selector_args = config.selector.args
-            error_list = torch.as_tensor(selector(act, selector_args))
+        if config.hasattr('selector'):
+            selector = named_functions[config.selector.method]
+            selector_args = config.selector.args.raw_dict
+            error_list = torch.as_tensor(selector(act.shape, **selector_args))
         else:
             error_list = slice(None)
         
-        modifier = named_functions(config.modifier.method)
-        modifier_args = config.modifier.args
+        modifier = named_functions[config.error_mode.method]
+        modifier_args = config.error_mode.args.raw_dict
 
         values = act.view(-1)[error_list]
 
@@ -172,9 +212,10 @@ def FI_activation(config, act):
         quantization_method.dequantization(act, **quantization_args)
 
 def FI_activations(config, acts):
+    if len(config)==0: return
     if isinstance(acts, tuple):
-        assert((len(config)==1) or (len(config)==len(acts)), 
-               'number of activation FI config should be 1 or same as module inputs')
+        assert (len(config)==1) or (len(config)==len(acts)), \
+               'number of activation FI config should be 1 or same as module inputs'
         if len(config)==1:
             for act in acts:
                 FI_activation(config[0], act)
@@ -184,6 +225,58 @@ def FI_activations(config, acts):
     else:
         FI_activation(config[0], acts)
 
+def FI_weight(config, weight):
+    if not config.enabled: return
+    
+    layerwise_quantization, fi_quantization = False, False
+    
+    if config.quantization:
+        if config.quantization.hasattr('layerwise') and config.quantization.layerwise == False:
+            fi_quantization = True
+        else:
+            layerwise_quantization = True
+    
+    if config.weight_copy == None:
+        config.weight_copy = weight.clone()
+    else:
+        weight.copy_(config.weight_copy)
+
+    if layerwise_quantization or fi_quantization:
+        quantization_method = named_functions[config.quantization.method]
+        quantization_args = config.quantization.args.raw_dict
+        if 'dynamic_range' in quantization_args:
+            if (quantization_args['dynamic_range'] == 'max' or 
+                quantization_args['dynamic_range'] == 'auto'):
+                quantization_args = copy.copy(quantization_args)
+                quantization_args['dynamic_range'] = weight.abs().max()
+    
+    if layerwise_quantization:
+        quantization_method.quantization(weight, **quantization_args)
+    
+    if not config.golden:
+        if config.hasattr('selector'):
+            selector = named_functions[config.selector.method]
+            selector_args = config.selector.args.raw_dict
+            error_list = torch.as_tensor(selector(weight.shape, **selector_args))
+        else:
+            error_list = slice(None)
+        
+        modifier = named_functions[config.error_mode.method]
+        modifier_args = config.error_mode.args.raw_dict
+
+        values = weight.view(-1)[error_list]
+
+        if fi_quantization: quantization_method.quantization(values)
+
+        fi_value = modifier(values, **modifier_args)
+        
+        if fi_quantization: quantization_method.dequantization(fi_value)
+
+        weight.view(-1)[error_list] = fi_value
+
+    if layerwise_quantization:
+        quantization_method.dequantization(weight, **quantization_args)
+
 
 def FI_weights(config, module):
     if config is None: return
@@ -191,29 +284,36 @@ def FI_weights(config, module):
         if weight_config.enabled == False: # not None, True
             continue
         weight = getattr(module, weight_config.name)
+        FI_weight(weight_config, weight)
 
 def run_observer(config, activation):
-    if config.method is not None:
+    if config.object is None:
         observer_method = named_functions[config.method]
-    observer_method(config.ctx, activation, config.golden)
+        config.object = observer_method()
+    config.object.update(activation, config.golden)
 
-def run_observers(config, act_value):
-    for config_observer in config:
-        run_observer(config_observer, act_value)
-
-named_functions = {}
-
-def add_function(name, function_object):
-    named_functions[name] = function_object
+def run_observers(config, acts):
+    if len(config)==0: return
+    if isinstance(acts, tuple):
+        assert (len(config)==1) or (len(config)==len(acts)), \
+               'number of activation FI config should be 1 or same as module inputs'
+        if len(config)==1:
+            for act in acts:
+                run_observer(config[0], act)
+        else:
+            for i, act in enumerate(acts):
+                run_observer(config[i], act)
+    else:
+        run_observer(config[0], acts)
 
 def pre_hook_func(config_node, module, inputs): # note inputs from module forward call, a tuple
     FI_activations(config_node.activation, inputs)
-    FI_weights(config_node.weights)
+    FI_weights(config_node.weights, module)
     run_observers(config_node.observers_pre, inputs)
 
 def after_hook_func(config_node, module, inputs, output):
     FI_activations(config_node.activation_out, output)
-    run_observers(config_node.observers_pre, output)
+    run_observers(config_node.observers, output)
 
 def default_list(x):
     if x is None: return []
@@ -235,8 +335,8 @@ class MRFI:
 
     def __add_hooks(self):
         for name, module in self.model.named_modules():
-            module.register_forward_pre_hook(lambda mod, input: pre_hook_func(self, mod, input))
-            module.register_forward_hook(lambda mod, input, output: after_hook_func(self, mod, input, output))
+            module.register_forward_pre_hook(lambda mod, input: pre_hook_func(mod.FI_config, mod, input))
+            module.register_forward_hook(lambda mod, input, output: after_hook_func(mod.FI_config, mod, input, output))
         
     @staticmethod
     def add_function(name, function_object):
@@ -244,9 +344,9 @@ class MRFI:
 
     def __findmodules(self, attrdict):
         '''find by name,type and remove item'''
-        moduletypes = default_list(attrdict.pop('moduletype', []))
-        modulenames = default_list(attrdict.pop('modulename', []))
-        modulefullnames = default_list(attrdict.pop('modulefullname', []))
+        moduletypes = default_list(attrdict.pop('module_type', []))
+        modulenames = default_list(attrdict.pop('module_name', []))
+        modulefullnames = default_list(attrdict.pop('module_fullname', []))
         found = {}
         for name, module in self.model.named_modules():
             for typename in moduletypes:
@@ -266,6 +366,7 @@ class MRFI:
             'activation_out':[],
             'activation':[],
             'observers':[],
+            'observers_pre':[],
             'sub_modules':{}
         }
         for name, submodule in module.named_children():
@@ -288,7 +389,6 @@ class MRFI:
     def __config_fi(self, fi:dict, module, fitype):
         configtree = module.FI_config
         
-        print(fi)
         if fitype == 'activation' or fitype == 'activation_in':
             configtree.activation.raw_list.append(
                 ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR))
@@ -296,26 +396,47 @@ class MRFI:
             configtree.activation_out.raw_list.append(
                 ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR))
         elif fitype == 'weight':
-            names = default_list(fi.pop('name', ['weight']))
+            names = default_list(fi.get('name', ['weight']))
 
             for name in names:
                 if not hasattr(module, name):
-                    print('warning: no "{name}" in current module, ignore')
+                    print('warning: no weight mode "{name}" in current module, ignore')
                     continue
                 ficopy = copy.deepcopy(fi)
                 ficopy['name'] = name
-                configtree.weight.raw_list.append(
+                configtree.weights.raw_list.append(
                     ConfigTree(ficopy, self, ConfigTreeNodeType.FI_ATTR))
+        else:
+            raise ValueError('FI type shoude be either activation(_in)/actionvation_out/weight')
+    
+    def golden_run(self, golden: bool):
+        self.golden = golden
+    
+    def __getattr__(self, name):
+        return getattr(self.model, name)
+
+    def __call__(self, *args, **kwds):
+        return self.model(*args, **kwds)
+                
+    def save_config(self, filename):
+        write_config(self.config.state_dict(), filename)
 
     def __config_observer(self, observer:dict, module):
         configtree = module.FI_config
 
-        configtree.observers.raw_list.append(ConfigTree(observer, self, ConfigTreeNodeType.OBSERVER_ATTR))
+        pos = observer.pop('position', 'after')
+        observer_copy = copy.deepcopy(observer)
+
+        if pos == 'pre':
+            configtree.observers_pre.raw_list.append(ConfigTree(observer_copy, self, ConfigTreeNodeType.OBSERVER_ATTR))
+        elif pos == 'after':
+            configtree.observers.raw_list.append(ConfigTree(observer_copy, self, ConfigTreeNodeType.OBSERVER_ATTR))
+        else:
+            raise ValueError('observer position should be either pre/after')
         
     def __expand_config(self, config: EasyConfig):
         treedict = self.__empty_configtree(self.model)
         configtree = ConfigTree(treedict, self)
-        print(configtree.state_dict())
         self.__add_moduleconfig(configtree, self.model)
 
         filist:list[dict] = config.filist
@@ -333,15 +454,17 @@ class MRFI:
             selector = fi.get('selector')
             if selector is not None:
                 self.__change_arg(selector)
-            modifier = fi.get('modifier')
-            if modifier is not None:
-                self.__change_arg(modifier)
+            error_mode = fi.get('error_mode')
+            if error_mode is not None:
+                self.__change_arg(error_mode)
 
             for mod in used_modules.values():
                 self.__config_fi(fi, mod, fitype)
 
         for observer in observerlist:
-            used_modules = self.__findmodules(fi)
+            used_modules = self.__findmodules(observer)
             
             for mod in used_modules.values():
                 self.__config_observer(observer, mod)
+
+        return configtree

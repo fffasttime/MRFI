@@ -1,0 +1,20 @@
+faultinject:
+  - type: weight
+    quantization:
+      method: SymmericQuantization
+      dynamic_range: auto
+      bit_width: 16
+    enabled: True
+    selector:
+      method: RandomPositionByRate
+      poisson_sample: True
+      rate: 1e-3
+    error_mode:
+      method: IntSignBitFlip
+      bit_width: 16
+
+    module_name: conv
+observe:
+  - method: MinMax
+    position: pre
+    module_name: [conv, fc]

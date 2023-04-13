@@ -3,7 +3,7 @@ from numpy import mod
 import torch.nn as nn
 import torch
 from .selector import Selector_Dict
-from .flip_mode import FlipMode_Dict
+from .error_mode import FlipMode_Dict
 from .observer import Mapper_Dict, Reducer_Dict
 
 import logging

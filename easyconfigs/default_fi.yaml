@@ -8,9 +8,9 @@ faultinject:
     selector:
       method: RandomPositionByRate
       poisson_sample: True
-      rate: 1e-5
-    modifier:
-      method: FlipIntHighest
+      rate: 1e-3
+    error_mode:
+      method: IntSignBitFlip
       bit_width: 16
 
-    modulename: conv
+    module_name: conv
