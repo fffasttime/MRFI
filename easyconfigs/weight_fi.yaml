@@ -15,6 +15,6 @@ faultinject:
 
     module_name: conv
 observe:
-  - method: MinMax
+  - method: RMSE
     position: pre
     module_name: [conv, fc]

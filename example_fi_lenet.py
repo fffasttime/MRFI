@@ -21,14 +21,19 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=8, shuffle=False)
 
 acc_golden, acc_fi = 0, 0
 
-with torch.no_grad():
+cfg = fi_model.get_configs('', 'weights.0', False)
+
+for i in range(2):
+    cfg.enabled = False
+    cfg[i].enabled = True
+    
+    fi_model.observers_reset()
     for images, labels in testloader:
         images=images.to(device)
         
         # fault free run
-        fi_model.golden_run(True)
-        outs_golden=fi_model(images)
-        fi_model.golden_run(False)
+        with fi_model.golden_run():
+            outs_golden=fi_model(images)
         # fault inject run
         outs_fi=fi_model(images)
 
@@ -36,4 +41,5 @@ with torch.no_grad():
         acc_fi+=(outs_fi.argmax(1)==labels).sum().item()
         break
 
-print(f'{len(testset)} images, acc_golden {acc_golden}, acc_fi {acc_fi}')
+    print(f'{len(testset)} images, acc_golden {acc_golden}, acc_fi {acc_fi}')
+    print(fi_model.observers_result())

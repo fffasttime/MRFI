@@ -3,6 +3,7 @@ import torch
 import copy
 from importlib import import_module
 from enum import Enum
+from contextlib import contextmanager
 
 named_functions = {}
 
@@ -96,73 +97,85 @@ def node_step(nodetype, name):
         return ConfigTreeNodeType.MODULE
 
 class ConfigTree(FIConfig):
-    def __init__(self, config_node, mrfi, nodetype = ConfigTreeNodeType.MODULE):
-        self.__mrfi = mrfi
-        self.__nodetype = nodetype
+    def __init__(self, config_node, mrfi, nodetype = ConfigTreeNodeType.MODULE, name = 'model'):
+        self.__dict__['mrfi'] = mrfi
+        self.__dict__['nodetype'] = nodetype
+        self.__dict__['name'] = name
         if isinstance(config_node, list):
             subtype = {
                 ConfigTreeNodeType.MODULE_LIST: ConfigTreeNodeType.MODULE,
                 ConfigTreeNodeType.FI_LIST: ConfigTreeNodeType.FI_ATTR,
                 ConfigTreeNodeType.OBSERVER_LIST: ConfigTreeNodeType.OBSERVER_ATTR,
             }[nodetype]
-            self.raw_list = [ConfigTree(item, mrfi, subtype) for item in config_node]
-            self.raw_dict = None
+            self.__dict__['raw_dict'] = {i: ConfigTree(item, mrfi, subtype, self.name + '.' + str(i)) for i, item in enumerate(config_node)}
 
         elif isinstance(config_node, dict):
-            self.raw_list = None
-            self.raw_dict = {}
+            self.__dict__['raw_dict'] = {}
             for k, v in config_node.items():
                 subtype = node_step(nodetype, k)
                 if subtype != None:
-                    self.raw_dict[k] = ConfigTree(v, mrfi, subtype)
+                    self.raw_dict[k] = ConfigTree(v, mrfi, subtype, self.name + '.' + k)
                 else:
                     self.raw_dict[k] = v
         
-        self.weight_copy = None
-        self.object = None
+        self.__dict__['weight_copy'] = None
+        self.__dict__['object'] = None
     
     def __contains__(self, key):
-        if self.raw_list is None:
-            return key in self.raw_dict
-        return key in self.raw_list
+        return key in self.raw_dict
 
     def __getitem__(self, id):
-        if self.raw_list is None:
-            return self.raw_dict[id]
-        return self.raw_list[id]
+        return self.raw_dict[id]
+    
+    def __setitem__(self, id, value):
+        self.raw_dict[id] = value
     
     def __len__(self):
-        if self.raw_list is None:
-            return len(self.raw_dict)
-        return len(self.raw_list)
+        return len(self.raw_dict)
 
     def __getattr__(self, name):
         if name == 'golden':
-            return self.__mrfi.golden
-        if self.__dict__['raw_dict'] is None:
-            raise AttributeError(name)
+            return self.mrfi.golden
         if name in self.raw_dict:
             return self.raw_dict[name]
-        raise KeyError(name)
+        raise KeyError(f"{self} has no config named '{name}'")
+    
+    def __setattr__(self, name, value):
+        if name in self.__dict__['raw_dict']:
+            self.__dict__['raw_dict'][name] = value
+            return
+        raise KeyError(f"{self} has no config named '{name}'")
+    
+    def __iter__(self):
+        return iter(self.raw_dict.values())
+    
+    def __repr__(self) -> str:
+        return ''.join("<%s node '%s'>"%(self.nodetype.name, self.name))
+
+    def append(self, obj):
+        self.raw_dict[len(self.raw_dict)] = obj
     
     def state_dict(self):
-        if self.__nodetype == ConfigTreeNodeType.METHOD_ARGS:
+        if self.nodetype == ConfigTreeNodeType.METHOD_ARGS:
             return self.raw_dict
-        if self.raw_list is None:
-            rdict = {}
-            for k, v in self.raw_dict.items():
-                if isinstance(v, ConfigTree):
-                    rdict[k] = v.state_dict()
-                else:
-                    rdict[k] = v
-            return rdict
-        else:
-            assert self.raw_list is not None
-            return [x.state_dict() if isinstance(x, ConfigTree) else x for x in self.raw_list]
+        rdict = {}
+        for k, v in self.raw_dict.items():
+            if isinstance(v, ConfigTree):
+                rdict[k] = v.state_dict()
+            else:
+                rdict[k] = v
+        return rdict
 
     def hasattr(self, name):
         assert self.raw_dict is not None
         return name in self.raw_dict
+    
+    def getattr(self, name):
+        if name not in self.raw_dict: return None
+        return self.raw_dict[name]
+    
+    def set_internal_attr(self, key, name):
+        self.__dict__[key] = name
 
 def FI_activation(config, act):
     if not config.enabled: return
@@ -237,7 +250,7 @@ def FI_weight(config, weight):
             layerwise_quantization = True
     
     if config.weight_copy == None:
-        config.weight_copy = weight.clone()
+        config.set_internal_attr('weight_copy', weight.clone())
     else:
         weight.copy_(config.weight_copy)
 
@@ -283,29 +296,23 @@ def FI_weights(config, module):
     for weight_config in config:
         if weight_config.enabled == False: # not None, True
             continue
-        weight = getattr(module, weight_config.name)
+        weight = getattr(module, weight_config.getattr('name'))
         FI_weight(weight_config, weight)
 
 def run_observer(config, activation):
     if config.object is None:
         observer_method = named_functions[config.method]
-        config.object = observer_method()
+        config.set_internal_attr('object', observer_method())
     config.object.update(activation, config.golden)
 
 def run_observers(config, acts):
-    if len(config)==0: return
-    if isinstance(acts, tuple):
-        assert (len(config)==1) or (len(config)==len(acts)), \
-               'number of activation FI config should be 1 or same as module inputs'
-        if len(config)==1:
-            for act in acts:
-                run_observer(config[0], act)
+    for observer in config:
+        if isinstance(acts, tuple):
+            index = int(observer.index) if observer.hasattr('index') else 0
+            run_observer(observer, acts[index])
         else:
-            for i, act in enumerate(acts):
-                run_observer(config[i], act)
-    else:
-        run_observer(config[0], acts)
-
+            run_observer(observer, acts)
+            
 def pre_hook_func(config_node, module, inputs): # note inputs from module forward call, a tuple
     FI_activations(config_node.activation, inputs)
     FI_weights(config_node.weights, module)
@@ -320,6 +327,20 @@ def default_list(x):
     if isinstance(x, list): return x
     return [x]
 
+class ConfigItemList(list):
+    def __getattr__(self, key):
+        return ConfigItemList([x[key] for x in self])
+    
+    def __setattr__(self, key, value):
+        if isinstance(value, list):
+            assert len(value)==len(self), 'setattr value list should have same length as config item'
+            for i, item in enumerate(self):
+                item[key] = value[i]
+            return
+
+        for item in self:
+            item[key] = value
+
 class MRFI:
     def __init__(self, model: nn.Module, config: FIConfig) -> None:
         self.model = model
@@ -332,6 +353,7 @@ class MRFI:
             raise TypeError(config)
 
         self.__add_hooks()
+        self.golden = False
 
     def __add_hooks(self):
         for name, module in self.model.named_modules():
@@ -390,47 +412,75 @@ class MRFI:
         configtree = module.FI_config
         
         if fitype == 'activation' or fitype == 'activation_in':
-            configtree.activation.raw_list.append(
-                ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR))
+            configtree.activation.append(
+                ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR, configtree.name + '.activation.0'))
         elif fitype == 'activation_out':
-            configtree.activation_out.raw_list.append(
-                ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR))
+            configtree.activation_out.append(
+                ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR, configtree.name + '.activation_out.0'))
         elif fitype == 'weight':
             names = default_list(fi.get('name', ['weight']))
 
-            for name in names:
+            for i, name in enumerate(names):
                 if not hasattr(module, name):
                     print('warning: no weight mode "{name}" in current module, ignore')
                     continue
                 ficopy = copy.deepcopy(fi)
                 ficopy['name'] = name
-                configtree.weights.raw_list.append(
-                    ConfigTree(ficopy, self, ConfigTreeNodeType.FI_ATTR))
+                configtree.weights.append(
+                    ConfigTree(ficopy, self, ConfigTreeNodeType.FI_ATTR, configtree.name + '.weights.' + str(i)))
         else:
             raise ValueError('FI type shoude be either activation(_in)/actionvation_out/weight')
     
-    def golden_run(self, golden: bool):
+    @contextmanager
+    def golden_run(self):
+        golden = self.golden
+        self.golden = True
+        yield
         self.golden = golden
     
     def __getattr__(self, name):
         return getattr(self.model, name)
 
     def __call__(self, *args, **kwds):
-        return self.model(*args, **kwds)
-                
+        with torch.no_grad():
+            return self.model(*args, **kwds)
+
+    def get_configs(self, modulename = '', configname = None, strict = True) -> ConfigItemList:
+        configname = configname.split('.')
+        result = ConfigItemList()
+        for name, module in self.named_modules():
+            if modulename not in name: continue
+            fi_config_root : ConfigTree = module.FI_config
+            fi_config = fi_config_root
+            for tname in configname:
+                if fi_config.nodetype == ConfigTreeNodeType.OBSERVER_LIST or fi_config.nodetype == ConfigTreeNodeType.FI_LIST:
+                    try:
+                        tname = int(tname)
+                    except:
+                        raise ValueError('Config "%s" expect index, got "%s"'%(fi_config, tname))
+                if not fi_config.hasattr(tname):
+                    if strict:
+                        raise ValueError('Config "%s" has no subnode named "%s"'%(fi_config, tname))
+                    else:
+                        break
+                fi_config = fi_config[tname]
+            else:
+                result.append(fi_config)
+        return result
+
     def save_config(self, filename):
         write_config(self.config.state_dict(), filename)
 
     def __config_observer(self, observer:dict, module):
         configtree = module.FI_config
 
-        pos = observer.pop('position', 'after')
         observer_copy = copy.deepcopy(observer)
+        pos = observer_copy.pop('position', 'after')
 
         if pos == 'pre':
-            configtree.observers_pre.raw_list.append(ConfigTree(observer_copy, self, ConfigTreeNodeType.OBSERVER_ATTR))
+            configtree.observers_pre.append(ConfigTree(observer_copy, self, ConfigTreeNodeType.OBSERVER_ATTR))
         elif pos == 'after':
-            configtree.observers.raw_list.append(ConfigTree(observer_copy, self, ConfigTreeNodeType.OBSERVER_ATTR))
+            configtree.observers.append(ConfigTree(observer_copy, self, ConfigTreeNodeType.OBSERVER_ATTR))
         else:
             raise ValueError('observer position should be either pre/after')
         
@@ -468,3 +518,35 @@ class MRFI:
                 self.__config_observer(observer, mod)
 
         return configtree
+
+    def observers_reset(self) -> None:
+        for module in self.model.modules():
+            config = module.FI_config
+            if config.observers_pre is not None:
+                for observer in config.observers_pre:
+                    if observer.object is not None:
+                        observer.object.reset()
+            if config.observers is not None:
+                for observer in config.observers:
+                    if observer.object is not None:
+                        observer.object.reset()
+
+    def observers_result(self) -> list:
+        resultlist = [] # name, value
+        for module_name, module in self.model.named_modules():
+            config = module.FI_config
+            if config.observers_pre is not None:
+                for i, observer in enumerate(config.observers_pre):
+                    if observer.object is not None and hasattr(observer.object, 'result'):
+                        name = module_name + '.pre.' + str(i)
+                        res = observer.object.result()
+                        resultlist.append((name, res))
+
+            if config.observers is not None:
+                for i, observer in enumerate(config.observers):
+                    if observer.object is not None and hasattr(observer.object, 'result'):
+                        name = module_name + '.' + str(i)
+                        res = observer.object.result()
+                        resultlist.append((name, res))
+        
+        return resultlist

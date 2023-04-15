@@ -29,3 +29,18 @@ class PositiveQuantization:
     def dequantization(x, bit_width, dynamic_range):
         up_limit = (1<<bit_width)-1
         x *= (dynamic_range)/(up_limit)
+
+class FixPointQuantization:
+    @staticmethod
+    def quantization(x, integer_bit, decimal_bit):
+        dynamic_range = 2**(integer_bit)
+        limit = (1<<(integer_bit + decimal_bit))-1
+        x *= (limit) / (dynamic_range)
+        x.clamp_(-limit, limit)
+        x.round_()
+
+    @staticmethod
+    def dequantization(x, integer_bit, decimal_bit):
+        dynamic_range = 2**(integer_bit)
+        limit = (1<<(integer_bit + decimal_bit))-1
+        x *= (dynamic_range)/(limit)
