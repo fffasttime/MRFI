@@ -21,11 +21,10 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=8, shuffle=False)
 
 acc_golden, acc_fi = 0, 0
 
-cfg = fi_model.get_configs('', 'weights.0', False)
+cfg = fi_model.get_configs('', 'weights.0.selector', False)
+print(cfg)
 
 for i in range(2):
-    cfg.enabled = False
-    cfg[i].enabled = True
     
     fi_model.observers_reset()
     for images, labels in testloader:
@@ -39,7 +38,6 @@ for i in range(2):
 
         acc_golden+=(outs_golden.argmax(1)==labels).sum().item()
         acc_fi+=(outs_fi.argmax(1)==labels).sum().item()
-        break
 
     print(f'{len(testset)} images, acc_golden {acc_golden}, acc_fi {acc_fi}')
     print(fi_model.observers_result())

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>924</width>
-    <height>729</height>
+    <width>1085</width>
+    <height>823</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,16 +16,44 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QTreeView" name="treeView">
-      <property name="minimumSize">
-       <size>
-        <width>435</width>
-        <height>0</height>
-       </size>
-      </property>
-      <attribute name="headerVisible">
-       <bool>false</bool>
-      </attribute>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Load a detail config file...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTreeView" name="treeView">
+         <property name="minimumSize">
+          <size>
+           <width>435</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="animated">
+          <bool>true</bool>
+         </property>
+         <attribute name="headerVisible">
+          <bool>true</bool>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
@@ -45,13 +73,13 @@
      <widget class="QWidget" name="widget" native="true">
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>300</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>304</width>
+        <width>600</width>
         <height>16777215</height>
        </size>
       </property>
@@ -72,26 +100,41 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTreeView" name="treeView_2"/>
-       </item>
-       <item>
         <widget class="QLabel" name="label">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>240</height>
+           <height>40</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
          <property name="margin">
           <number>0</number>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QTreeView" name="treeView_2"/>
        </item>
       </layout>
      </widget>
@@ -103,7 +146,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>924</width>
+     <width>1085</width>
      <height>26</height>
     </rect>
    </property>
@@ -119,12 +162,12 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoadConfig">
    <property name="text">
-    <string>LoadConfig</string>
+    <string>Load Config...</string>
    </property>
   </action>
   <action name="actionSaveConfig">
    <property name="text">
-    <string>SaveConfig</string>
+    <string>Save As...</string>
    </property>
   </action>
  </widget>

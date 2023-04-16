@@ -17,9 +17,8 @@ def RandomPositionByNumber(shape, n):
     return torch.randint(0, nelem, (n,))
 
 def RandomPositionByRate(shape, rate: float, poisson_sample: bool = True):
-    #print(shape, end=' ')
     nelem = shape.numel()
-    print(nelem, rate)
+    # print(nelem, rate)
 
     n=nelem * float(rate)
     #print(n)

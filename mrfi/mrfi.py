@@ -95,6 +95,10 @@ def node_step(nodetype, name):
         raise ValueError(name)
     elif nodetype == ConfigTreeNodeType.MODULE_LIST:
         return ConfigTreeNodeType.MODULE
+    elif nodetype == ConfigTreeNodeType.FI_LIST:
+        return ConfigTreeNodeType.FI_ATTR
+    elif nodetype == ConfigTreeNodeType.OBSERVER_LIST:
+        return ConfigTreeNodeType.OBSERVER_ATTR
 
 class ConfigTree(FIConfig):
     def __init__(self, config_node, mrfi, nodetype = ConfigTreeNodeType.MODULE, name = 'model'):
@@ -102,19 +106,13 @@ class ConfigTree(FIConfig):
         self.__dict__['nodetype'] = nodetype
         self.__dict__['name'] = name
         if isinstance(config_node, list):
-            subtype = {
-                ConfigTreeNodeType.MODULE_LIST: ConfigTreeNodeType.MODULE,
-                ConfigTreeNodeType.FI_LIST: ConfigTreeNodeType.FI_ATTR,
-                ConfigTreeNodeType.OBSERVER_LIST: ConfigTreeNodeType.OBSERVER_ATTR,
-            }[nodetype]
-            self.__dict__['raw_dict'] = {i: ConfigTree(item, mrfi, subtype, self.name + '.' + str(i)) for i, item in enumerate(config_node)}
-
+            raise ValueError(f"In config {self.name}, expect dict, got list")
         elif isinstance(config_node, dict):
             self.__dict__['raw_dict'] = {}
             for k, v in config_node.items():
                 subtype = node_step(nodetype, k)
                 if subtype != None:
-                    self.raw_dict[k] = ConfigTree(v, mrfi, subtype, self.name + '.' + k)
+                    self.raw_dict[k] = ConfigTree(v, mrfi, subtype, self.name + '.' + str(k))
                 else:
                     self.raw_dict[k] = v
         
@@ -384,11 +382,11 @@ class MRFI:
 
     def __empty_configtree(self, module: torch.nn.Module):
         curdict = {
-            'weights': [],
-            'activation_out':[],
-            'activation':[],
-            'observers':[],
-            'observers_pre':[],
+            'weights': {},
+            'activation_out':{},
+            'activation':{},
+            'observers':{},
+            'observers_pre':{},
             'sub_modules':{}
         }
         for name, submodule in module.named_children():
