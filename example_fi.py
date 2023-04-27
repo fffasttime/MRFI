@@ -13,10 +13,10 @@ tf=transforms.Compose([
                                      std=[0.229, 0.224, 0.225]),
         ])
 
-fi_model = MRFI(models.resnet50(pretrained = True), 
+fi_model = MRFI(models.resnet18(pretrained = True), 
                 EasyConfig.load_file('easyconfigs/default_fi.yaml'))
 
-fi_model.save_config('detailconfigs/resnet50_default_fi.yaml')
+fi_model.save_config('detailconfigs/resnet18_default_fi.yaml')
 testset=datasets.ImageFolder('~/dataset/val', tf)
 
 if torch.cuda.is_available():

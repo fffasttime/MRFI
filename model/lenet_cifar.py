@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
+import torch.utils.data
  
 transform = transforms.Compose(
     [transforms.ToTensor(),
@@ -21,6 +22,12 @@ testset = torchvision.datasets.CIFAR10(root=datapath, train=False,
                                        download=False, transform=transform)
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+
+def make_testloader(size = None, **kwargs):
+    if size == None:
+        return torch.utils.data.DataLoader(testset, **kwargs)
+    subset = torch.utils.data.Subset(testset, range(size))
+    return torch.utils.data.DataLoader(subset, **kwargs)
 
 import torch.nn as nn
 import torch.nn.functional as F

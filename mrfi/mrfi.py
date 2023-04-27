@@ -51,8 +51,8 @@ def write_config(config: dict, filename):
 
 class EasyConfig(FIConfig):
     def __init__(self, config: dict):
-        self.filist = config.get('faultinject', [])
-        self.observerlist = config.get('observe', [])
+        self.faultinject = config.get('faultinject', [])
+        self.observe = config.get('observe', [])
     
     @classmethod
     def load_file(cls, filename):
@@ -487,8 +487,8 @@ class MRFI:
         configtree = ConfigTree(treedict, self)
         self.__add_moduleconfig(configtree, self.model)
 
-        filist:list[dict] = config.filist
-        observerlist = config.observerlist
+        filist:list[dict] = config.faultinject
+        observerlist = config.observe
 
         for fi in filist:
             used_modules = self.__findmodules(fi)

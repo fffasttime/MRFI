@@ -24,8 +24,9 @@ acc_golden, acc_fi = 0, 0
 cfg = fi_model.get_configs('', 'weights.0.selector', False)
 print(cfg)
 
-for i in range(2):
-    
+for i in range(5):
+    cfg.enabled = False
+    cfg[i].enabled = True
     fi_model.observers_reset()
     for images, labels in testloader:
         images=images.to(device)
