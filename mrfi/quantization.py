@@ -2,7 +2,7 @@
 
 class SymmericQuantization:
     @staticmethod
-    def quantization(x, bit_width, dynamic_range, scale_factor = 1.0):
+    def quantize(x, bit_width, dynamic_range, scale_factor = 1.0):
         dynamic_range_scale = scale_factor * dynamic_range
         down_limit, up_limit = -(1<<bit_width-1)+1, (1<<bit_width-1)-1
         x += dynamic_range_scale
@@ -12,7 +12,7 @@ class SymmericQuantization:
         x.round_()
 
     @staticmethod
-    def dequantization(x, bit_width, dynamic_range, scale_factor = 1.0):
+    def dequantize(x, bit_width, dynamic_range, scale_factor = 1.0):
         dynamic_range_scale = scale_factor * dynamic_range
         down_limit, up_limit = -(1<<bit_width-1)+1, (1<<bit_width-1)-1
         x -= down_limit
@@ -21,7 +21,7 @@ class SymmericQuantization:
 
 class PositiveQuantization:
     @staticmethod
-    def quantization(x, bit_width, dynamic_range, scale_factor = 1.0):
+    def quantize(x, bit_width, dynamic_range, scale_factor = 1.0):
         dynamic_range_scale = scale_factor * dynamic_range
         up_limit = (1<<bit_width)-1
         x *= (up_limit) / (dynamic_range_scale)
@@ -29,14 +29,14 @@ class PositiveQuantization:
         x.round_()
 
     @staticmethod
-    def dequantization(x, bit_width, dynamic_range, scale_factor = 1.0):
+    def dequantize(x, bit_width, dynamic_range, scale_factor = 1.0):
         dynamic_range_scale = scale_factor * dynamic_range
         up_limit = (1<<bit_width)-1
         x *= (dynamic_range_scale)/(up_limit)
 
 class FixPointQuantization:
     @staticmethod
-    def quantization(x, integer_bit, decimal_bit):
+    def quantize(x, integer_bit, decimal_bit):
         dynamic_range = 2**(integer_bit)
         limit = (1<<(integer_bit + decimal_bit))-1
         x *= (limit) / (dynamic_range)
@@ -44,7 +44,7 @@ class FixPointQuantization:
         x.round_()
 
     @staticmethod
-    def dequantization(x, integer_bit, decimal_bit):
+    def dequantize(x, integer_bit, decimal_bit):
         dynamic_range = 2**(integer_bit)
         limit = (1<<(integer_bit + decimal_bit))-1
         x *= (dynamic_range)/(limit)

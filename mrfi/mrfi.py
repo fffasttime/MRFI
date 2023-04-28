@@ -196,7 +196,7 @@ def FI_activation(config, act):
                 quantization_args['dynamic_range'] = act.abs().max()
     
     if layerwise_quantization:
-        quantization_method.quantization(act, **quantization_args)
+        quantization_method.quantize(act, **quantization_args)
     
     if not config.golden:
         if config.hasattr('selector'):
@@ -211,16 +211,16 @@ def FI_activation(config, act):
 
         values = act.view(-1)[error_list]
 
-        if fi_quantization: quantization_method.quantization(values)
+        if fi_quantization: quantization_method.quantize(values)
 
         fi_value = modifier(values, **modifier_args)
         
-        if fi_quantization: quantization_method.dequantization(fi_value)
+        if fi_quantization: quantization_method.dequantize(fi_value)
 
         act.view(-1)[error_list] = fi_value
 
     if layerwise_quantization:
-        quantization_method.dequantization(act, **quantization_args)
+        quantization_method.dequantize(act, **quantization_args)
 
 def FI_activations(config, acts):
     if len(config)==0: return
@@ -262,7 +262,7 @@ def FI_weight(config, weight):
                 quantization_args['dynamic_range'] = weight.abs().max()
     
     if layerwise_quantization:
-        quantization_method.quantization(weight, **quantization_args)
+        quantization_method.quantize(weight, **quantization_args)
     
     if not config.golden:
         if config.hasattr('selector'):
@@ -277,16 +277,16 @@ def FI_weight(config, weight):
 
         values = weight.view(-1)[error_list]
 
-        if fi_quantization: quantization_method.quantization(values)
+        if fi_quantization: quantization_method.quantize(values)
 
         fi_value = modifier(values, **modifier_args)
         
-        if fi_quantization: quantization_method.dequantization(fi_value)
+        if fi_quantization: quantization_method.dequantize(fi_value)
 
         weight.view(-1)[error_list] = fi_value
 
     if layerwise_quantization:
-        quantization_method.dequantization(weight, **quantization_args)
+        quantization_method.dequantize(weight, **quantization_args)
 
 
 def FI_weights(config, module):
