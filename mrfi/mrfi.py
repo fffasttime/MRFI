@@ -4,6 +4,7 @@ import copy
 from importlib import import_module
 from enum import Enum
 from contextlib import contextmanager
+from typing import Union, List
 
 named_functions = {}
 
@@ -134,6 +135,8 @@ class ConfigTree(FIConfig):
     def __getattr__(self, name):
         if name == 'golden':
             return self.mrfi.golden
+        if name == 'enabled':
+            return self.raw_dict['enabled'] and self.mrfi.global_FI_enabled
         if name in self.raw_dict:
             return self.raw_dict[name]
         raise KeyError(f"{self} has no config named '{name}'")
@@ -151,7 +154,12 @@ class ConfigTree(FIConfig):
         return ''.join("<%s node '%s'>"%(self.nodetype.name, self.name))
 
     def append(self, obj):
-        self.raw_dict[len(self.raw_dict)] = obj
+        id = len(self.raw_dict)
+        self.raw_dict[id] = obj
+        return id
+    
+    def remove(self, id):
+        del self.raw_dict[id]
     
     def state_dict(self):
         if self.nodetype == ConfigTreeNodeType.METHOD_ARGS:
@@ -180,7 +188,7 @@ def FI_activation(config, act):
     
     layerwise_quantization, fi_quantization = False, False
     
-    if config.quantization:
+    if config.hasattr('quantization'):
         if config.quantization.hasattr('layerwise') and config.quantization.layerwise == False:
             fi_quantization = True
         else:
@@ -241,12 +249,12 @@ def FI_weight(config, weight):
     
     layerwise_quantization, fi_quantization = False, False
     
-    if config.quantization:
+    if config.hasattr('quantization'):
         if config.quantization.hasattr('layerwise') and config.quantization.layerwise == False:
             fi_quantization = True
         else:
             layerwise_quantization = True
-    
+
     if config.weight_copy == None:
         config.set_internal_attr('weight_copy', weight.clone())
     else:
@@ -352,6 +360,7 @@ class MRFI:
 
         self.__add_hooks()
         self.golden = False
+        self.global_FI_enabled = True # also affect quantization
 
     def __add_hooks(self):
         for name, module in self.model.named_modules():
@@ -443,11 +452,19 @@ class MRFI:
         with torch.no_grad():
             return self.model(*args, **kwds)
 
-    def get_configs(self, modulename = '', configname = None, strict = True) -> ConfigItemList:
+    def get_configs(self, modulename: Union[str, List[str]] = '', configname: str = None, strict: bool = False) -> ConfigItemList:
         configname = configname.split('.')
         result = ConfigItemList()
         for name, module in self.named_modules():
-            if modulename not in name: continue
+            if isinstance(modulename, list):
+                for mname in modulename:
+                    if mname in name:
+                        break
+                else:
+                    continue
+            else:
+                if modulename not in name: 
+                    continue
             fi_config_root : ConfigTree = module.FI_config
             fi_config = fi_config_root
             for tname in configname:

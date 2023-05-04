@@ -1,0 +1,12 @@
+faultinject:
+  - type: activation
+    enabled: True
+    selector:
+      method: RandomPositionByRate
+      poisson_sample: True
+      rate: 1e-3
+    error_mode:
+      method: FloatRandomBitFlip
+      floattype: float32
+
+    module_name: conv

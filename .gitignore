@@ -4,3 +4,4 @@ _logs
 .vscode
 temp.*
 detailconfigs/*
+result/*

@@ -43,20 +43,20 @@ def SetValue(x: torch.Tensor, value: Union[int, float, Sized]):
 def _get_float_type(x_in, floattype = None):
     if floattype is None:
         floattype = x_in.dtype
-    if floattype == torch.float32 or floattype == np.float32:
+    if floattype == torch.float32 or floattype == np.float32 or floattype == 'float32':
         bit_width = 32
         nptype = np.float32
         npinttype = np.int32
-    elif floattype == torch.float64 or floattype == np.float64:
+    elif floattype == torch.float64 or floattype == np.float64 or floattype == 'float64':
         bit_width = 64
         nptype = np.float64
         npinttype = np.int64
-    elif floattype == torch.float16 or floattype == np.float16:
+    elif floattype == torch.float16 or floattype == np.float16 or floattype == 'float16':
         bit_width = 16
         nptype = np.float16
         npinttype = np.int16
     else:
-        raise TypeError("Unknown float type '%s'"%floattype)
+        raise TypeError("Unknown float type '%s'"%str(floattype))
     
     return bit_width, nptype, npinttype
 
