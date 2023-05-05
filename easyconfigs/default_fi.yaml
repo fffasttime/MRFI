@@ -14,3 +14,4 @@ faultinject:
       bit_width: 16
 
     module_name: conv
+    module_type: Conv2d

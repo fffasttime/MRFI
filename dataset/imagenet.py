@@ -25,6 +25,6 @@ def get_testset(folder = '~/dataset/val'):
 def make_testloader(size = None, folder = '~/dataset/val', **kwargs):
     testset = get_testset(folder)
     if size == None:
-        return torch.utils.data.DataLoader(testset, **kwargs)
-    subset = torch.utils.data.Subset(testset, range(size))
-    return torch.utils.data.DataLoader(subset, **kwargs)
+        return data.DataLoader(testset, **kwargs)
+    subset = data.Subset(testset, range(size))
+    return data.DataLoader(subset, **kwargs)

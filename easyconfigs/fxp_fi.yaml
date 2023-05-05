@@ -1,10 +1,9 @@
 faultinject:
-  - type: weight
-    name: [weight]
+  - type: activation
     quantization:
-      method: SymmericQuantization
-      dynamic_range: auto
-      bit_width: 16
+      method: FixPointQuantization
+      integer_bit: 3
+      decimal_bit: 13
     enabled: True
     selector:
       method: RandomPositionByRate
@@ -13,5 +12,6 @@ faultinject:
     error_mode:
       method: IntSignBitFlip
       bit_width: 16
-    module_name: [conv, fc]
-    module_type: [Conv2d, Linear]
+
+    module_name: conv
+    module_type: Conv2d

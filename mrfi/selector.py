@@ -4,7 +4,7 @@ from typing import List, Union
 import scipy.stats
 import torch
 import numpy as np
-import warnings
+import logging
 
 def _flatten_position(shape, position: torch.Tensor):
     assert len(shape) == len(position), \
@@ -46,15 +46,14 @@ def RandomPositionByNumber(shape, n = 1):
 
 def _get_num_by_rate(shape, rate, poisson_sample):
     nelem = shape.numel()
-    # print(nelem, rate)
 
     n=nelem * float(rate)
-    #print(n)
     if poisson_sample:
         n=scipy.stats.poisson.rvs(n)
     else:
         n=int(round(n))
     
+    logging.debug('selector: Random num at shape %s, %d elem, %d selected'%(str(shape), nelem, n))
     return n
 
 def _check_rate_zero(rate):
@@ -63,7 +62,7 @@ def _check_rate_zero(rate):
     if rate == 0: 
         return True
     if 1 > rate > 0.1: 
-        warnings.warn('value select rate is too large (%f), may get inaccuracy result'%rate)
+        logging.warning('selector: Value select rate is too large (%f), may get inaccuracy result'%rate)
         return False
     raise ValueError('Invalid error rate: %f'%(rate))
 
@@ -97,7 +96,7 @@ def _get_pos_with_mask(shape, n, dimmasks, inverse = True):
             else:
                 used = torch.from_numpy(np.array(dimmasks[dim]))
             if len(used) == 0:
-                warnings.warn('No FI position selected after mask/select, please check')
+                logging.warning('selector: No FI position selected after mask/select, please check')
                 return []
             idx = torch.randint(0, len(used), (n,))
             pos[dim] = used[idx]

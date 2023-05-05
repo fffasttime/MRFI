@@ -5,6 +5,7 @@ from importlib import import_module
 from enum import Enum
 from contextlib import contextmanager
 from typing import Union, List
+import logging
 
 named_functions = {}
 
@@ -210,7 +211,7 @@ def FI_activation(config, act):
         if config.hasattr('selector'):
             selector = named_functions[config.selector.method]
             selector_args = config.selector.args.raw_dict
-            error_list = torch.as_tensor(selector(act.shape, **selector_args))
+            error_list = torch.as_tensor(selector(act.shape, **selector_args), dtype=torch.int64)
         else:
             error_list = slice(None)
         
@@ -276,7 +277,7 @@ def FI_weight(config, weight):
         if config.hasattr('selector'):
             selector = named_functions[config.selector.method]
             selector_args = config.selector.args.raw_dict
-            error_list = torch.as_tensor(selector(weight.shape, **selector_args))
+            error_list = torch.as_tensor(selector(weight.shape, **selector_args), dtype=torch.int64)
         else:
             error_list = slice(None)
         
@@ -347,6 +348,28 @@ class ConfigItemList(list):
         for item in self:
             item[key] = value
 
+def find_modules(model, attrdict):
+    '''find by name,type and remove item'''
+    moduletypes = default_list(attrdict.pop('module_type', []))
+    modulenames = default_list(attrdict.pop('module_name', []))
+    modulefullnames = default_list(attrdict.pop('module_fullname', []))
+    found = {}
+    for name, module in model.named_modules():
+        for typename in moduletypes:
+            if typename in str(type(module)):
+                found[name] = module
+        for fname in modulenames:
+            if fname in name:
+                found[name] = module
+        for fname in modulefullnames:
+            if fname == name:
+                found[name] = module
+    if len(found)==0:
+        logging.warning(f'mrfi.find_modules: No module match in current condition (module_type: {moduletypes}, module_name: {modulenames}, module_fullname: {modulefullnames}), please check.')
+    else:
+        logging.info(f'mrfi.find_modules: Found modules {list(found.keys())}')
+    return found
+
 class MRFI:
     def __init__(self, model: nn.Module, config: FIConfig) -> None:
         self.model = model
@@ -370,24 +393,6 @@ class MRFI:
     @staticmethod
     def add_function(name, function_object):
         named_functions[name] = function_object
-
-    def __findmodules(self, attrdict):
-        '''find by name,type and remove item'''
-        moduletypes = default_list(attrdict.pop('module_type', []))
-        modulenames = default_list(attrdict.pop('module_name', []))
-        modulefullnames = default_list(attrdict.pop('module_fullname', []))
-        found = {}
-        for name, module in self.model.named_modules():
-            for typename in moduletypes:
-                if typename in str(type(module)):
-                    found[name] = module
-            for fname in modulenames:
-                if fname in name:
-                    found[name] = module
-            for fname in modulefullnames:
-                if fname == name:
-                    found[name] = module
-        return found
 
     def __empty_configtree(self, module: torch.nn.Module):
         curdict = {
@@ -508,7 +513,7 @@ class MRFI:
         observerlist = config.observe
 
         for fi in filist:
-            used_modules = self.__findmodules(fi)
+            used_modules = find_modules(self.model, fi)
             
             fitype = fi.pop('type')
             activationid = fi.pop('activationid', 0)
@@ -527,7 +532,7 @@ class MRFI:
                 self.__config_fi(fi, mod, fitype)
 
         for observer in observerlist:
-            used_modules = self.__findmodules(observer)
+            used_modules = find_modules(self.model, observer)
             
             for mod in used_modules.values():
                 self.__config_observer(observer, mod)
