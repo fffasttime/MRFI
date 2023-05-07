@@ -126,7 +126,7 @@ def MaskedDimRandomPositionByRate(shape, rate: float, poisson_sample: bool = Tru
 def SelectedDimRandomPositionByRate(shape, rate: float, poisson_sample: bool = True, **kwargs):
     rate = float(rate)
     if _check_rate_zero(rate): return []
-    dimmasks = _get_mask_kwargs(shape, kwargs)    
+    dimmasks = _get_mask_kwargs(shape, kwargs)
     rate_reduce = float(rate)
     for i, dimsize in enumerate(shape):
         if dimmasks[i] is not None:

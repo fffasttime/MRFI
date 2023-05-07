@@ -4,7 +4,7 @@ import copy
 from importlib import import_module
 from enum import Enum
 from contextlib import contextmanager
-from typing import Union, List
+from typing import Optional, Union, List
 import logging
 
 named_functions = {}
@@ -52,7 +52,7 @@ def write_config(config: dict, filename):
     return config
 
 class EasyConfig(FIConfig):
-    def __init__(self, config: dict):
+    def __init__(self, config: dict = {}):
         self.faultinject = config.get('faultinject', [])
         self.observe = config.get('observe', [])
     
@@ -310,7 +310,11 @@ def run_observer(config, activation):
     if config.object is None:
         observer_method = named_functions[config.method]
         config.set_internal_attr('object', observer_method())
-    config.object.update(activation, config.golden)
+
+    if config.golden:
+        config.object.update_golden(activation)
+    else:
+        config.object.update(activation)
 
 def run_observers(config, acts):
     for observer in config:
@@ -457,19 +461,16 @@ class MRFI:
         with torch.no_grad():
             return self.model(*args, **kwds)
 
-    def get_configs(self, modulename: Union[str, List[str]] = '', configname: str = None, strict: bool = False) -> ConfigItemList:
+    def get_configs(self, configname: str = None, strict: bool = False, **kwargs) -> ConfigItemList:
         configname = configname.split('.')
         result = ConfigItemList()
-        for name, module in self.named_modules():
-            if isinstance(modulename, list):
-                for mname in modulename:
-                    if mname in name:
-                        break
-                else:
-                    continue
-            else:
-                if modulename not in name: 
-                    continue
+
+        if len(kwargs) == 0:
+            named_modules = dict(self.model.named_modules())
+        else:
+            named_modules = find_modules(self.model, kwargs)
+
+        for module in named_modules.values():
             fi_config_root : ConfigTree = module.FI_config
             fi_config = fi_config_root
             for tname in configname:
@@ -552,7 +553,7 @@ class MRFI:
                         observer.object.reset()
 
     def observers_result(self) -> list:
-        resultlist = [] # name, value
+        result = {}
         for module_name, module in self.model.named_modules():
             config = module.FI_config
             if config.observers_pre is not None:
@@ -560,13 +561,13 @@ class MRFI:
                     if observer.object is not None and hasattr(observer.object, 'result'):
                         name = module_name + '.pre.' + str(i)
                         res = observer.object.result()
-                        resultlist.append((name, res))
+                        result[name] = res
 
             if config.observers is not None:
                 for i, observer in enumerate(config.observers):
                     if observer.object is not None and hasattr(observer.object, 'result'):
                         name = module_name + '.' + str(i)
                         res = observer.object.result()
-                        resultlist.append((name, res))
+                        result[name] = res
         
-        return resultlist
+        return result

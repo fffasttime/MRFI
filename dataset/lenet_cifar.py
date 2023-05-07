@@ -54,6 +54,7 @@ class Net(nn.Module):
         x = self.fc3(x)
         return x
 
+LeNet = Net
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def train():

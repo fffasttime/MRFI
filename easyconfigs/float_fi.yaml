@@ -9,4 +9,5 @@ faultinject:
       method: FloatRandomBitFlip
       floattype: float32
 
-    module_name: conv
+    module_name: [conv, fc]
+    module_type: [Conv2d, Linear]
