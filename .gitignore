@@ -3,5 +3,7 @@ _data
 _logs
 .vscode
 temp.*
-detailconfigs/*
-result/*
+detailconfigs
+result
+site
+.ipynb_checkpoints

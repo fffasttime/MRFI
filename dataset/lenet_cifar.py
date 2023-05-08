@@ -17,9 +17,9 @@ except Exception:
     datapath = './_data'
 
 trainset = torchvision.datasets.CIFAR10(root=datapath, train=True,
-                                        download=False, transform=transform)
+                                        download=True, transform=transform)
 testset = torchvision.datasets.CIFAR10(root=datapath, train=False,
-                                       download=False, transform=transform)
+                                       download=True, transform=transform)
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
@@ -43,7 +43,7 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(120,84)
         self.fc3 = nn.Linear(84,10)
         if trained:
-            self.load_state_dict(torch.load('./_data/cifar10.pth'))
+            self.load_state_dict(torch.load('./dataset/lenet_cifar10.pth'))
 
     def forward(self,x):
         x = F.max_pool2d(F.relu(self.conv1(x)),(2,2))

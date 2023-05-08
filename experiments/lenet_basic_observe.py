@@ -1,12 +1,17 @@
-from dataset.lenet_cifar import make_testloader, LeNet
-from mrfi import MRFI, EasyConfig
-from mrfi.experiment import get_activation_info, get_weight_info
-import matplotlib.pyplot as plt
-import torch
 from pprint import pprint
 
-fi_model = MRFI(LeNet(trained=True), EasyConfig())
+import matplotlib.pyplot as plt
+import torch
+
+from dataset.lenet_cifar import LeNet, make_testloader
+from mrfi import MRFI, EasyConfig
+from mrfi.experiment import get_activation_info, get_weight_info
+
+fi_model = MRFI(LeNet(trained=True).eval(), EasyConfig())
+print(fi_model, fi_model.model)
+
 input_images = make_testloader(128, batch_size = 128)
+img0 = next(iter(input_images))[0]
 
 print("Activation Shape:")
 pprint(get_activation_info(fi_model, torch.zeros([1,3,32,32]), 'Shape'))
@@ -47,3 +52,11 @@ for i, (name, value) in enumerate(weight_samping.items()):
     ax.set_title(name)
 axs[1,2].violinplot(list(weight_samping.values()))
 plt.show()
+
+last_featuremap = get_activation_info(fi_model, input_images, 'SaveLast', module_name = ['conv1'])
+print(last_featuremap.keys())
+
+featuremap = last_featuremap['model.conv1.SaveLast'][1].numpy()
+print(featuremap.shape)
+
+plt.imshow(featuremap[0].reshape(-1, 28))
