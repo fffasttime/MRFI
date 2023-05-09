@@ -35,11 +35,14 @@ for package_name in mrfi_packages:
     load_package_functions(package_name)
 
 def add_function(name: str, function_object: Callable[..., Any]) -> None:
-    """Add custom functions.
+    """Add a custom function, may be a observer, quantization, selector or error_mode.
     
     Args:
         name: To be used in config file, `method` field of observers, quantization, selector, error_mode.
         function_object: A callable object consists with implementions of observers, quantization, selector, error_mode.
+    Examples:
+        >>> mrfi.add_function('my_empty_selector', lambda shape: [])
+        Then you can use this empty selector by setting selector.method to 'my_empty_selector' in .yaml config file.
     """
     named_functions[name] = function_object
 
@@ -425,7 +428,7 @@ class ConfigItemList(list):
             item[key] = value
 
 def find_modules(model: Union['MRFI', torch.nn.Module], attrdict: dict):
-    '''Find by module_type, module_name, module_fullname, also remove these attr in attrdict'''
+    '''Find by `module_type`, `module_name`, `module_fullname`, also remove these attr in attrdict.'''
     moduletypes = _default_list(attrdict.pop('module_type', []))
     modulenames = _default_list(attrdict.pop('module_name', []))
     modulefullnames = _default_list(attrdict.pop('module_fullname', []))
