@@ -76,13 +76,14 @@ def RandomPositionByNumber(shape, n: int = 1):
         n: Number of target positions.
     """
     nelem = shape.numel()
-    return torch.randint(0, nelem, (int(n),))
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    return torch.randint(0, nelem, (int(n),), device = device)
 
-def _get_num_by_rate(shape, rate, poisson_sample):
+def _get_num_by_rate(shape, rate, poisson):
     nelem = shape.numel()
 
     n=nelem * float(rate)
-    if poisson_sample:
+    if poisson:
         n=scipy.stats.poisson.rvs(n)
     else:
         n=int(round(n))
@@ -100,12 +101,12 @@ def _check_rate_zero(rate):
         return False
     raise ValueError('Invalid error rate: %f'%(rate))
 
-def RandomPositionByRate(shape, rate: float = 1e-4, poisson_sample: bool = True):
+def RandomPositionByRate(shape, rate: float = 1e-4, poisson: bool = True):
     """Select random positions by rate.
     
     Args:
         rate: Rate of each position to be chosen.
-        poisson_sample: Enable poisson samping, which is more accurate when rate is quite small.
+        poisson: Enable poisson samping, which is more accurate when rate is quite small.
 
     Info:
         `rate` stands for tensor value selected rate here. To calculate the bit error rate on bit flip experiment,
@@ -115,8 +116,31 @@ def RandomPositionByRate(shape, rate: float = 1e-4, poisson_sample: bool = True)
     rate = float(rate)
     if _check_rate_zero(rate): return []
     nelem = shape.numel()
-    n = _get_num_by_rate(shape, rate, poisson_sample)
-    return torch.randint(0, nelem, (n,))
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    n = _get_num_by_rate(shape, rate, poisson)
+    return torch.randint(0, nelem, (n,), device = device)
+
+def RandomPositionByRate_classic(shape, rate: float = 1e-4):
+    """Select random positions by rate.
+    
+    Args:
+        rate: Rate of each position to be chosen.
+    Deprecated:
+        This function is deprecated and only for test because of bad performance.
+    """
+    rate = float(rate)
+    if _check_rate_zero(rate): return []
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    nelem = shape.numel()
+    positions = torch.arange(nelem, device = device)
+    while rate < 1e-4: # run multiple times because of float accuracy problem of RNG
+        positions_rate = torch.rand((len(positions), ), device = device)
+        positions = positions[torch.where(positions_rate<1e-4)]
+        rate *= 1e4
+
+    positions_rate = torch.rand((len(positions), ), device = device)
+    positions = positions[torch.where(positions_rate<rate)]
+    return positions
 
 def _get_mask_kwargs(shape, kwargs: dict):
     d0 = kwargs.get('instance') or kwargs.get('out_channel') or kwargs.get('d0') or kwargs.get('out')
@@ -144,7 +168,7 @@ def _get_pos_with_mask(shape, n, dimmasks, inverse = True):
     return _flatten_position(shape, pos)
 
 
-def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs):
+def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     """Select n positions after specifed dimensions are masked.
     
     For a 2-d tensor, it is equivalent to selecting on a submatrix
@@ -186,7 +210,7 @@ def SelectedDimRandomPositionByNumber(shape, n: int = 1, **kwargs):
     dimmasks = _get_mask_kwargs(shape, kwargs)
     return _get_pos_with_mask(shape, n, dimmasks, False)
 
-def MaskedDimRandomPositionByRate(shape, rate: float, poisson_sample: bool = True, **kwargs):
+def MaskedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs):
     """Select by rate where some coordinate are masked.
 
     For argument list, please refer `MaskedDimRandomPositionByNumber`.
@@ -198,9 +222,9 @@ def MaskedDimRandomPositionByRate(shape, rate: float, poisson_sample: bool = Tru
     for i, dimsize in enumerate(shape):
         if dimmasks[i] is not None:
             rate_reduce = rate * (1 - len(dimmasks[i])/dimsize)
-    return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson_sample), dimmasks)
+    return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson), dimmasks)
 
-def SelectedDimRandomPositionByRate(shape, rate: float, poisson_sample: bool = True, **kwargs):
+def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs):
     """Select on some coordinate by rate.
 
     For argument list, please refer `MaskedDimRandomPositionByNumber`.\n
@@ -214,4 +238,4 @@ def SelectedDimRandomPositionByRate(shape, rate: float, poisson_sample: bool = T
     for i, dimsize in enumerate(shape):
         if dimmasks[i] is not None:
             rate_reduce = rate * (len(dimmasks[i])/dimsize)
-    return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson_sample), dimmasks, False)
+    return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson), dimmasks, False)

@@ -24,7 +24,6 @@ def test_RandomPositionByNumber():
     shape = torch.Size((1,64,10,20))
     assert selector.RandomPositionByNumber(shape, 100).numel() == 100
 
-
 def test_RandomPositionByRate():
     shape = torch.Size((1,64,10,20)) # 12800
 
@@ -34,6 +33,10 @@ def test_RandomPositionByRate():
 def test_RandomPositionByRate_2():
     shape = torch.Size((1,64,10,20))
     selector.RandomPositionByRate(shape, 1e-3, True).numel()
+
+def test_RandomPositionByRate_classic():
+    shape = torch.Size((1,64,100,200))
+    selector.RandomPositionByRate_classic(shape, 1e-5) # 128000 * 1e-5 ~ 12.8
 
 def test_MaskedRandomPositionByNumber():
     shape = torch.Size((2,64,10,20)) # 25600

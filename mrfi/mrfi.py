@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from enum import Enum
 from importlib import import_module
 from typing import Optional, Union, Callable, Any
+import yaml
 
 import torch
 from torch import nn
@@ -54,7 +55,6 @@ def _read_config(filename: str) -> dict:
     extentname = filename.split('.')[-1]
     with open(filename) as f:
         if extentname == 'yml' or extentname=='yaml':
-            import yaml
             config = yaml.full_load(f)
         else:
             raise NotImplementedError(extentname)
@@ -65,7 +65,6 @@ def _write_config(config: dict, filename: str) -> None:
     extentname = filename.split('.')[-1]
     with open(filename, 'w') as f:
         if extentname == 'yml' or extentname=='yaml':
-            import yaml
             yaml.dump(config, f)
         else:
             raise NotImplementedError(extentname)
@@ -86,6 +85,10 @@ class EasyConfig(FIConfig):
     def load_file(cls, filename: str):
         """Load EasyConfig from .yaml File"""
         return cls(_read_config(filename))
+    
+    @classmethod
+    def load_string(cls, string: str):
+        return cls(yaml.full_load(string))
 
 class ConfigTreeNodeType(Enum):
     """Config tree node types.
@@ -141,7 +144,11 @@ def _node_step(nodetype, name):
         return ConfigTreeNodeType.FI_ATTR
     if nodetype == ConfigTreeNodeType.OBSERVER_LIST:
         return ConfigTreeNodeType.OBSERVER_ATTR
-    assert False, f'Invalid nodetype {nodetype}'
+    if nodetype == ConfigTreeNodeType.METHOD_ARGS:
+        return None
+    if nodetype == ConfigTreeNodeType.OBSERVER_ATTR:
+        return None
+    assert False, f'Invalid name {name} nodetype {nodetype}'
 
 class ConfigTree(FIConfig):
     """Make a detail config tree.

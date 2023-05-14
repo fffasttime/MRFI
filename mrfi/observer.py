@@ -71,7 +71,7 @@ class MinMax(BaseObserver):
         else:
             self.max = max(self.max, maxv)
     
-    def result(self) -> tuple[float, float]:
+    def result(self) -> tuple:
         return self.min, self.max
 
 class RMSE(BaseObserver):
@@ -87,7 +87,7 @@ class RMSE(BaseObserver):
 
     def update_golden(self, x):
         self.last_is_golden = True
-        self.golden_act = x
+        self.golden_act = x.clone()
 
     def update(self, x):
         if not self.last_is_golden:
@@ -140,6 +140,23 @@ class MaxAbs(BaseObserver):
     def result(self) -> float:
         return self.maxabs
 
+class MeanAbs(BaseObserver):
+    """mean of abs, a metric of scale of values
+    
+    Returns (float):
+        Similar as `x.abs.mean()` but among all inference.
+    """
+    def reset(self):
+        self.sum_mean = 0
+        self.n = 0
+
+    def update(self, x):
+        self.sum_mean += x.abs().mean().item()
+        self.n += 1
+
+    def result(self) -> float:
+        return self.sum_mean / self.n
+
 class Std(BaseObserver):
     """Standard deviation of zero-mean values.
     
@@ -147,15 +164,15 @@ class Std(BaseObserver):
         Similar as `sqrt((x**2).mean())` but among all inference.
     """
     def reset(self):
-        self.sum_var = 0
+        self.sum_var = []
         self.n = 0
 
     def update(self, x):
-        self.sum_var += (x**2).mean().item()
+        self.sum_var.append((x**2).mean().item())
         self.n += 1
 
     def result(self) -> float:
-        return np.sqrt(self.sum_var / self.n)
+        return np.sqrt(np.mean(self.sum_var))
 
 class Shape(BaseObserver):
     """Simply record tensor shape of last inference
@@ -184,7 +201,7 @@ class MAE(BaseObserver):
 
     def update_golden(self, x):
         self.last_is_golden = True
-        self.golden_act = x
+        self.golden_act = x.clone()
 
     def update(self, x):
         if not self.last_is_golden:
@@ -214,7 +231,7 @@ class EqualRate(BaseObserver):
 
     def update_golden(self, x):
         self.last_is_golden = True
-        self.golden_act = x
+        self.golden_act = x.clone()
 
     def update(self, x):
         if not self.last_is_golden:

@@ -4,7 +4,7 @@ import traceback
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from mrfi_gui.mainwindow import Ui_MainWindow
-from mrfi.mrfi import ConfigTree, read_config, ConfigTreeNodeType
+from mrfi.mrfi import ConfigTree, _read_config, ConfigTreeNodeType
 
 class MainForm(QMainWindow, Ui_MainWindow):
     def __init__(self, parent = None) -> None:
@@ -48,7 +48,7 @@ class MainForm(QMainWindow, Ui_MainWindow):
                 'Load config file', './detailconfigs', 'yaml (*.yml;*.yaml);;xml (*.xml);;json (*.json);;All (*.*)')[0]
         if filename == '': return
         try:
-            config_root = read_config(filename)
+            config_root = _read_config(filename)
             configtree = ConfigTree(config_root, None)
         except Exception as e:
             QMessageBox.critical(self, 'Error on loading config', traceback.format_exc())

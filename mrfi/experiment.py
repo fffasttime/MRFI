@@ -57,16 +57,16 @@ def observeFI_experiment(fi_model: MRFI,
         with torch.no_grad():
             if use_golden:
                 with fi_model.golden_run():
-                    fi_model(input_data.to(device)).cpu()
-            fi_model(input_data.to(device)).cpu()
+                    fi_model(input_data.to(device))
+            fi_model(input_data.to(device))
     else:
         for inputs in input_data:
-            if isinstance(tuple): inputs = inputs[0] # ignore label
+            if isinstance(inputs, (List, tuple)): inputs = inputs[0] # ignore label
             with torch.no_grad():
                 if use_golden:
                     with fi_model.golden_run():
-                        fi_model(inputs.to(device)).cpu()
-                fi_model(inputs.to(device)).cpu()
+                        fi_model(inputs.to(device))
+                fi_model(inputs.to(device))
     
     if observers_dict is None:
         result = fi_model.observers_result()
@@ -95,9 +95,12 @@ def BER_Acc_experiment(fi_model: MRFI,
     BER_range = np.array(BER_range)
     if isinstance(fi_selectors, ConfigTree):
         fi_selectors = [fi_selectors]
-    assert isinstance(fi_selectors, list), 'fi_selector should be either ConfigTree or ConfigItemList'
-    assert fi_selectors[0].nodetype == ConfigTreeNodeType.FI_STAGE, 'should be a FI selector config node'
-    assert fi_selectors[0].method == 'RandomPositionByRate', "selector in BER experiment should be 'RandomPositionByRate'"
+    if not isinstance(fi_selectors, list):
+        raise RuntimeError('fi_selector should be either ConfigTree or ConfigItemList')
+    if fi_selectors[0].nodetype != ConfigTreeNodeType.FI_STAGE:
+        raise RuntimeError('fi_selector should be a FI selector config node')
+    if 'Rate' not in fi_selectors[0].method:
+        raise RuntimeError(f"Selector in BER experiment should be a rate selector, but get {fi_selectors[0].method}.")
     autoskip_larger = True
 
     Acc_result = np.zeros_like(BER_range)
@@ -117,7 +120,7 @@ def BER_Acc_experiment(fi_model: MRFI,
     return BER_range, Acc_result
 
 def BER_observe_experiment(fi_model: MRFI, 
-                   fi_selectors, 
+                   fi_selectors: ConfigItemList, 
                    dataloader: DataLoader, 
                    BER_range: Union[list, np.array] = logspace_density(), 
                    bit_width: int = 16,
@@ -135,9 +138,12 @@ def BER_observe_experiment(fi_model: MRFI,
     BER_range = np.array(BER_range)
     if isinstance(fi_selectors, ConfigTree):
         fi_selectors = [fi_selectors]
-    assert isinstance(fi_selectors, list), 'fi_selector should be either ConfigTree or ConfigItemList'
-    assert fi_selectors[0].nodetype == ConfigTreeNodeType.FI_STAGE, 'should be a FI selector config node'
-    assert fi_selectors[0].method == 'RandomPositionByRate', "selector in BER experiment should be 'RandomPositionByRate'"
+    if not isinstance(fi_selectors, list):
+        raise RuntimeError('fi_selector should be either ConfigTree or ConfigItemList')
+    if fi_selectors[0].nodetype != ConfigTreeNodeType.FI_STAGE:
+        raise RuntimeError('fi_selector should be a FI selector config node')
+    if 'Rate' not in fi_selectors[0].method:
+        raise RuntimeError(f"Selector in BER experiment should be a rate selector, but get {fi_selectors[0].method}.")
 
     observe_result = []
     
@@ -240,7 +246,7 @@ def get_weight_info(model: Union[MRFI, torch.nn.Module],
     """Observe model weights.
 
     Args:
-        fi_model: Target model.
+        model: Target model.
         method: Name of the basic observer in `mrfi.observer`.
         weight_name: Target weight name.
         **kwargs: Target module to do observe, `module_type`, `module_name` or `module_fullname`

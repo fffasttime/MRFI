@@ -4,6 +4,10 @@
 
 Multi-Resolution Fault Injector is a powerful neural network fault injector based on PyTorch.
 
+<p dir="auto" align="center">
+<img src="assets/logo_name.png" width=350)>
+</p>
+
 Compared with other injection frameworks, the biggest feature is that it can flexibly adjust different injection configurations for different experimental needs. Injection config and observations on each layer can be set independently by one clear config file. MRFI also provides a large number of commonly used error injection methods and error models, and allows customization.
 
 ![Overview Pic](/assets/overviewpic.png)

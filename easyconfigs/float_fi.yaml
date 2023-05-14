@@ -3,8 +3,8 @@ faultinject:
     enabled: True
     selector:
       method: RandomPositionByRate
-      poisson_sample: True
-      rate: 1e-3
+      poisson: True
+      rate: 1e-6
     error_mode:
       method: FloatRandomBitFlip
       floattype: float32

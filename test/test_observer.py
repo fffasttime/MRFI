@@ -48,6 +48,13 @@ def test_MaxAbs():
     obs.update(torch.Tensor([1,8]))
     assert obs.result() == 8
 
+def test_MeanABS():
+    obs = MeanAbs()
+    obs.update_golden(torch.Tensor([-7,6]))
+    assert obs.result() == 6.5
+    obs.update(torch.Tensor([1,8]))
+    assert obs.result() == 5.5
+
 def test_Std():
     obs = Std()
     obs.update_golden(torch.Tensor([2,-1]))
