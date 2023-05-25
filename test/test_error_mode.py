@@ -54,24 +54,24 @@ class TestErrorMode:
         x = error_mode.SetValue(x_in, list(np.arange(8)))
         assert (x == torch.arange(8)).all()
     
-    def test_FloatFixBitFlip_1(self):
+    def test_FloatFixedBitFlip_1(self):
         x_in = torch.Tensor([1,2,3])
-        x = error_mode.FloatFixBitFlip(x_in, 31)
+        x = error_mode.FloatFixedBitFlip(x_in, 31)
         assert (x == torch.Tensor([-1, -2, -3])).all()
 
-    def test_FloatFixBitFlip_2(self):
+    def test_FloatFixedBitFlip_2(self):
         x_in = torch.Tensor([1,2,3])
-        x = error_mode.FloatFixBitFlip(x_in, 63, torch.float64)
+        x = error_mode.FloatFixedBitFlip(x_in, 63, torch.float64)
         assert (x == torch.Tensor([-1, -2, -3])).all()
     
-    def test_FloatFixBitFlip_3(self):
+    def test_FloatFixedBitFlip_3(self):
         x_in = torch.Tensor([1,2,3])
-        x = error_mode.FloatFixBitFlip(x_in, 15, np.float16)
+        x = error_mode.FloatFixedBitFlip(x_in, 15, np.float16)
         assert (x == torch.Tensor([-1, -2, -3])).all()
 
-    def test_FloatFixBitFlip_Vector(self):
+    def test_FloatFixedBitFlip_Vector(self):
         x_in = torch.zeros(16)
-        x = error_mode.FloatFixBitFlip(x_in, range(16), np.float16)
+        x = error_mode.FloatFixedBitFlip(x_in, range(16), np.float16)
         assert (x == torch.tensor([5.9604644775e-08, 1.1920928955e-07, 2.3841857910e-07, 4.7683715820e-07,
         9.5367431641e-07, 1.9073486328e-06, 3.8146972656e-06, 7.6293945312e-06,
         1.5258789062e-05, 3.0517578125e-05, 6.1035156250e-05, 1.2207031250e-04,

@@ -44,6 +44,7 @@ def FixPosition(shape, position: Union[int, List[int]]):
             if `int`, stands for index of . 
             if `List[int]`, stands for n-d coordinate of target position.
     """
+    if isinstance(position, int): position = [position]
     pos = torch.tensor(position, dtype=torch.long)
     if len(pos) == 1:
         nelem = shape.numel()
@@ -69,14 +70,20 @@ def FixPositions(shape, positions: Union[List[int], List[List[int]]]):
         assert len(pos.shape) == 2
         return _flatten_position(shape, pos)
 
-def RandomPositionByNumber(shape, n: int = 1):
+def RandomPositionByNumber(shape, n: int = 1, per_instance: bool = False):
     """Select n random positions.
     
     Args:
         n: Number of target positions.
+        per_instance: if `true`, perform n inject on per instance (ignore dim 0).
     """
     nelem = shape.numel()
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    if per_instance:
+        insts = shape[0]
+        sizes = nelem // insts
+        return (torch.arange(n * insts, device=device) // insts * sizes + 
+                torch.randint(0, sizes, (n * insts, ), device = device))
     return torch.randint(0, nelem, (int(n),), device = device)
 
 def _get_num_by_rate(shape, rate, poisson):

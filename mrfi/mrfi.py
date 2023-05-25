@@ -89,6 +89,24 @@ class EasyConfig(FIConfig):
     @classmethod
     def load_string(cls, string: str):
         return cls(yaml.full_load(string))
+    
+    def set_quantization(self, idx: int, content_dict, update_only = False):
+        if update_only:
+            self.faultinject[idx]['quantization'].update(content_dict)
+        else:
+            self.faultinject[idx]['quantization'] = content_dict
+
+    def set_selector(self, idx: int, content_dict, update_only = False):
+        if update_only:
+            self.faultinject[idx]['selector'].update(content_dict)
+        else:
+            self.faultinject[idx]['selector'] = content_dict
+
+    def set_error_mode(self, idx: int, content_dict, update_only = False):
+        if update_only:
+            self.faultinject[idx]['error_mode'].update(content_dict)
+        else:
+            self.faultinject[idx]['error_mode'] = content_dict
 
 class ConfigTreeNodeType(Enum):
     """Config tree node types.
@@ -585,6 +603,23 @@ class MRFI:
             else:
                 result.append(fi_config)
         return result
+    
+    def get_activation_configs(self, fi_configname: str = None, strict: bool = False, activation_id: int = 0, out: bool = False, **kwargs: dict):
+        """A convenient function of `get_configs` to get activation config.
+
+        Equivalent to call `get_configs('activation.0.{fi_configname}')` or `get_configs('activation_out.0.{fi_configname}').`
+        """
+        if out:
+            return self.get_configs('activation_out.' + str(activation_id) + '.' + fi_configname, strict, **kwargs)
+        else:
+            return self.get_configs('activation.' + str(activation_id) + '.' + fi_configname, strict, **kwargs)
+        
+    def get_weights_configs(self, fi_configname: str = None, strict: bool = False, weight_id: int = 0, **kwargs: dict):
+        """A convenient function of `get_configs` to get weights config.
+
+        Equivalent to call `get_configs('weights.0.{fi_configname}')`
+        """
+        return self.get_configs('weights.' + str(weight_id) + '.' + fi_configname, strict, **kwargs)
 
     def save_config(self, filename: str):
         """Save current detail config tree to a file."""

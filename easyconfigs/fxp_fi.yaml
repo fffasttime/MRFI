@@ -3,7 +3,7 @@ faultinject:
     quantization:
       method: FixPointQuantization
       integer_bit: 3
-      decimal_bit: 13
+      decimal_bit: 12
     enabled: True
     selector:
       method: RandomPositionByRate

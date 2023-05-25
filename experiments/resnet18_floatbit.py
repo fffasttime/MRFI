@@ -1,13 +1,13 @@
 
 from dataset.imagenet import make_testloader
 from mrfi import MRFI, EasyConfig
-from mrfi.experiment import BER_Acc_experiment, logspace_density, Acc_golden, benchmark_range
+from mrfi.experiment import BER_Acc_experiment, logspace_density, Acc_golden
 import matplotlib.pyplot as plt
 from torchvision.models import resnet18
 import torch
 
 econfig = EasyConfig.load_file('easyconfigs/float_fi.yaml')
-econfig.faultinject[0]['error_mode']['method'] = 'FloatFixBitFlip'
+econfig.faultinject[0]['error_mode']['method'] = 'FloatFixedBitFlip'
 econfig.faultinject[0]['error_mode']['floattype'] = 'float16'
 econfig.faultinject[0]['error_mode']['bit'] = 31
 fi_model = MRFI(resnet18(pretrained = True).cuda().eval(), econfig)

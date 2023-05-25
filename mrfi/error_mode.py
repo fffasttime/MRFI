@@ -110,7 +110,7 @@ def FloatRandomBitFlip(x_in: torch.Tensor,
 
     return torch.tensor(np_value, dtype=x_in.dtype, device=x_in.device)
 
-def FloatFixBitFlip(x_in: torch.Tensor, 
+def FloatFixedBitFlip(x_in: torch.Tensor, 
                     bit: Union[int, Sized], 
                     floattype: Optional[Union[np.float16, np.float32, np.float64]] = None):
     """Flip specific bit on float values"""
