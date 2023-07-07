@@ -1,126 +1,144 @@
 # Multi-Resolution Fault Injector
 
-This is a neuron level fault injector based on PyTorch. 
+<p dir="auto" align="center">
+<img src="docs/assets/logo_name.png" width=350)>
+</p>
 
-Compared with other injection frameworks, the biggest feature is that it can flexibly adjust different injection configurations for different experimental needs. Injection config and observations on each layer can be set independently by one clear config file.
+Multi-Resolution Fault Injector is a **powerful** neural network fault injector tool based on PyTorch.
 
-When we verify our statistic model based analysis of reliability, we found that the previous framework is not easy to be used for such experiments that require highly flexible configuration. We developed this fault injector for complex experimental requirements.
+Compared with other injection frameworks, the biggest feature is that it can flexibly adjust different injection configurations for different experimental needs. Injection config and observations on each layer can be set independently by one clear config file. MRFI also provides a large number of commonly used error injection methods and error models, and allows customization.
 
-This project needs more development, because some of its functions are not easy to use. 
+![Overview Pic](/docs/assets/overviewpic.png)
 
-## Example
+Read detail usage from Documents >>
 
-This is a example experiment code for LeNet. 
+Learn more from our paper on [Arxiv](https://arxiv.org/pdf/2306.11758.pdf).
 
-### Fault inject config example
+## Basic Example
 
-This is a example yaml config for LeNet. The configuration file is easy to read and flexible.
+### A coarse-grained configuation fault inject experiment
+The following code perform a quantized random integer bit flip injection on LeNet, 
+and find the relation between bit error rate (BER) and classification accuracy.
 
-```yaml
-FI_activation: true
-FI_enable: false
-FI_weight: false
-flip_mode: flip_int_highest
-flip_mode_args:
-  bit_width: 8
-layerwise_quantization:
-  bit_width: 8
-  dynamic_range: 8
-selector: RandomPositionSelector_Rate
-selector_args:
-  rate: 0.0008
-sub_modules:
-  conv1:
-    layerwise_quantization:
-      bit_width: 8
-      dynamic_range: 4
-    observer:
-      map: mse
-      reduce: sum
-  conv2:
-    observer:
-      map: mse
-      reduce: sum
-  fc1:
-    observer:
-      map: mse
-      reduce: sum
-  fc2:
-    observer:
-      map: mse
-      reduce: sum
-  fc3:
-    observer:
-      map: mse
-      reduce: sum
+```python title="LeNet default fault injection"
+from dataset.lenet_cifar import make_testloader, LeNet
+from mrfi import MRFI, EasyConfig
+from mrfi.experiment import BER_Acc_experiment
+
+testloader = make_testloader(1000, batch_size = 128) # test on 1000 cifar-10 images
+
+# Create fault inject model
+fi_model = MRFI(network = LeNet(trained=True).eval(), 
+                EasyConfig.load_file('easyconfigs/default_fi.yaml'))
+
+################### A Simple acccuracy experiment #####################
+# Test accuracy under fault injection with select rate = 1e-3 which specified in "default_fi.yaml"
+print('FI Acc: ', Acc_experiment(fi_model, dataloader))
+# Test accuracy w/o fault inject
+with fi_model.golden_run():
+    print('golden run Acc: ', Acc_experiment(fi_model, dataloader))
+
+######################## BER_Acc_experiment ###########################
+# Get selector handler because BER_Acc_experiment needs to modify selection rate in experiment
+selector_cfg = fi_model.get_configs('activation.0.selector')
+BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, testloader, [1e-6, 1e-5, 1e-4, 1e-3])
+print('Bit error rate and accuracy: ', BER, Acc)
 ```
 
-In this configuration, error injection is only performed on the active value (`FI_activation: true`).
+The content of corresponding EasyConfig file `default_fi.yaml`:
+```yaml
+faultinject:
+  - type: activation
+    quantization:
+      method: SymmericQuantization
+      dynamic_range: auto
+      bit_width: 16
+    enabled: True
+    selector:
+      method: RandomPositionByRate
+      poisson: True
+      rate: 1e-3
+    error_mode:
+      method: IntSignBitFlip
+      bit_width: 16
 
-The fault inject mode is most significant bit of integer value (`flip_mode: flip_int_highest`).
+    module_name: [conv, fc] # Match layers that contain these name
+    module_type: [Conv2d, Linear] # Or match layers contain these typename
+```
 
-`selector` parameter specify how to select victim neurons, it is random choiced from all neurons of rate 8e-4 here.
+## Supported Features
 
-Next we can choose layers to be fault injected in `sub_modules`. These layer name is the same as the module name when created in PyTorch.
+**Activation injection**
 
-We can specify FI parameters of each layer. For example, we set conv1 with smaller dynamic_range here. Note that FI parameters is "inherit" from parent level, so we can omit the configuration for each layer and let their flip_mode and selector parameter same as we specified in model level.
+- [x] Fixed position (Permanent fault)
+- [x] Runtime random position (Transient fault)
 
-Some times we need some internal observation data of the model, e.g. dynamic range of activations or measurement of error perturbation. We can simply add different observer into layers. For example, we can measure error perturbation by calculate mean square error (`map: mse`) of the layer output, and then sum them along different input execution (`reduce: sum`). 
+**Weight injection**
 
-The `map` here means how to map a layer output into a result. If we want to find the dynamic range of each layer, we can set (`map: maxabs`) to get max range of one batch layer output, and then reduce them by (`reduce: max`) to get max range between all batchs.
+- [x] Fixed position (Permanent fault)
+- [x] Runtime random position (Transient fault)
+
+**Injection on quantization model**
+
+- [x] Posting training quantization
+- [x] Dynamic quantization
+- [x] Fine-grained quantization parameters config
+- [x] Add custom quantization
+
+**Error mode**
+
+- [x] Integer bit flip
+- [x] Float bit flip
+- [x] Stuck-at fault (SetValue)
+- [x] Random value
+- [x] Add random noise
+
+**Internal observation & visualize**
+
+- [x] Activation & Weight observer
+- [x] Error propagation observer
+- [x] Easy to save and visualize result, work well with `numpy` and `matplotlib`
+
+**Flexibility**
+
+- [x] Add custom `error_mode`, `selector`, `quantization` and `observer`
+- [x] Distinguish network-level, layer-level, channel-level, neuron-level and bit-level fault tolerance difference
+
+**Performance**
+
+- [x] Automatically use GPU for network inference and fault injection
+- [x] The selector - injector design is significantly faster than generate probability on all position when perform a random error injection
+- [x] Accelerate error impact analysis through internal observer metrics rather than use original accuracy metric
+
+**Fine-grained configuration**
+
+- [x] By python code
+- [x] By .yaml config file
+- [ ] By GUI (in development)
+
+**Evaluation fault tolerance policy**
+
+- [x] Selective protection on different level
+- [ ] More fault tolerance method may be support later (e.g. fault tolerant retrain, range-based filter)
 
 
-### python script for per layer fault tolerance comparing
 
-Previous configuration file gives us a static fault inject config, and error injection is performed on all five layers of lenet with a fixed probability.
+## Developing
 
-Assume we want to conduct fault inject experiment for each single layer so that we can compare the fault tolerance ability of each layer. In this case, we have to perform 5 experiments and enable only one layer for inject in each experiment. To run these highly similar experiments, it is awkward to copy many configuration file or rewrite config file by script code.
+Code in `mrfi/` are tested to ensure correctness. Test case are under `test/`.
 
-In MRFI, we can enable or disable fault injection of each layer dynamically, so it can be easily completed in a loop. You can refer the following code. Note that you can also dynamically modify other arguments as your need, such as quantization dynamic range or fault inject rate.
+### Unit Test
 
-```python
-import yaml
-import torch
-import numpy as np
+```bash
+pytest --cov=mrfi --cov-report=html
+```
+coverage report written to `htmlconv/index.html`
 
-from model.vgg11 import Net, testset
-from mrfi.injector import ModuleInjector
+### Update Docs
 
-def experiment(total = 10000): # total = number of images to test
-    torch.set_num_threads(8)
-    config = yaml.load(yamlcfg)
-
-    net=Net(True) # load model
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    net.to(device).eval()
-
-    testloader = torch.utils.data.DataLoader(testset, batch_size=1, shuffle=False) # cifar dataloader
-
-    FI_network = ModuleInjector(net, config) # create FI framework
-
-    for layer in FI_network.subinjectors: # select each layer for fault inject
-        data=iter(testloader)
-        FI_network.reset_observe_value() # reset internal observation value so that different experiment result WILL NOT be wrongly accumulated
-        
-        accg, acc = 0, 0
-        for ll in FI_network.subinjectors: # disable other layer fault injection
-            ll.FI_enable = False
-        layer.FI_enable = True # enable current layer injection
-
-        for i in range(total): # input images
-            images, labels = next(data)
-            images=images.to(device)
-
-            outg = FI_network(images, golden=True) # Golden run before FI run is necessary.
-            out = FI_network(images).cpu().numpy() # FI run. Note that neural network internal observation value will be record automatically.
-
-            accg+=(np.argmax(outg[0])==labels.numpy()[0]) # sum final accuracy, similar with normal accuracy test
-            acc+=(np.argmax(out[0])==labels.numpy()[0])
-
-        observes=FI_network.get_observes()
-        print(layer.name, end='\t')
-        for name, value in observes.items():   # print internal observation values, it will print RMSE of each layer activation value if we use previous yaml config.
-            print("%.5f"%np.sqrt(value/total), end='\t')
-        print("%.2f%%"%(acc/total*100), flush=True, end='\t') # print FI accuracy
-        print("%.2f%%"%(accg/total*100), flush=True)          # print golden accuracy
+Modify markdown content files under `docs/`.
+```bash
+mkdocs build
+mkdocs serve
+mkdocs gh-deploy
 ```

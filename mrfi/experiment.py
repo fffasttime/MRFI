@@ -16,7 +16,7 @@ def logspace_density(low: int = -8, high: int = -4, density: int = 3):
     """
     return np.logspace(low, high, density*(high - low) + 1)
 
-def Acc_experiment(fi_model: MRFI, dataloader: DataLoader):
+def Acc_experiment(model: Union[MRFI, torch.nn.Module], dataloader: DataLoader):
     """Return classification accuracy on dataset.
 
     Args:
@@ -24,12 +24,13 @@ def Acc_experiment(fi_model: MRFI, dataloader: DataLoader):
         dataloader: Yields a series of tuple of (batched) input images and classification label.
     """
     acc_fi, n_inputs = 0, 0
-    device = next(fi_model.parameters()).device
-    fi_model.observers_reset()
+    device = next(model.parameters()).device
+    if isinstance(model, MRFI):
+        model.observers_reset()
 
     for inputs, labels in dataloader:
         with torch.no_grad():
-            outs = fi_model(inputs.to(device)).cpu()
+            outs = model(inputs.to(device)).cpu()
         acc_fi += (outs.argmax(1)==labels).sum().item()
         n_inputs += len(labels)
 

@@ -5,7 +5,7 @@ import logging
 from contextlib import contextmanager
 from enum import Enum
 from importlib import import_module
-from typing import Optional, Union, Callable, Any
+from typing import List, Optional, Union, Callable, Any
 import yaml
 
 import torch
@@ -90,23 +90,40 @@ class EasyConfig(FIConfig):
     def load_string(cls, string: str):
         return cls(yaml.full_load(string))
     
-    def set_quantization(self, idx: int, content_dict, update_only = False):
+    def set_quantization(self, idx: int, content_dict, update_only = False) -> None:
         if update_only:
             self.faultinject[idx]['quantization'].update(content_dict)
         else:
             self.faultinject[idx]['quantization'] = content_dict
 
-    def set_selector(self, idx: int, content_dict, update_only = False):
+    def set_selector(self, idx: int, content_dict, update_only = False) -> None:
         if update_only:
             self.faultinject[idx]['selector'].update(content_dict)
         else:
             self.faultinject[idx]['selector'] = content_dict
 
-    def set_error_mode(self, idx: int, content_dict, update_only = False):
+    def set_error_mode(self, idx: int, content_dict, update_only = False) -> None:
         if update_only:
             self.faultinject[idx]['error_mode'].update(content_dict)
         else:
             self.faultinject[idx]['error_mode'] = content_dict
+    
+    def set_module_used(self, idx: int,
+                        module_type: Union[str, List[str]] = None,
+                        module_name: Union[str, List[str]] = None,
+                        module_fullname: Union[str, List[str]] = None) -> None:
+        if module_type is not None:
+            self.faultinject[idx]['module_type'] = module_type
+        else:
+            self.faultinject[idx].pop('module_type', None)
+        if module_name is not None:
+            self.faultinject[idx]['module_name'] = module_name
+        else:
+            self.faultinject[idx].pop('module_name', None)
+        if module_fullname is not None:
+            self.faultinject[idx]['module_fullname'] = module_fullname
+        else:
+            self.faultinject[idx].pop('module_fullname', None)
 
 class ConfigTreeNodeType(Enum):
     """Config tree node types.
@@ -609,17 +626,19 @@ class MRFI:
 
         Equivalent to call `get_configs('activation.0.{fi_configname}')` or `get_configs('activation_out.0.{fi_configname}').`
         """
+        fi_configname = '' if fi_configname is None else '.' + fi_configname
         if out:
-            return self.get_configs('activation_out.' + str(activation_id) + '.' + fi_configname, strict, **kwargs)
+            return self.get_configs('activation_out.' + str(activation_id) + fi_configname, strict, **kwargs)
         else:
-            return self.get_configs('activation.' + str(activation_id) + '.' + fi_configname, strict, **kwargs)
+            return self.get_configs('activation.' + str(activation_id) + fi_configname, strict, **kwargs)
         
     def get_weights_configs(self, fi_configname: str = None, strict: bool = False, weight_id: int = 0, **kwargs: dict):
         """A convenient function of `get_configs` to get weights config.
 
         Equivalent to call `get_configs('weights.0.{fi_configname}')`
         """
-        return self.get_configs('weights.' + str(weight_id) + '.' + fi_configname, strict, **kwargs)
+        fi_configname = '' if fi_configname is None else '.' + fi_configname
+        return self.get_configs('weights.' + str(weight_id) + fi_configname, strict, **kwargs)
 
     def save_config(self, filename: str):
         """Save current detail config tree to a file."""

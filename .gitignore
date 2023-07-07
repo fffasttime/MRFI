@@ -7,3 +7,4 @@ detailconfigs
 result
 site
 .ipynb_checkpoints
+.coverage

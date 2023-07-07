@@ -53,43 +53,63 @@ print(observeFI_experiment_plus(fi_model, img, 'EqualRate'))
 
 datas = list(observeFI_experiment_plus(fi_model, img, 'SaveLast', module_type = ['Linear','Conv']).values())
 
-def visualize_feature_map(x: torch.Tensor):
+def visualize_feature_map(x: torch.Tensor, square = False, cmap = 'gray', symmeric = False):
+    def best_hw(n):
+        d = int(np.floor(np.sqrt(n)))
+        for dh in range(d, 0, -1):
+            if n%dh == 0:
+                break
+        dw = n//dh
+        if square or dh < d*0.5: 
+            return d, d
+        return dh, dw
+
     x = x.squeeze().numpy()
     if len(x.shape) == 3:
         C,H,W = x.shape
-        d = int(np.ceil(np.sqrt(C)))
+        dh, dw = best_hw(C)
 
-        pic = np.zeros((d*H, d*W))
+        pic = np.zeros((dh*H, dw*W))
 
         for i in range(C):
-            row, col = i//d, i%d
+            row, col = i//dw, i%dw
             pic[row*H:row*H+H, col*W:col*W+W] = x[i]
+        
+        from matplotlib import ticker
+        plt.gca().xaxis.set_major_locator(ticker.MultipleLocator(W))
+        plt.gca().yaxis.set_major_locator(ticker.MultipleLocator(H))
 
     else:
         n = len(x)
-        if n>10:
-            d = int(np.ceil(np.sqrt(n)))
-            pic = np.zeros(d*d)
+        if n>5 or square:
+            dh, dw = best_hw(n)
+            pic = np.zeros(dh*dw)
             pic[:n] = x
-            pic = pic.reshape(d, d)
-            
+            pic = pic.reshape(dh, dw)
         else:
             pic = np.zeros((1,n))
             pic[0] = x            
 
-    im = plt.imshow(pic, cmap='gray')
-    plt.colorbar(im)
+    vmin, vmax = np.min(x), np.max(x)
+    if symmeric:
+        absmax = np.max(np.abs(x))
+        vmin, vmax = -absmax, absmax
+
+    im = plt.imshow(pic, cmap = cmap, vmin = vmin, vmax = vmax)
+    plt.colorbar(im, fraction = 0.05, pad = 0.05)
 
 titles = ['conv1', 'conv2', 'fc1', 'fc2', 'fc3']
+N = len(titles)
 
 for i, (g, e) in enumerate(datas):
-    plt.subplot(2, 5, i+1)
-    visualize_feature_map(g)
-    plt.title(titles[i])
+    plt.subplot(2, N, i+1)
+    visualize_feature_map(g, cmap = 'gray')
+    plt.title(titles[i] + ' activation')
 
-    plt.subplot(2, 5, i+6)
-    visualize_feature_map(g - e)
-    plt.title(titles[i] + ' err')
+    plt.subplot(2, N, i+1+N)
+    visualize_feature_map(g - e, cmap = 'RdBu', symmeric = True)
+    plt.title(titles[i] + ' error')
+    if i == N - 1: break
 
 plt.show()
 # pprint(observeFI_experiment(fi_model, input_images))

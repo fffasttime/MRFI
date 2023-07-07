@@ -172,6 +172,7 @@ def _get_pos_with_mask(shape, n, dimmasks, inverse = True):
         else:
             pos[dim] = torch.randint(0, dimsize, (n,))
     
+    logging.debug('mrfi.selector._get_pos_with_mask, shape = %r, dimmasks = %r, selected pos = %r', shape, dimmasks, pos)
     return _flatten_position(shape, pos)
 
 
@@ -246,3 +247,26 @@ def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **
         if dimmasks[i] is not None:
             rate_reduce = rate * (len(dimmasks[i])/dimsize)
     return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson), dimmasks, False)
+
+
+def FixedPixelByNumber(shape, n: int, pixel: Union[int, tuple], per_instance = False):
+    if len(shape) != 4:
+        raise ValueError('FixedPixelByNumber requires 4-D feature map')
+    if isinstance(pixel, int):
+        pixel = (pixel // shape[3], pixel % shape[3])
+    if pixel[0]>=shape[2] or pixel[1]>=shape[3]:
+        logging.error('pixel (%r) out of shape (%r)', pixel, shape)
+        raise ValueError
+
+    if per_instance:
+        inst = torch.arange(n * shape[0]) // n
+        n *= shape[0]
+        channel = torch.randint(0, shape[1], (n, ))
+    else:
+        inst = torch.randint(0, shape[0], (n, ))
+        channel = torch.randint(0, shape[1], (n, ))
+
+    pos = torch.stack((inst, channel, 
+                     torch.full((n,), pixel[0]), 
+                     torch.full((n,), pixel[1])))
+    return _flatten_position(shape, pos)
