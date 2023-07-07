@@ -2,7 +2,8 @@
 
 A error_mode callback function recieve a fixed argument `x_in`,
 and other arguments specified by config, 
-then return a tensor with values after fault inject.
+then *return* a tensor with values after fault inject. 
+DO NOT modify data in tensor `x_in`.
 
 `x_in` is a 1-d tensor contains values selected by `selector`.
 The return fault injected tensor should have same shape and type as x_in.

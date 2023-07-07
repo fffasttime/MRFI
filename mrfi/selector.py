@@ -75,14 +75,14 @@ def RandomPositionByNumber(shape, n: int = 1, per_instance: bool = False):
     
     Args:
         n: Number of target positions.
-        per_instance: if `true`, perform n inject on per instance (ignore dim 0).
+        per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0).
     """
     nelem = shape.numel()
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     if per_instance:
         insts = shape[0]
         sizes = nelem // insts
-        return (torch.arange(n * insts, device=device) // insts * sizes + 
+        return (torch.arange(n * insts, device=device) // n * sizes + 
                 torch.randint(0, sizes, (n * insts, ), device = device))
     return torch.randint(0, nelem, (int(n),), device = device)
 
@@ -250,6 +250,14 @@ def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **
 
 
 def FixedPixelByNumber(shape, n: int, pixel: Union[int, tuple], per_instance = False):
+    """Select random channel on one fixed pixel(height x weight dimension).
+
+    Args:
+        n: number of positions
+        pixel: An 2-d coordinate tuple specified target pixel
+        per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0).
+    
+    """
     if len(shape) != 4:
         raise ValueError('FixedPixelByNumber requires 4-D feature map')
     if isinstance(pixel, int):

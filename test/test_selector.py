@@ -23,6 +23,13 @@ def test_FixPositions():
 def test_RandomPositionByNumber():
     shape = torch.Size((1,64,10,20))
     assert selector.RandomPositionByNumber(shape, 100).numel() == 100
+    print(selector.RandomPositionByNumber(shape, 100))
+
+    shape = torch.Size((3,64,10,20))
+    pos = selector.RandomPositionByNumber(shape, 100, True)
+    assert pos.numel() == 300
+    assert (pos < 64*10*20).sum() == 100
+    assert (pos < 2*64*10*20).sum() == 200
 
 def test_RandomPositionByRate():
     shape = torch.Size((1,64,10,20)) # 12800
@@ -56,9 +63,26 @@ def test_SelectedRandomPositionByNumber():
 def test_MaskedDimRandomPositionByRate():
     shape = torch.Size((3,64,10,20)) # 38400
     sel = selector.MaskedDimRandomPositionByRate(shape, 1e-2, False, instance = [1,2])
-    assert sel.numel()==128 and (sel<12800).all()
+    assert sel.numel() == 128 and (sel<12800).all()
 
 def test_SelectedDimRandomPositionByRate():
     shape = torch.Size((3,64,10,20)) # 38400
     sel = selector.SelectedDimRandomPositionByRate(shape, 1e-2, False, instance = [1,2])
-    assert sel.numel()==256 and (sel>=12800).all()
+    assert sel.numel() == 256 and (sel>=12800).all()
+
+
+def test_FixedPixelByNumber():
+    shape = torch.Size((2,64,4,5))
+    
+    target = torch.zeros(shape)
+    sel = selector.FixedPixelByNumber(shape, 2, (1, 2))
+    target.flatten()[sel] = 2
+    assert sel.numel() == 2 and target[..., 1, 2].sum() == 4
+
+    
+    shape = torch.Size((2,64,4,5))
+    target = torch.zeros(shape)
+    sel = selector.FixedPixelByNumber(shape, 1, (1, 2), True)
+    target.flatten()[sel] = 2
+
+    assert sel.numel() == 2 and target[..., 1, 2].sum().int().item() == 4

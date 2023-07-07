@@ -47,9 +47,6 @@ def add_function(name: str, function_object: Callable[..., Any]) -> None:
     """
     named_functions[name] = function_object
 
-class FIConfig:
-    """Base class of FIConfig."""
-
 def _read_config(filename: str) -> dict:
     """Read config file."""
     extentname = filename.split('.')[-1]
@@ -69,7 +66,7 @@ def _write_config(config: dict, filename: str) -> None:
         else:
             raise NotImplementedError(extentname)
 
-class EasyConfig(FIConfig):
+class EasyConfig:
     """EasyConfig object.
     
     Properties:
@@ -80,6 +77,9 @@ class EasyConfig(FIConfig):
         if config is None: config = {}
         self.faultinject = config.get('faultinject', [])
         self.observe = config.get('observe', [])
+    
+    def __repr__(self) -> str:
+        return f'faultinject:{self.faultinject.__repr__()}\nobserve:{self.observe}'
     
     @classmethod
     def load_file(cls, filename: str):
@@ -168,7 +168,7 @@ def _node_step(nodetype, name):
             return None
         raise ValueError(name)
     if nodetype == ConfigTreeNodeType.FI_STAGE:
-        if name == 'method':
+        if name in ('method', 'layerwise'):
             return None
         if name == 'args':
             return ConfigTreeNodeType.METHOD_ARGS
@@ -185,7 +185,7 @@ def _node_step(nodetype, name):
         return None
     assert False, f'Invalid name {name} nodetype {nodetype}'
 
-class ConfigTree(FIConfig):
+class ConfigTree:
     """Make a detail config tree.
     
     Detail config tree is a dict-like object.
@@ -322,12 +322,12 @@ def _FI_activation(config, act):
         values = act.view(-1)[error_list]
 
         if fi_quantization: 
-            quantization_method.quantize(values)
+            quantization_method.quantize(values, **quantization_args)
 
         fi_value = modifier(values, **modifier_args)
         
         if fi_quantization: 
-            quantization_method.dequantize(fi_value)
+            quantization_method.dequantize(fi_value, **quantization_args)
 
         act.view(-1)[error_list] = fi_value
 
@@ -392,12 +392,12 @@ def _FI_weight(config, weight):
         values = weight.view(-1)[error_list]
 
         if fi_quantization: 
-            quantization_method.quantize(values)
+            quantization_method.quantize(values, **quantization_args)
 
         fi_value = modifier(values, **modifier_args)
         
         if fi_quantization: 
-            quantization_method.dequantize(fi_value)
+            quantization_method.dequantize(fi_value, **quantization_args)
 
         weight.view(-1)[error_list] = fi_value
 
@@ -495,13 +495,14 @@ def find_modules(model: Union['MRFI', torch.nn.Module], attrdict: dict):
 
 class MRFI:
     """MRFI core object, a wrapper of network module."""
-    def __init__(self, model: nn.Module, config: FIConfig) -> None:
+    def __init__(self, model: nn.Module, config: Union[str, EasyConfig]) -> None:   
         self.model = model
+        assert not hasattr(model, 'FI_config'), 'This model instance is used twice for MRFI, please create a new.'
 
         if isinstance(config, EasyConfig):
             self.config = self.__expand_config(config)
-        elif isinstance(config, ConfigTree):
-            self.config = config
+        elif isinstance(config, str):
+            self.config = ConfigTree(_read_config(config), self)
         else:
             raise TypeError(config)
 
@@ -533,12 +534,17 @@ class MRFI:
             if name in configtree.sub_modules:
                 self.__add_moduleconfig(configtree.sub_modules[name],submodule)
     
-    def __change_arg(self, fiattr: dict):
-        method = fiattr.pop('method')
+    def __change_arg(self, fiattr: dict, keep_arg = ['method']):
+        """Add an args level"""
+        
+        temp_dict = {}
+        for arg in keep_arg:
+            temp_dict[arg] = fiattr.pop(arg)
+
         args = copy.copy(fiattr)
         fiattr.clear()
-        fiattr['method'] = method
         fiattr['args'] = args
+        fiattr.update(temp_dict)
         
     def __config_fi(self, fi: dict, module, fitype):
         configtree = module.FI_config
@@ -549,12 +555,12 @@ class MRFI:
         elif fitype == 'activation_out':
             configtree.activation_out.append(
                 ConfigTree(copy.deepcopy(fi), self, ConfigTreeNodeType.FI_ATTR, configtree.name + '.activation_out.0'))
-        elif fitype == 'weight':
+        elif fitype == 'weight' or fitype == 'weights':
             names = _default_list(fi.get('name', ['weight']))
 
             for i, name in enumerate(names):
                 if not hasattr(module, name):
-                    print('warning: no weight mode "{name}" in current module, ignore')
+                    logging.warning('warning: no weight mode "%s" in current module, ignore', name)
                     continue
                 ficopy = copy.deepcopy(fi)
                 ficopy['name'] = name
@@ -671,9 +677,12 @@ class MRFI:
             fitype = fi.pop('type')
             activationid = fi.pop('activationid', 0)
 
+            fi.setdefault('enabled', True)
+
             quantization = fi.get('quantization')
             if quantization is not None:
-                self.__change_arg(quantization)
+                quantization.setdefault('layerwise', True)
+                self.__change_arg(quantization, ['method', 'layerwise'])
             selector = fi.get('selector')
             if selector is not None:
                 self.__change_arg(selector)

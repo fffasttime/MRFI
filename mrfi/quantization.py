@@ -1,10 +1,11 @@
 """MRFI quantization methods
 
 A Quantization has two static function `quantize()` and `dequantize()`, 
-both have args `x` and other args have specified in config file. 
+both have args `x` and other args have specified in config file.
+These two function should modify `x` inplace, DO NOT return something.
 
-`quantize()` should make input `x` into a integer tensor with float type, 
-aka. fake quantization, therefore pytorch can forward them correctly.
+`quantize()` should make input `x` into a integer tensor with float32 type, 
+aka. pseudo quantization, therefore pytorch can forward them correctly.
 
 Warning:
     A integer bit flip error mode *always* need a quantization.
