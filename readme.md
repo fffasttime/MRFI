@@ -127,6 +127,8 @@ faultinject:
 
 Code in `mrfi/` are tested to ensure correctness. Test case are under `test/`.
 
+Set `logging.basicConfig(level = logging.DEBUG)` can get more runtime logging. It may be helpful when MRFI does not perform as expected.
+
 ### Unit Test
 
 ```bash

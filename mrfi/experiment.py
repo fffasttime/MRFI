@@ -20,7 +20,7 @@ def Acc_experiment(model: Union[MRFI, torch.nn.Module], dataloader: DataLoader):
     """Return classification accuracy on dataset.
 
     Args:
-        fi_model: Target model.
+        model: Target model.
         dataloader: Yields a series of tuple of (batched) input images and classification label.
     """
     acc_fi, n_inputs = 0, 0

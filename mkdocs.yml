@@ -2,16 +2,18 @@ site_name: MRFI documention
 
 nav:
 - MRFI overview: index.md
-- Usage: usage.md
+- Usage: 
+  - usage.md
+- Examples:
+  - basic_observe.md
+  - basic_faultinjection.md
 - Documents:
-  - core.md
+  - mrfi.md
   - selector.md
   - quantization.md
   - error_mode.md
   - observer.md
   - experiment.md
-- Examples:
-  - basic_observe.md
 
 theme:
   name: "material"
@@ -27,6 +29,10 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+  features:
+    - navigation.sections
+extra_css:
+  - assets/extra_style.css
 
 markdown_extensions:
   - admonition  # 提示块
@@ -45,7 +51,7 @@ markdown_extensions:
       linenums: true
   - toc:  # 锚点
       permalink: true
-#  - pymdownx.arithmatex  # 数学公式
+  - pymdownx.arithmatex  # 数学公式
   - pymdownx.betterem:  # 对加粗和斜体更好的检测
       smart_enable: all
 #  - pymdownx.emoji:  # 表情

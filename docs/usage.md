@@ -1,39 +1,120 @@
 # Basic Usage
 
-## Examples
+## Beginning
 
-### Observe network weights and activations
+As a starting point, you can give a **PyTorch model** (`torch.nn.Module` type) and a **EasyConfig** to MRFI to create a model with fault injection.
 
-We provide `get_activation_info` and `get_weight_info` in `mrfi.experiment`.
+```python
+from mrfi import MRFI, EasyConfig
+from mymodel import Model  # custom model
+from torchvision.models import resnet18  # model from torchvision
+
+fi_model = MRFI(Model(), EasyConfig.load_file('easyconfigs/default_fi.yaml'))
+fi_resnet18 = MRFI(resnet18(), EasyConfig.load_file('easyconfigs/default_fi.yaml'))
+```
+
+Then, you can use `fi_model` as a regular PyTorch model for inference, and the output of model is affected by fault injection. 
+More exactly, the hooks inserted by MRFI will conduct fault injection automatically according to the configuration in **EasyConfig**.
+
+To test accuracy of a classification model, you may write a loop to compare the outputs and labels. 
+For convenience, we also provide some utility functions in `mrfi.experiment` that can do it in one line, such as `Acc_experiment`.
+
+See complete exmpale of [Basic fault injection on LeNet](basic_faultinjection.md)
+
+### EasyConfig object
+
+We provide some template of easyconfig file in folder `easyconfigs/`. 
+You can modify these configuration files according to your needs and load it by  `EasyConfig.load_file()`.
+
+```yaml title="easyconfigs/default_fi.yaml"
+faultinject:
+  - type: activation
+    quantization:
+      method: SymmericQuantization
+      dynamic_range: auto
+      bit_width: 16
+    enabled: True
+    selector:
+      method: RandomPositionByRate
+      poisson: True
+      rate: 1e-3
+    error_mode:
+      method: IntSignBitFlip
+      bit_width: 16
+
+    module_name: [conv, fc] # Match layers that contain these name
+    module_type: [Conv2d, Linear] # Or match layers contain these typename
+```
+It is clear the quantization, selector, error_mode method used for fault injection, as well as their parameters. 
+The order of these config blocks in same level is not important because YAML regards them as dictionary.
+
+Let's look one parameter. `rate` is a parameter of selector `RandomPositionByRate` indicate the indicate the probability of each tensor value being selected.
+Here, we set  `rate: 1e-3` to significantly indicate that error injection is working, which is a relative high error rate for fault injection.
+
+You can use the commonly used methods already provided by MRFI as the execution module, or you can customize new methods. 
+Note that each method can have different parameter names, specified by their definition.
+
+The last two lines indicate the layers that require fault injection. 
+MRFI will try to match all layers specified by `module_name` or `module_type` and set fault injection above.
+Before write a custom fault injection in your own model, 
+You can type `print(model)` to get name and type of all layers of the model.
+
+If you don't want to create a new YAML EasyConfig file,
+you can also load a custom EasyConfig yaml from python string by `EasyConfig.load_string()`,
+or modify EasyConfig object by python code directly before create a MRFI object.
+
+See >>> EasyConfig Usage <<< to learn more usage and special rules of EasyConfig,
+
+
+### Observing variables
+
+It is helpful to make some observation before fault injection, such as the shape of tensors and the min-max range of tensors.
+When conducting fault injection, internal observers are also helpful for recognize error propagation.
+
+In MRFI, observers can be defined in **EasyConfig**, then they will be called every inference. 
+You can collect observation results by using `fi_model.observers_result()` after each run.
+
+For convenience, `mrfi.experiment` provides some function for inserting observer temporarily and making inference.
+`get_activation_info` and `get_weight_info` in `mrfi.experiment` are powerful, allow us to perform various observations in one line of code.
 They can be used to observe the shape, distribution, and sampling & visualization of network data.
 
-[>> Example of basic observe on LeNet](basic_observe.md)
+See [>> Example of basic observe on LeNet with interactive command](basic_observe.md).
 
-### A coarse-grained configuation fault inject experiment
-For example, the following code perform a quantized random integer bit flip injection on LeNet, 
-and find the relation between bit error rate (BER) and classification accuracy.
+### Golden run
 
-```python title="LeNet default fault injection"
-from dataset.lenet_cifar import make_testloader, LeNet
-from mrfi import MRFI, EasyConfig
-from mrfi.experiment import BER_Acc_experiment
+To inference a `fi_model` without fault injection, we suggest using a golden_run context to include the code that calls the model,
+which will temporary disable all fault injection on the model:
 
-testloader = make_testloader(1000, batch_size = 128) # test on 1000 cifar-10 images
-
-# Create fault inject model
-fi_model = MRFI(network = LeNet(trained=True).eval(), 
-                EasyConfig.load_file('easyconfigs/default_fi.yaml'))
-
-################### A Simple acccuracy experiment #####################
-# Test accuracy under fault injection with select rate = 1e-3 which specified in "default_fi.yaml"
-print('FI Acc: ', Acc_experiment(fi_model, dataloader))
-# Test accuracy w/o fault inject
+```python
 with fi_model.golden_run():
-    print('golden run Acc: ', Acc_experiment(fi_model, dataloader))
+    # Disable MRFI in this context
+    out_golden = fi_model(input_data)
 
-######################## BER_Acc_experiment ###########################
-# Get selector handler because BER_Acc_experiment needs to modify selection rate in experiment
-selector_cfg = fi_model.get_configs('activation.0.selector')
-BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, testloader, [1e-6, 1e-5, 1e-4, 1e-3])
-print('Bit error rate and accuracy: ', BER, Acc)
+out_fi = fi_model(input_data)
+
+# Or disable MRFI directly
+fi_model.golden = True
+out_golden = fi_model(input_data)
 ```
+
+### Fine-grained and advanced configuration
+
+MRFI allows different error injection methods and parameters to be configured on each layer, as it has a tree like detailed configuration **ConfigTree** inside. 
+*In fact, when we created MRFI objects from EasyConfig earlier, the configuration was automatically copied to all matching layers and modules to create ConfigTree.*
+
+To execute different error injection parameters on different layers, one way is to write several injection configuration in **EasyConfig** and let MRFI to expand then to distinct layers.
+However, a more flexible approach is to directly modify **ConfigTree**. To save or load detail config tree, you can use following code:
+
+```python
+fi_model = MRFI(Model(), 'easyconfigs/default_fi.yaml')
+
+# Save config tree to a YAML file
+fi_model.save_config('model_config_tree.yaml')
+
+# A detail config tree can be loaded by
+fi_model_new = MRFI(Model(), 'model_config_tree.yaml')
+```
+
+It is possible to manually modify the ConfigTree YAML configuration file and then load it. Due to the large amount of data in ConfigTree, we also provide some APIs for batch modifying the built-in ConfigTree of MRFI objects.
+
+See fine-grained configuration and advanced configuration for more information.

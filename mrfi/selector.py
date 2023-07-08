@@ -249,7 +249,7 @@ def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **
     return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson), dimmasks, False)
 
 
-def FixedPixelByNumber(shape, n: int, pixel: Union[int, tuple], per_instance = False):
+def FixedPixelByNumber(shape, n: int, pixel: Union[int, tuple], per_instance: bool = False):
     """Select random channel on one fixed pixel(height x weight dimension).
 
     Args:
