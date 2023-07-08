@@ -1,0 +1,1457 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../error_mode/">
+      
+      
+        <link rel="next" href="../experiment/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
+    
+    
+      
+        <title>observer - MRFI documention</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../assets/extra_style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#observer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MRFI documention" class="md-header__button md-logo" aria-label="MRFI documention" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MRFI documention
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              observer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MRFI documention" class="md-nav__button md-logo" aria-label="MRFI documention" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MRFI documention
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        MRFI overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Usage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        Basic Usage
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_observe/" class="md-nav__link">
+        Basic observation on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_faultinjection/" class="md-nav__link">
+        Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Documents
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Documents
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mrfi/" class="md-nav__link">
+        mrfi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../selector/" class="md-nav__link">
+        selector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quantization/" class="md-nav__link">
+        quantization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_mode/" class="md-nav__link">
+        error_mode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          observer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        observer
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer" class="md-nav__link">
+    mrfi.observer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver" class="md-nav__link">
+    BaseObserver
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseObserver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.reset" class="md-nav__link">
+    reset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.update_golden" class="md-nav__link">
+    update_golden()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.update" class="md-nav__link">
+    update()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.result" class="md-nav__link">
+    result()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MinMax" class="md-nav__link">
+    MinMax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.RMSE" class="md-nav__link">
+    RMSE
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.SaveLast" class="md-nav__link">
+    SaveLast
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MaxAbs" class="md-nav__link">
+    MaxAbs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MeanAbs" class="md-nav__link">
+    MeanAbs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.Std" class="md-nav__link">
+    Std
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.Shape" class="md-nav__link">
+    Shape
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MAE" class="md-nav__link">
+    MAE
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.EqualRate" class="md-nav__link">
+    EqualRate
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.UniformSampling" class="md-nav__link">
+    UniformSampling
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiment/" class="md-nav__link">
+        experiment
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer" class="md-nav__link">
+    mrfi.observer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver" class="md-nav__link">
+    BaseObserver
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseObserver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.reset" class="md-nav__link">
+    reset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.update_golden" class="md-nav__link">
+    update_golden()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.update" class="md-nav__link">
+    update()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.observer.BaseObserver.result" class="md-nav__link">
+    result()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MinMax" class="md-nav__link">
+    MinMax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.RMSE" class="md-nav__link">
+    RMSE
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.SaveLast" class="md-nav__link">
+    SaveLast
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MaxAbs" class="md-nav__link">
+    MaxAbs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MeanAbs" class="md-nav__link">
+    MeanAbs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.Std" class="md-nav__link">
+    Std
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.Shape" class="md-nav__link">
+    Shape
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.MAE" class="md-nav__link">
+    MAE
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.EqualRate" class="md-nav__link">
+    EqualRate
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.observer.UniformSampling" class="md-nav__link">
+    UniformSampling
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="observer">observer<a class="headerlink" href="#observer" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="mrfi.observer"></a>
+  <div class="doc doc-contents first">
+  
+      <p>MRFI common used observers</p>
+<p>Callback function <code>update(x)</code> will be called for each batch of inference.</p>
+<p>Observer can accumulate its results between batchs, until a <code>reset()</code> is called.</p>
+
+<details class="note" open>
+  <summary>Note</summary>
+  <p>Most of fault inject observer requires golden run before each fault inject run, 
+in order to compare the impact of fault inject.
+<div class="highlight"><pre><span></span><code><span class="c1"># fi_model has FI observers, e.g. RMSE</span>
+
+<span class="n">fi_model</span><span class="o">.</span><span class="n">observers_reset</span><span class="p">()</span> 
+<span class="k">for</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">golden_run</span><span class="p">():</span>
+        <span class="n">fi_model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">fi_model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">observers_result</span><span class="p">()</span>
+</code></pre></div></p>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.BaseObserver" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">BaseObserver</span><span class="p">()</span></code>
+
+<a href="#mrfi.observer.BaseObserver" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Basement of observers.</p>
+<p>MRFI will call these callback functions when inference.
+A custom observer should implement follow functions.</p>
+
+
+          <details class="quote">
+            <summary>Source code in <code>mrfi\observer.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.observer.BaseObserver.reset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">reset</span><span class="p">()</span></code>
+
+<a href="#mrfi.observer.BaseObserver.reset" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Reset observer when running multiple experiments</p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\observer.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset observer when running multiple experiments&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.observer.BaseObserver.update_golden" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update_golden</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>
+
+<a href="#mrfi.observer.BaseObserver.update_golden" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Callback when model inference with <code>mrfi.golden == True</code></p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>x</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td><p>Internal observation value, usually a batched tenser of feature map.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\observer.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update_golden</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback when model inference with `mrfi.golden == True`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x: Internal observation value, usually a batched tenser of feature map.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># By default, also update by golden run</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.observer.BaseObserver.update" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>
+
+<a href="#mrfi.observer.BaseObserver.update" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Callback when model inference with  <code>mrfi.golden == False</code></p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\observer.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback when model inference with  `mrfi.golden == False`&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.observer.BaseObserver.result" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">result</span><span class="p">()</span></code>
+
+<a href="#mrfi.observer.BaseObserver.result" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Callback when get observe result after experiment.</p>
+<p>You can do some postprocess of observation value here.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\observer.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callback when get observe result after experiment.</span>
+
+<span class="sd">    You can do some postprocess of observation value here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.MinMax" class="doc doc-heading">
+        <code>MinMax</code>
+
+
+<a href="#mrfi.observer.MinMax" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Observe min/max range of tensors.</p>
+<p>Returns (tuple[float, float]):
+    A tuple <code>(min_value, max_value)</code></p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.RMSE" class="doc doc-heading">
+        <code>RMSE</code>
+
+
+<a href="#mrfi.observer.RMSE" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Root Mean Square Error metric between golden run and fault inject run.</p>
+<p>Returns (float):
+    RMSE value of fault inject impact.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.SaveLast" class="doc doc-heading">
+        <code>SaveLast</code>
+
+
+<a href="#mrfi.observer.SaveLast" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Simply save last inference internal tensor. This will be helpful when visualize NN feature maps.</p>
+<p>Returns (tuple):
+    Last golden run activation and last FI run activation tuple (golden_act, FI_act).
+    If no such run before get result, returns <code>None</code>.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.MaxAbs" class="doc doc-heading">
+        <code>MaxAbs</code>
+
+
+<a href="#mrfi.observer.MaxAbs" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Observe max abs range of tensors.</p>
+<p>Returns (float):
+    Similar as <code>x.abs().max()</code> but among all inference.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.MeanAbs" class="doc doc-heading">
+        <code>MeanAbs</code>
+
+
+<a href="#mrfi.observer.MeanAbs" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>mean of abs, a metric of scale of values</p>
+<p>Returns (float):
+    Similar as <code>x.abs.mean()</code> but among all inference.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.Std" class="doc doc-heading">
+        <code>Std</code>
+
+
+<a href="#mrfi.observer.Std" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Standard deviation of zero-mean values.</p>
+<p>Returns (float):
+    Similar as <code>sqrt((x**2).mean())</code> but among all inference.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.Shape" class="doc doc-heading">
+        <code>Shape</code>
+
+
+<a href="#mrfi.observer.Shape" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Simply record tensor shape of last inference</p>
+<p>Returns (torch.Size):</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.MAE" class="doc doc-heading">
+        <code>MAE</code>
+
+
+<a href="#mrfi.observer.MAE" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Mean Absolute Error between golden run and fault inject run.</p>
+<p>Returns (float):
+    MAE metric of fault inject impact.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.EqualRate" class="doc doc-heading">
+        <code>EqualRate</code>
+
+
+<a href="#mrfi.observer.EqualRate" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Compare how many value unchanged between golden run and fault inject run.</p>
+<p>Returns (float):
+    A average ratio of how many values remain unchanged, between [0, 1].
+    - If all value have changed, return 0. 
+    - If all value are same as golden run, return 1.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.observer.UniformSampling" class="doc doc-heading">
+        <code>UniformSampling</code>
+
+
+<a href="#mrfi.observer.UniformSampling" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><a class="autorefs autorefs-internal" title="mrfi.observer.BaseObserver" href="#mrfi.observer.BaseObserver">BaseObserver</a></code></p>
+
+  
+      <p>Uniform sampling from tensors between all inference, up to 10000 samples.</p>
+<p>Co-work well with statistical visualization requirements, e.g. <code>plt.hist()</code> or <code>plt.boxplot()</code>.</p>
+
+<details class="info" open>
+  <summary>Info</summary>
+  <p>Since feature map in NN are usually entire large, 
+save all feature map(e.g. use <code>SaveLast</code>) and sampling later is in-efficient.</p>
+<p>This observer automatically sampling values between all inference with uniform probability.</p>
+</details>      <p>Returns (np.array):
+    A 1-d numpy, its length is min(all observerd values, 10000).</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+    
+  </body>
+</html>

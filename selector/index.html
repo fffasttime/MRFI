@@ -1,0 +1,1637 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../mrfi/">
+      
+      
+        <link rel="next" href="../quantization/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
+    
+    
+      
+        <title>selector - MRFI documention</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../assets/extra_style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#selector" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MRFI documention" class="md-header__button md-logo" aria-label="MRFI documention" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MRFI documention
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              selector
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MRFI documention" class="md-nav__button md-logo" aria-label="MRFI documention" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MRFI documention
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        MRFI overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Usage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        Basic Usage
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_observe/" class="md-nav__link">
+        Basic observation on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_faultinjection/" class="md-nav__link">
+        Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Documents
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Documents
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mrfi/" class="md-nav__link">
+        mrfi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          selector
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        selector
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector" class="md-nav__link">
+    mrfi.selector
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.EmptySelector" class="md-nav__link">
+    EmptySelector()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.FixPosition" class="md-nav__link">
+    FixPosition()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.FixPositions" class="md-nav__link">
+    FixPositions()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.RandomPositionByNumber" class="md-nav__link">
+    RandomPositionByNumber()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.RandomPositionByRate" class="md-nav__link">
+    RandomPositionByRate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.RandomPositionByRate_classic" class="md-nav__link">
+    RandomPositionByRate_classic()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.MaskedDimRandomPositionByNumber" class="md-nav__link">
+    MaskedDimRandomPositionByNumber()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.SelectedDimRandomPositionByNumber" class="md-nav__link">
+    SelectedDimRandomPositionByNumber()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.MaskedDimRandomPositionByRate" class="md-nav__link">
+    MaskedDimRandomPositionByRate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.SelectedDimRandomPositionByRate" class="md-nav__link">
+    SelectedDimRandomPositionByRate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.FixedPixelByNumber" class="md-nav__link">
+    FixedPixelByNumber()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quantization/" class="md-nav__link">
+        quantization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_mode/" class="md-nav__link">
+        error_mode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observer/" class="md-nav__link">
+        observer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiment/" class="md-nav__link">
+        experiment
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector" class="md-nav__link">
+    mrfi.selector
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.EmptySelector" class="md-nav__link">
+    EmptySelector()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.FixPosition" class="md-nav__link">
+    FixPosition()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.FixPositions" class="md-nav__link">
+    FixPositions()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.RandomPositionByNumber" class="md-nav__link">
+    RandomPositionByNumber()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.RandomPositionByRate" class="md-nav__link">
+    RandomPositionByRate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.RandomPositionByRate_classic" class="md-nav__link">
+    RandomPositionByRate_classic()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.MaskedDimRandomPositionByNumber" class="md-nav__link">
+    MaskedDimRandomPositionByNumber()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.SelectedDimRandomPositionByNumber" class="md-nav__link">
+    SelectedDimRandomPositionByNumber()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.MaskedDimRandomPositionByRate" class="md-nav__link">
+    MaskedDimRandomPositionByRate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.SelectedDimRandomPositionByRate" class="md-nav__link">
+    SelectedDimRandomPositionByRate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mrfi.selector.FixedPixelByNumber" class="md-nav__link">
+    FixedPixelByNumber()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="selector">selector<a class="headerlink" href="#selector" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+<a id="mrfi.selector"></a>
+  <div class="doc doc-contents first">
+  
+      <p>MRFI selector methods</p>
+<p>A selector is a call back function with fixed argument <code>shape</code>, 
+and other optional args specified in config file.</p>
+<p>The selector determines which positions of tensor are send to fault injector i.e. <code>error_mode</code>.</p>
+<p>Selector returns a 1-d index tensor with type <code>torch.long</code>, 
+indicates the index of target tensor after flatten.</p>
+
+<details class="note" open>
+  <summary>Note</summary>
+  <p>If no selector specified in config file, all target tensor will be sent to fault injector.</p>
+</details>
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.EmptySelector" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">EmptySelector</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.EmptySelector" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>No position selected by this, for debug or special use.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">EmptySelector</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No position selected by this, for debug or special use.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[]</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.FixPosition" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">FixPosition</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.FixPosition" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select fixed <em>one</em> position by coordinate.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>position</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[int, <span title="typing.List">List</span>[int]]</code>
+          </td>
+          <td><p>if <code>int</code>, stands for index of . 
+if <code>List[int]</code>, stands for n-d coordinate of target position.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">FixPosition</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select fixed *one* position by coordinate.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        position: </span>
+<span class="sd">            if `int`, stands for index of . </span>
+<span class="sd">            if `List[int]`, stands for n-d coordinate of target position.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> <span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">nelem</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nelem</span>
+        <span class="k">return</span> <span class="n">pos</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_flatten_position</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.FixPositions" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">FixPositions</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">positions</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.FixPositions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select a list of fixed positions by coordinate.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>positions</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<span title="typing.List">List</span>[int], <span title="typing.List">List</span>[<span title="typing.List">List</span>[int]]]</code>
+          </td>
+          <td><p>if <code>List[int]</code>, stands for index of target tensor after flatten 
+if <code>List[List[int]]</code>, stands for n-d coordinate of target position.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">FixPositions</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select a list of fixed positions by coordinate.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        positions: </span>
+<span class="sd">            if `List[int]`, stands for index of target tensor after flatten </span>
+<span class="sd">            if `List[List[int]]`, stands for n-d coordinate of target position.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">nelem</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">nelem</span>
+        <span class="k">return</span> <span class="n">pos</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">_flatten_position</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.RandomPositionByNumber" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">RandomPositionByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">per_instance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.RandomPositionByNumber" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select n random positions.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>n</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Number of target positions.</p></td>
+          <td>
+                <code>1</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>per_instance</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>if <code>True</code>, perform n inject on per instance (i.e. ignore dim 0).</p></td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">RandomPositionByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">per_instance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select n random positions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n: Number of target positions.</span>
+<span class="sd">        per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nelem</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span>
+    <span class="k">if</span> <span class="n">per_instance</span><span class="p">:</span>
+        <span class="n">insts</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sizes</span> <span class="o">=</span> <span class="n">nelem</span> <span class="o">//</span> <span class="n">insts</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">insts</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span> <span class="o">//</span> <span class="n">n</span> <span class="o">*</span> <span class="n">sizes</span> <span class="o">+</span> 
+                <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sizes</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">insts</span><span class="p">,</span> <span class="p">),</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nelem</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">),),</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.RandomPositionByRate" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">RandomPositionByRate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">poisson</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.RandomPositionByRate" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select random positions by rate.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>rate</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>Rate of each position to be chosen.</p></td>
+          <td>
+                <code>0.0001</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>poisson</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>Enable poisson samping, which is more accurate when rate is quite small.</p></td>
+          <td>
+                <code>True</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<details class="info" open>
+  <summary>Info</summary>
+  <p><code>rate</code> stands for tensor value selected rate here. To calculate the bit error rate on bit flip experiment,
+it needs to be additionally divided by the bit width.</p>
+</details>
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">RandomPositionByRate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">poisson</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select random positions by rate.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rate: Rate of each position to be chosen.</span>
+<span class="sd">        poisson: Enable poisson samping, which is more accurate when rate is quite small.</span>
+
+<span class="sd">    Info:</span>
+<span class="sd">        `rate` stands for tensor value selected rate here. To calculate the bit error rate on bit flip experiment,</span>
+<span class="sd">        it needs to be additionally divided by the bit width.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_check_rate_zero</span><span class="p">(</span><span class="n">rate</span><span class="p">):</span> <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">nelem</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">_get_num_by_rate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">poisson</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nelem</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,),</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.RandomPositionByRate_classic" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">RandomPositionByRate_classic</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.RandomPositionByRate_classic" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select random positions by rate.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>rate</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td><p>Rate of each position to be chosen.</p></td>
+          <td>
+                <code>0.0001</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<details class="deprecated" open>
+  <summary>Deprecated</summary>
+  <p>This function is deprecated and only for test because of bad performance.</p>
+</details>
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">RandomPositionByRate_classic</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select random positions by rate.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rate: Rate of each position to be chosen.</span>
+<span class="sd">    Deprecated:</span>
+<span class="sd">        This function is deprecated and only for test because of bad performance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_check_rate_zero</span><span class="p">(</span><span class="n">rate</span><span class="p">):</span> <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span>
+    <span class="n">nelem</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nelem</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">rate</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">:</span> <span class="c1"># run multiple times because of float accuracy problem of RNG</span>
+        <span class="n">positions_rate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="p">),</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">positions_rate</span><span class="o">&lt;</span><span class="mf">1e-4</span><span class="p">)]</span>
+        <span class="n">rate</span> <span class="o">*=</span> <span class="mf">1e4</span>
+
+    <span class="n">positions_rate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="p">),</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>
+    <span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">positions_rate</span><span class="o">&lt;</span><span class="n">rate</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">positions</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.MaskedDimRandomPositionByNumber" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">MaskedDimRandomPositionByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.MaskedDimRandomPositionByNumber" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select n positions after specifed dimensions are masked.</p>
+<p>For a 2-d tensor, it is equivalent to selecting on a submatrix
+where some rows and cols are masked.</p>
+
+<details class="info" open>
+  <summary>Info</summary>
+  <p>MaskedDim- and SelectedDim- selectors can be used for fine-grained 
+evaluate and selective protect experiments, 
+including instance-wise, channel-wise and spatial-wise.</p>
+</details>
+<details class="tip" open>
+  <summary>Tip</summary>
+  <p>Mask argeuments follow common pytorch memory layout:</p>
+<ul>
+<li>
+<p>CNN feature map: (<code>instance</code>, <code>channel</code>, <code>height</code>, <code>width</code>)</p>
+</li>
+<li>
+<p>CNN weight: (<code>out_channel</code>, <code>in_channel</code>, <code>height</code>, <code>width</code>)</p>
+</li>
+<li>
+<p>Full connect layer:  (<code>instance</code>, <code>neuron</code>)</p>
+</li>
+<li>
+<p>Full connect weight:  (<code>out</code>, <code>in</code>)</p>
+</li>
+</ul>
+</details>
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>n</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>number of position to select.</p></td>
+          <td>
+                <code>1</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>**kwargs</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td><p>instance <code>list[int]</code>: dim = 0</p>
+<p>channel <code>list[int]</code>: dim = 1</p>
+<p>height <code>list[int]</code>: dim = 2</p>
+<p>width <code>list[int]</code>: dim = 3</p>
+<p>out_channel <code>list[int]</code>: dim = 0</p>
+<p>in_channel <code>list[int]</code>: dim = 1</p>
+<p>out <code>list[int]</code>: dim = 0</p>
+<p>in <code>list[int]</code>: dim = 1</p>
+<p>neuron <code>list[int]</code>: dim = 1</p></td>
+          <td>
+                <code>{}</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">MaskedDimRandomPositionByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select n positions after specifed dimensions are masked.</span>
+
+<span class="sd">    For a 2-d tensor, it is equivalent to selecting on a submatrix</span>
+<span class="sd">    where some rows and cols are masked.</span>
+
+<span class="sd">    Info:</span>
+<span class="sd">        MaskedDim- and SelectedDim- selectors can be used for fine-grained </span>
+<span class="sd">        evaluate and selective protect experiments, </span>
+<span class="sd">        including instance-wise, channel-wise and spatial-wise.</span>
+<span class="sd">    Tip:</span>
+<span class="sd">        Mask argeuments follow common pytorch memory layout:\n</span>
+<span class="sd">        - CNN feature map: (`instance`, `channel`, `height`, `width`)\n</span>
+<span class="sd">        - CNN weight: (`out_channel`, `in_channel`, `height`, `width`)\n</span>
+<span class="sd">        - Full connect layer:  (`instance`, `neuron`)\n</span>
+<span class="sd">        - Full connect weight:  (`out`, `in`)</span>
+<span class="sd">    Args:</span>
+<span class="sd">        n (int): number of position to select.</span>
+<span class="sd">        **kwargs:</span>
+<span class="sd">            instance `list[int]`: dim = 0\n</span>
+<span class="sd">            channel `list[int]`: dim = 1\n</span>
+<span class="sd">            height `list[int]`: dim = 2\n</span>
+<span class="sd">            width `list[int]`: dim = 3\n</span>
+<span class="sd">            out_channel `list[int]`: dim = 0\n</span>
+<span class="sd">            in_channel `list[int]`: dim = 1\n</span>
+<span class="sd">            out `list[int]`: dim = 0\n</span>
+<span class="sd">            in `list[int]`: dim = 1\n</span>
+<span class="sd">            neuron `list[int]`: dim = 1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dimmasks</span> <span class="o">=</span> <span class="n">_get_mask_kwargs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_get_pos_with_mask</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">dimmasks</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.SelectedDimRandomPositionByNumber" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">SelectedDimRandomPositionByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.SelectedDimRandomPositionByNumber" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select n positions on selected coordinate.</p>
+<p>For argument list, please refer <code>MaskedDimRandomPositionByNumber</code>.</p>
+<p>Note if one dimension selection list is not specified, 
+it stands for all of this dimension are possible selected.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">SelectedDimRandomPositionByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select n positions on selected coordinate.</span>
+
+<span class="sd">    For argument list, please refer `MaskedDimRandomPositionByNumber`.\n</span>
+<span class="sd">    Note if one dimension selection list is not specified, </span>
+<span class="sd">    it stands for all of this dimension are possible selected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dimmasks</span> <span class="o">=</span> <span class="n">_get_mask_kwargs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_get_pos_with_mask</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">dimmasks</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.MaskedDimRandomPositionByRate" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">MaskedDimRandomPositionByRate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">poisson</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.MaskedDimRandomPositionByRate" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select by rate where some coordinate are masked.</p>
+<p>For argument list, please refer <code>MaskedDimRandomPositionByNumber</code>.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">MaskedDimRandomPositionByRate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">poisson</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select by rate where some coordinate are masked.</span>
+
+<span class="sd">    For argument list, please refer `MaskedDimRandomPositionByNumber`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_check_rate_zero</span><span class="p">(</span><span class="n">rate</span><span class="p">):</span> <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">dimmasks</span> <span class="o">=</span> <span class="n">_get_mask_kwargs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">rate_reduce</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dimsize</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dimmasks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rate_reduce</span> <span class="o">=</span> <span class="n">rate</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimmasks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">dimsize</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_get_pos_with_mask</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">_get_num_by_rate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate_reduce</span><span class="p">,</span> <span class="n">poisson</span><span class="p">),</span> <span class="n">dimmasks</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.SelectedDimRandomPositionByRate" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">SelectedDimRandomPositionByRate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">poisson</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.SelectedDimRandomPositionByRate" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select on some coordinate by rate.</p>
+<p>For argument list, please refer <code>MaskedDimRandomPositionByNumber</code>.</p>
+<p>Note if one dimension selection list is not specified, 
+it stands for all of this dimension are possible selected.</p>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">SelectedDimRandomPositionByRate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">poisson</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select on some coordinate by rate.</span>
+
+<span class="sd">    For argument list, please refer `MaskedDimRandomPositionByNumber`.\n</span>
+<span class="sd">    Note if one dimension selection list is not specified, </span>
+<span class="sd">    it stands for all of this dimension are possible selected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_check_rate_zero</span><span class="p">(</span><span class="n">rate</span><span class="p">):</span> <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">dimmasks</span> <span class="o">=</span> <span class="n">_get_mask_kwargs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">rate_reduce</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dimsize</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dimmasks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rate_reduce</span> <span class="o">=</span> <span class="n">rate</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dimmasks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">dimsize</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_get_pos_with_mask</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">_get_num_by_rate</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">rate_reduce</span><span class="p">,</span> <span class="n">poisson</span><span class="p">),</span> <span class="n">dimmasks</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="mrfi.selector.FixedPixelByNumber" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">FixedPixelByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">per_instance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#mrfi.selector.FixedPixelByNumber" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Select random channel on one fixed pixel(height x weight dimension).</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>n</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>number of positions</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pixel</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[int, tuple]</code>
+          </td>
+          <td><p>An 2-d coordinate tuple specified target pixel</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>per_instance</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>if <code>True</code>, perform n inject on per instance (i.e. ignore dim 0).</p></td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>mrfi\selector.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">FixedPixelByNumber</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pixel</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span> <span class="n">per_instance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select random channel on one fixed pixel(height x weight dimension).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n: number of positions</span>
+<span class="sd">        pixel: An 2-d coordinate tuple specified target pixel</span>
+<span class="sd">        per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;FixedPixelByNumber requires 4-D feature map&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pixel</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">pixel</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixel</span> <span class="o">//</span> <span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">pixel</span> <span class="o">%</span> <span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;pixel (</span><span class="si">%r</span><span class="s1">) out of shape (</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+
+    <span class="k">if</span> <span class="n">per_instance</span><span class="p">:</span>
+        <span class="n">inst</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">*=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">inst</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">))</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">))</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">inst</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> 
+                     <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">n</span><span class="p">,),</span> <span class="n">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> 
+                     <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">n</span><span class="p">,),</span> <span class="n">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">_flatten_position</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+    
+  </body>
+</html>
