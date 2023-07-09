@@ -4,9 +4,14 @@ nav:
 - MRFI overview: index.md
 - Usage: 
   - usage.md
+  - usage_easyconfig.md
+  - usage_finegrained.md
+  - usage_advanced.md
+  - usage_functiontable.md
 - Examples:
   - basic_observe.md
   - basic_faultinjection.md
+  - example_yolov8.md
 - Documents:
   - mrfi.md
   - selector.md
@@ -48,7 +53,7 @@ markdown_extensions:
   - pymdownx.superfences  # 代码嵌套在列表里
   - codehilite:    # 代码高亮，显示行号
       guess_lang: false
-      linenums: true
+      linenums: false
   - toc:  # 锚点
       permalink: true
   - pymdownx.arithmatex  # 数学公式
@@ -71,3 +76,5 @@ plugins:
             heading_level: 3
             members_order: "source"
             merge_init_into_class: True
+            show_source: False
+            show_root_toc_entry: false

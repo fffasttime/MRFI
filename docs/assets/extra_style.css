@@ -1,3 +1,7 @@
 .md-typeset {
 font-size: .7rem;
 }
+
+.md-typeset a{
+text-decoration: underline;
+}

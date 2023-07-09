@@ -10,8 +10,8 @@ fi_model = MRFI(model.model, EasyConfig.load_file('easyconfigs/default_fi.yaml')
 
 # Validate the model
 metrics = model.val(data='coco128.yaml') # 128 images
-print(metrics.box.map50) # got 0.03~0.06
+print('map50:', metrics.box.map50) # got 0.03~0.06
 
 with fi_model.golden_run():
     metrics = model.val(data='coco128.yaml')
-    print(metrics.box.map50) # got 0.60
+    print('map50:', metrics.box.map50) # got 0.60

@@ -232,7 +232,7 @@ def get_activation_info(fi_model: MRFI,
         input_data: A input tensor or a dataloader.
         method: Name of the basic observer in `mrfi.observer`.
         pre_hook: Observer value in module input, not output.
-        **kwargs: Target module to do observe, `module_type`, `module_name` or `module_fullname`
+        **kwargs: Target module to observe, `module_type`, `module_name` or `module_fullname`
     """
     fi_model.global_FI_enabled = False
     result = _temp_observer_expriment(fi_model, input_data, method, pre_hook, False, **kwargs)
@@ -250,7 +250,7 @@ def get_weight_info(model: Union[MRFI, torch.nn.Module],
         model: Target model.
         method: Name of the basic observer in `mrfi.observer`.
         weight_name: Target weight name.
-        **kwargs: Target module to do observe, `module_type`, `module_name` or `module_fullname`
+        **kwargs: Target module to observe, `module_type`, `module_name` or `module_fullname`
     """
     if isinstance(weight_name, str):
         weight_name = [weight_name]

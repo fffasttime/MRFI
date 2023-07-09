@@ -83,11 +83,12 @@ class EasyConfig:
     
     @classmethod
     def load_file(cls, filename: str):
-        """Load EasyConfig from .yaml File"""
+        """Load EasyConfig from .yaml File."""
         return cls(_read_config(filename))
     
     @classmethod
     def load_string(cls, string: str):
+        """Load EasyConfig from a yaml string."""
         return cls(yaml.full_load(string))
     
     def set_quantization(self, idx: int, content_dict, update_only = False) -> None:

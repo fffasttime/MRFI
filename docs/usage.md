@@ -1,4 +1,4 @@
-# Basic Usage
+# Basic usage
 
 ## Beginning
 
@@ -19,7 +19,7 @@ More exactly, the hooks inserted by MRFI will conduct fault injection automatica
 To test accuracy of a classification model, you may write a loop to compare the outputs and labels. 
 For convenience, we also provide some utility functions in `mrfi.experiment` that can do it in one line, such as `Acc_experiment`.
 
-See complete exmpale of [Basic fault injection on LeNet](basic_faultinjection.md)
+See complete exmpale of [basic fault injection on LeNet](basic_faultinjection.md).
 
 ### EasyConfig object
 
@@ -63,7 +63,7 @@ If you don't want to create a new YAML EasyConfig file,
 you can also load a custom EasyConfig yaml from python string by `EasyConfig.load_string()`,
 or modify EasyConfig object by python code directly before create a MRFI object.
 
-See >>> EasyConfig Usage <<< to learn more usage and special rules of EasyConfig,
+See [EasyConfig Usage](usage_easyconfig.md) to learn more usage and special rules of EasyConfig,
 
 
 ### Observing variables
@@ -78,7 +78,7 @@ For convenience, `mrfi.experiment` provides some function for inserting observer
 `get_activation_info` and `get_weight_info` in `mrfi.experiment` are powerful, allow us to perform various observations in one line of code.
 They can be used to observe the shape, distribution, and sampling & visualization of network data.
 
-See [>> Example of basic observe on LeNet with interactive command](basic_observe.md).
+See [example of basic observe on LeNet with interactive command](basic_observe.md).
 
 ### Golden run
 
@@ -103,18 +103,9 @@ MRFI allows different error injection methods and parameters to be configured on
 *In fact, when we created MRFI objects from EasyConfig earlier, the configuration was automatically copied to all matching layers and modules to create ConfigTree.*
 
 To execute different error injection parameters on different layers, one way is to write several injection configuration in **EasyConfig** and let MRFI to expand then to distinct layers.
-However, a more flexible approach is to directly modify **ConfigTree**. To save or load detail config tree, you can use following code:
+However, a more flexible approach is to directly modify **ConfigTree**. 
 
-```python
-fi_model = MRFI(Model(), 'easyconfigs/default_fi.yaml')
+It is possible to manually modify the ConfigTree YAML configuration file and then load it. 
+Due to the large amount of data, we also provide some APIs for dynamically modifying a batch of configurations of the built-in ConfigTree.
 
-# Save config tree to a YAML file
-fi_model.save_config('model_config_tree.yaml')
-
-# A detail config tree can be loaded by
-fi_model_new = MRFI(Model(), 'model_config_tree.yaml')
-```
-
-It is possible to manually modify the ConfigTree YAML configuration file and then load it. Due to the large amount of data in ConfigTree, we also provide some APIs for batch modifying the built-in ConfigTree of MRFI objects.
-
-See fine-grained configuration and advanced configuration for more information.
+See [fine-grained configuration](usage_finegrained.md) and [advanced configuration](usage_advanced.md) for more information.

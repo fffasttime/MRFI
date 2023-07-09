@@ -14,7 +14,7 @@ Compared with other injection frameworks, the biggest feature is that it can fle
 
 In preliminary experiments, you may not want to face complex experimental configurations. For example, simply observing the parameters of the network model, or conducting error injection experiments with a simple global configuration. MRFI also provide simple API for observation and course-grained fault injection.
 
-See [>>> MRFI Basic usage <<<](usage.md) for more information.
+See [MRFI Basic usage](usage.md) for more information.
 
 ## Supported Features
 
