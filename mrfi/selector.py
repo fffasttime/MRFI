@@ -41,7 +41,8 @@ def FixPosition(shape, position: Union[int, List[int]]):
     
     Args:
         position: 
-            if `int`, stands for index of . 
+            if `int`, stands for index of target position on flattened tensor.
+
             if `List[int]`, stands for n-d coordinate of target position.
     """
     if isinstance(position, int): position = [position]
@@ -58,7 +59,8 @@ def FixPositions(shape, positions: Union[List[int], List[List[int]]]):
     
     Args:
         positions: 
-            if `List[int]`, stands for index of target tensor after flatten 
+            if `List[int]`, stands for index of target tensor after flatten.
+
             if `List[List[int]]`, stands for n-d coordinate of target position.
     """
     pos = torch.tensor(positions, dtype=torch.long)
@@ -111,6 +113,8 @@ def _check_rate_zero(rate):
 def RandomPositionByRate(shape, rate: float = 1e-4, poisson: bool = True):
     """Select random positions by rate.
     
+    This function generate positions by n ~ Possion(N_all * rate).
+
     Args:
         rate: Rate of each position to be chosen.
         poisson: Enable poisson samping, which is more accurate when rate is quite small.
@@ -129,11 +133,13 @@ def RandomPositionByRate(shape, rate: float = 1e-4, poisson: bool = True):
 
 def RandomPositionByRate_classic(shape, rate: float = 1e-4):
     """Select random positions by rate.
+
+    This function generate positions by sampling on all value.
     
     Args:
         rate: Rate of each position to be chosen.
     Deprecated:
-        This function is deprecated and only for test because of bad performance.
+        This function is deprecated and only for test because of low performance.
     """
     rate = float(rate)
     if _check_rate_zero(rate): return []
@@ -182,11 +188,11 @@ def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     For a 2-d tensor, it is equivalent to selecting on a submatrix
     where some rows and cols are masked.
 
-    Info:
+    Tip:
         MaskedDim- and SelectedDim- selectors can be used for fine-grained 
         evaluate and selective protect experiments, 
         including instance-wise, channel-wise and spatial-wise.
-    Tip:
+    Info:
         Mask argeuments follow common pytorch memory layout:\n
         - CNN feature map: (`instance`, `channel`, `height`, `width`)\n
         - CNN weight: (`out_channel`, `in_channel`, `height`, `width`)\n
@@ -208,7 +214,7 @@ def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     dimmasks = _get_mask_kwargs(shape, kwargs)
     return _get_pos_with_mask(shape, n, dimmasks)
 
-def SelectedDimRandomPositionByNumber(shape, n: int = 1, **kwargs):
+def SelectedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     """Select n positions on selected coordinate.
 
     For argument list, please refer `MaskedDimRandomPositionByNumber`.\n
@@ -218,7 +224,7 @@ def SelectedDimRandomPositionByNumber(shape, n: int = 1, **kwargs):
     dimmasks = _get_mask_kwargs(shape, kwargs)
     return _get_pos_with_mask(shape, n, dimmasks, False)
 
-def MaskedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs):
+def MaskedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs: dict):
     """Select by rate where some coordinate are masked.
 
     For argument list, please refer `MaskedDimRandomPositionByNumber`.
@@ -232,7 +238,7 @@ def MaskedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kw
             rate_reduce = rate * (1 - len(dimmasks[i])/dimsize)
     return _get_pos_with_mask(shape, _get_num_by_rate(shape, rate_reduce, poisson), dimmasks)
 
-def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs):
+def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs: dict):
     """Select on some coordinate by rate.
 
     For argument list, please refer `MaskedDimRandomPositionByNumber`.\n
@@ -250,13 +256,12 @@ def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **
 
 
 def FixedPixelByNumber(shape, n: int, pixel: Union[int, tuple], per_instance: bool = False):
-    """Select random channel on one fixed pixel(height x weight dimension).
+    """Select random channel on one fixed pixel (i.e. H * W dimension).
 
     Args:
         n: number of positions
         pixel: An 2-d coordinate tuple specified target pixel
         per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0).
-    
     """
     if len(shape) != 4:
         raise ValueError('FixedPixelByNumber requires 4-D feature map')

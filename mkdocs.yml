@@ -1,4 +1,6 @@
 site_name: MRFI documention
+repo_url: https://github.com/fffasttime/MRFI
+repo_name: MRFI
 
 nav:
 - MRFI overview: index.md
@@ -7,18 +9,18 @@ nav:
   - usage_easyconfig.md
   - usage_finegrained.md
   - usage_advanced.md
-  - usage_functiontable.md
+  - function_table.md
 - Examples:
   - basic_observe.md
   - basic_faultinjection.md
   - example_yolov8.md
 - Documents:
   - mrfi.md
-  - selector.md
-  - quantization.md
-  - error_mode.md
-  - observer.md
   - experiment.md
+  - observer.md
+  - selector.md
+  - error_mode.md
+  - quantization.md 
 
 theme:
   name: "material"
@@ -36,6 +38,8 @@ theme:
         name: Switch to light mode
   features:
     - navigation.sections
+    - content.code.copy
+
 extra_css:
   - assets/extra_style.css
 
@@ -59,8 +63,8 @@ markdown_extensions:
   - pymdownx.arithmatex  # 数学公式
   - pymdownx.betterem:  # 对加粗和斜体更好的检测
       smart_enable: all
-#  - pymdownx.emoji:  # 表情
-#      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.emoji:  # 表情
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
 #  - pymdownx.magiclink  # 自动识别超链接
   - pymdownx.tasklist:  # 复选框checklist
       custom_checkbox: true

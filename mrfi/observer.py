@@ -1,11 +1,19 @@
 """MRFI common used observers
 
-Callback function `update(x)` will be called for each batch of inference.
+An observer is a class with callback methods `update(x)`, `result()`, `reset()`, 
+and optional method `update_golden()`.
 
-Observer can accumulate its results between batchs, until a `reset()` is called.
+Callback function `update(x)` will be called for each batch of inference.
+Observer usually accumulate its results between batchs, until its `reset()` is called.
+
+To collect all result among MRFI model, use `fi_model.observers_result()`.
+
+To reset all observers among MRFI model, use `fi_model.observers_reset()`.
 
 Note: 
-    Most of fault inject observer requires golden run before each fault inject run, 
+    :mag: Simple observer :mag:  can run directly.
+
+    :hammer_and_wrench: Fault inject observer :hammer_and_wrench:  requires golden run before each fault inject run, 
     in order to compare the impact of fault inject.
     ```python
     # fi_model has FI observers, e.g. RMSE
@@ -32,16 +40,23 @@ class BaseObserver:
     def __init__(self) -> None:
         self.reset()
     def reset(self) -> None:
-        """Reset observer when running multiple experiments"""
+        """Reset observer when running multiple experiments.
+        
+        For example, you can set initial sum value to 0 here.
+        """
     def update_golden(self, x: torch.Tensor) -> None:
-        """Callback when model inference with `mrfi.golden == True`
+        """Callback every model inference when `mrfi.golden == True`
         
         Args:
             x: Internal observation value, usually a batched tenser of feature map.
         """
         self.update(x) # By default, also update by golden run
     def update(self, x: torch.Tensor) -> None:
-        """Callback when model inference with  `mrfi.golden == False`"""
+        """Callback every model inference when `mrfi.golden == False`
+        
+        Args:
+            x: Internal observation value, usually a batched tenser of feature map.
+        """
     def result(self) -> Any:
         """Callback when get observe result after experiment.
         
@@ -50,10 +65,10 @@ class BaseObserver:
         return None
 
 class MinMax(BaseObserver):
-    """Observe min/max range of tensors.
+    """:mag: Observe min/max range of tensors.
 
-    Returns (tuple[float, float]):
-        A tuple `(min_value, max_value)`
+    Returns:
+        minmax (tuple[float, float]): A tuple `(min_value, max_value)`
     """
     def reset(self):
         self.min = self.max = None
@@ -75,10 +90,10 @@ class MinMax(BaseObserver):
         return self.min, self.max
 
 class RMSE(BaseObserver):
-    """Root Mean Square Error metric between golden run and fault inject run.
+    """:hammer_and_wrench: Root Mean Square Error metric between golden run and fault inject run.
 
-    Returns (float):
-        RMSE value of fault inject impact.
+    Returns:
+        RMSE (float): RMSE value of fault inject impact.
     """
     def reset(self):
         self.golden_act = None
@@ -103,11 +118,12 @@ class RMSE(BaseObserver):
         return np.sqrt(np.mean(self.MSE_sum))
 
 class SaveLast(BaseObserver):
-    """Simply save last inference internal tensor. This will be helpful when visualize NN feature maps.
+    """:mag: Simply save last inference internal tensor. 
 
-    Returns (tuple):
-        Last golden run activation and last FI run activation tuple (golden_act, FI_act).
-        If no such run before get result, returns `None`.
+    This will be helpful when visualize NN feature maps.
+
+    Returns:
+        last_tuple (tuple): Last golden run activation and last FI run activation tuple (golden_act, FI_act). If no such run before get result, returns `None`.
     """
     def reset(self):
         self.golden_act = None
@@ -123,10 +139,10 @@ class SaveLast(BaseObserver):
         return self.golden_act, self.fi_act
         
 class MaxAbs(BaseObserver):
-    """Observe max abs range of tensors.
+    """:mag: Observe max abs range of tensors.
 
-    Returns (float):
-        Similar as `x.abs().max()` but among all inference.
+    Returns:
+        maxabs (float): Similar as `x.abs().max()` but among all inference.
     """
     def reset(self):
         self.maxabs = None
@@ -141,10 +157,10 @@ class MaxAbs(BaseObserver):
         return self.maxabs
 
 class MeanAbs(BaseObserver):
-    """mean of abs, a metric of scale of values
+    """:mag: Mean of abs, a metric of scale of values
     
-    Returns (float):
-        Similar as `x.abs.mean()` but among all inference.
+    Returns:
+        meanabs (float): Similar as `x.abs.mean()` but among all inference.
     """
     def reset(self):
         self.sum_mean = 0
@@ -158,10 +174,10 @@ class MeanAbs(BaseObserver):
         return self.sum_mean / self.n
 
 class Std(BaseObserver):
-    """Standard deviation of zero-mean values.
+    """:mag: Standard deviation of zero-mean values.
     
-    Returns (float):
-        Similar as `sqrt((x**2).mean())` but among all inference.
+    Returns:
+        std (float): Similar as `sqrt((x**2).mean())` but among all inference.
     """
     def reset(self):
         self.sum_var = []
@@ -175,9 +191,10 @@ class Std(BaseObserver):
         return np.sqrt(np.mean(self.sum_var))
 
 class Shape(BaseObserver):
-    """Simply record tensor shape of last inference
-    
-    Returns (torch.Size):
+    """:mag: Simply record tensor shape of last inference
+
+    Returns:
+        shape (torch.Size): Shape of last input tensor.
     """
     def reset(self):
         self.shape = None
@@ -189,10 +206,10 @@ class Shape(BaseObserver):
         return self.shape
 
 class MAE(BaseObserver):
-    """Mean Absolute Error between golden run and fault inject run.
+    """:hammer_and_wrench: Mean Absolute Error between golden run and fault inject run.
 
-    Returns (float):
-        MAE metric of fault inject impact.
+    Returns:
+        MAE (float): MAE metric of fault inject impact.
     """
     def reset(self):
         self.MAEs = []
@@ -217,12 +234,12 @@ class MAE(BaseObserver):
         return np.mean(self.MAEs)
 
 class EqualRate(BaseObserver):
-    """Compare how many value unchanged between golden run and fault inject run.
+    """:hammer_and_wrench: Compare how many value unchanged between golden run and fault inject run.
 
-    Returns (float):
-        A average ratio of how many values remain unchanged, between [0, 1].
-        - If all value have changed, return 0. 
-        - If all value are same as golden run, return 1.
+    Returns:
+        rate (float): A average ratio of how many values remain unchanged, between [0, 1].\n
+            - If all value have changed, return 0. \n
+            - If all value are same as golden run, return 1.
     """
     def reset(self):
         self.results = []
@@ -247,7 +264,7 @@ class EqualRate(BaseObserver):
         return np.mean(self.results)
 
 class UniformSampling(BaseObserver):
-    """Uniform sampling from tensors between all inference, up to 10000 samples.
+    """:mag: Uniform sampling from tensors between all inference, up to 10000 samples.
 
     Co-work well with statistical visualization requirements, e.g. `plt.hist()` or `plt.boxplot()`.
 
@@ -257,8 +274,8 @@ class UniformSampling(BaseObserver):
 
         This observer automatically sampling values between all inference with uniform probability.
 
-    Returns (np.array):
-        A 1-d numpy, its length is min(all observerd values, 10000).
+    Returns:
+        array (np.array): A 1-d numpy, its length is min(all observerd values, 10000).
     """
     MAX_NUM = 10000
     def reset(self):

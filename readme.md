@@ -4,13 +4,18 @@
 <img src="docs/assets/logo_name.png" width=350)>
 </p>
 
+## MRFI Overview
+[![GitHub license](https://img.shields.io/github/license/fffasttime/MRFI)](https://github.com/fffasttime/MRFI/blob/master/LICENSE)
+
 Multi-Resolution Fault Injector is a **powerful** neural network fault injector tool based on PyTorch.
 
-Compared with other injection frameworks, the biggest feature is that it can flexibly adjust different injection configurations for different experimental needs. Injection config and observations on each layer can be set independently by one clear config file. MRFI also provides a large number of commonly used error injection methods and error models, and allows customization.
+Compared with previous fault injection frameworks, the biggest feature is that MRFI can flexibly adjust different injection configurations for different experimental needs. 
+Injection config and observations on each layer can be set independently by one clear config file. 
+MRFI also provides a large number of commonly used error injection methods and error models, and allows customization.
 
 ![Overview Pic](/docs/assets/overviewpic.png)
 
-Read detail usage from Documents >>
+Read detail usage on [MRFI Documents >>](https://fffasttime.github.io/MRFI/)
 
 Learn more from our paper on [Arxiv](https://arxiv.org/pdf/2306.11758.pdf).
 
@@ -23,7 +28,7 @@ and find the relation between bit error rate (BER) and classification accuracy.
 ```python title="LeNet default fault injection"
 from dataset.lenet_cifar import make_testloader, LeNet
 from mrfi import MRFI, EasyConfig
-from mrfi.experiment import BER_Acc_experiment
+from mrfi.experiment import Acc_experiment, Acc_golden, BER_Acc_experiment
 
 testloader = make_testloader(1000, batch_size = 128) # test on 1000 cifar-10 images
 
@@ -114,7 +119,7 @@ faultinject:
 
 - [x] By python code
 - [x] By .yaml config file
-- [ ] By GUI (in development)
+- [ ] By GUI
 
 **Evaluation fault tolerance policy**
 

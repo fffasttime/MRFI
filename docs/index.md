@@ -64,7 +64,7 @@ See [MRFI Basic usage](usage.md) for more information.
 
 - [x] By python code
 - [x] By .yaml config file
-- [ ] By GUI (in development)
+- [ ] By GUI
 
 **Evaluation fault tolerance policy**
 
