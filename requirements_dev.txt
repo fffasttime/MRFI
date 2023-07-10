@@ -1,0 +1,17 @@
+PyQt5>=5.15
+matplotlib
+mkdocs
+mkdocs-autorefs
+mkdocs-material
+mkdocs-material-extensions
+mkdocstrings
+mkdocstrings-python
+pymdown-extensions
+pytest>=6.0
+pytest-cov
+
+torchvision>=0.11
+numpy>=1.21
+PyYAML
+scipy
+torch>=1.9

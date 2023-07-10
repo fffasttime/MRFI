@@ -1,0 +1,5 @@
+torchvision>=0.11
+numpy>=1.21
+PyYAML
+scipy
+torch>=1.9

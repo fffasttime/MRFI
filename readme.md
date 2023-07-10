@@ -6,18 +6,26 @@
 
 ## MRFI Overview
 [![GitHub license](https://img.shields.io/github/license/fffasttime/MRFI)](https://github.com/fffasttime/MRFI/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/fffasttime/MRFI/branch/main/graph/badge.svg)](https://codecov.io/gh/fffasttime/MRFI)
 
 Multi-Resolution Fault Injector is a **powerful** neural network fault injector tool based on PyTorch.
 
-Compared with previous fault injection frameworks, the biggest feature is that MRFI can flexibly adjust different injection configurations for different experimental needs. 
-Injection config and observations on each layer can be set independently by one clear config file. 
+Compared with previous network-level fault injection frameworks, the biggest feature is that MRFI can flexibly adjust different injection configurations for different experimental needs. 
+Injection config and observations on each layer can be set **independently** by one clear config file. 
 MRFI also provides a large number of commonly used error injection methods and error models, and allows customization.
-
-![Overview Pic](/docs/assets/overviewpic.png)
+In preliminary experiments, we may not want to face complex experimental configurations. MRFI also provide simple API for course-grained fault injection experiment.
 
 Read detail usage on [MRFI Documents >>](https://fffasttime.github.io/MRFI/)
 
-Learn more from our paper on [Arxiv](https://arxiv.org/pdf/2306.11758.pdf).
+![Overview Pic](/docs/assets/overviewpic.png)
+
+Fault injection is a classic method for studying reliability. 
+This is crucial for the design and deployment of neural networks for security critical applications.
+The low-level hardware based error injection methods are time-consuming, 
+while the high-level network model based methods usually neglect details.
+MRFI is designed to be an efficient and highly configurable multi-resolution network-level fault injection tool.
+
+Learn more from our [paper of MRFI on Arxiv](https://arxiv.org/pdf/2306.11758.pdf). For other level fault injection tool, see also [MR-Neural-Network-Reliability-Analysis-Toolbox](https://github.com/fffasttime/MR-Neural-Network-Reliability-Analysis-Toolbox).
 
 ## Basic Example
 
