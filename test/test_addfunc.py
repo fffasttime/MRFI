@@ -48,9 +48,10 @@ def test_01():
 
     print(fi_model.observers_result())
 
-    fi_model.save_config('.pytest_cache/test_addfunc_output.yaml')
+    # fi_model.save_config('.pytest_cache/test_addfunc_output.yaml')
+    fi_model.save_config('test/test_addfunc_output.yaml')
 
-    fi_model = MRFI(Net(trained=True), '.pytest_cache/test_addfunc_output.yaml')
+    fi_model = MRFI(Net(trained=True), 'test/test_addfunc_output.yaml')
 
 
 def test_02():

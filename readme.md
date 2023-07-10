@@ -6,7 +6,8 @@
 
 ## MRFI Overview
 [![GitHub license](https://img.shields.io/github/license/fffasttime/MRFI)](https://github.com/fffasttime/MRFI/blob/master/LICENSE)
-[![codecov](https://codecov.io/gh/fffasttime/MRFI/branch/main/graph/badge.svg)](https://codecov.io/gh/fffasttime/MRFI)
+[![Test](https://github.com/fffasttime/MRFI/actions/workflows/codecov.yml/badge.svg)](https://github.com/fffasttime/MRFI/actions/workflows/codecov.yml)
+[![Codecov](https://codecov.io/gh/fffasttime/MRFI/branch/main/graph/badge.svg)](https://codecov.io/gh/fffasttime/MRFI)
 
 Multi-Resolution Fault Injector is a **powerful** neural network fault injector tool based on PyTorch.
 
