@@ -1,0 +1,1248 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../usage/">
+      
+      
+        <link rel="next" href="../usage_finegrained/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
+    
+    
+      
+        <title>EasyConfig usage - MRFI documention</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../assets/extra_style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#easyconfig-usage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MRFI documention" class="md-header__button md-logo" aria-label="MRFI documention" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MRFI documention
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              EasyConfig usage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/fffasttime/MRFI" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MRFI
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MRFI documention" class="md-nav__button md-logo" aria-label="MRFI documention" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    MRFI documention
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/fffasttime/MRFI" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MRFI
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        MRFI overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Usage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        Basic usage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          EasyConfig usage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        EasyConfig usage
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#easyconfig-yaml-format" class="md-nav__link">
+    EasyConfig YAML format
+  </a>
+  
+    <nav class="md-nav" aria-label="EasyConfig YAML format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-easyconfig-yaml-template" class="md-nav__link">
+    Full EasyConfig YAML template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector-properties" class="md-nav__link">
+    Injector properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector-execution-module-properties" class="md-nav__link">
+    Injector execution module properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observer-properties" class="md-nav__link">
+    Observer properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-easyconfig" class="md-nav__link">
+    Class EasyConfig
+  </a>
+  
+    <nav class="md-nav" aria-label="Class EasyConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig" class="md-nav__link">
+    EasyConfig
+  </a>
+  
+    <nav class="md-nav" aria-label="EasyConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.faultinject" class="md-nav__link">
+    faultinject
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.observe" class="md-nav__link">
+    observe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.__repr__" class="md-nav__link">
+    __repr__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_file" class="md-nav__link">
+    load_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_string" class="md-nav__link">
+    load_string()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_quantization" class="md-nav__link">
+    set_quantization()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_selector" class="md-nav__link">
+    set_selector()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_error_mode" class="md-nav__link">
+    set_error_mode()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_module_used" class="md-nav__link">
+    set_module_used()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage_finegrained/" class="md-nav__link">
+        Fine-grained config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage_advanced/" class="md-nav__link">
+        Advanced fine-grained config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../function_table/" class="md-nav__link">
+        MRFI function table
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_observe/" class="md-nav__link">
+        Basic observation on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_faultinjection/" class="md-nav__link">
+        Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_yolov8/" class="md-nav__link">
+        Object detection model inject
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Documents
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Documents
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mrfi/" class="md-nav__link">
+        mrfi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiment/" class="md-nav__link">
+        experiment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observer/" class="md-nav__link">
+        observer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../selector/" class="md-nav__link">
+        selector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error_mode/" class="md-nav__link">
+        error_mode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quantization/" class="md-nav__link">
+        quantization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#easyconfig-yaml-format" class="md-nav__link">
+    EasyConfig YAML format
+  </a>
+  
+    <nav class="md-nav" aria-label="EasyConfig YAML format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-easyconfig-yaml-template" class="md-nav__link">
+    Full EasyConfig YAML template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector-properties" class="md-nav__link">
+    Injector properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector-execution-module-properties" class="md-nav__link">
+    Injector execution module properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#observer-properties" class="md-nav__link">
+    Observer properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-easyconfig" class="md-nav__link">
+    Class EasyConfig
+  </a>
+  
+    <nav class="md-nav" aria-label="Class EasyConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig" class="md-nav__link">
+    EasyConfig
+  </a>
+  
+    <nav class="md-nav" aria-label="EasyConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.faultinject" class="md-nav__link">
+    faultinject
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.observe" class="md-nav__link">
+    observe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.__repr__" class="md-nav__link">
+    __repr__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_file" class="md-nav__link">
+    load_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_string" class="md-nav__link">
+    load_string()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_quantization" class="md-nav__link">
+    set_quantization()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_selector" class="md-nav__link">
+    set_selector()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_error_mode" class="md-nav__link">
+    set_error_mode()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.set_module_used" class="md-nav__link">
+    set_module_used()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="easyconfig-usage">EasyConfig usage<a class="headerlink" href="#easyconfig-usage" title="Permanent link">&para;</a></h1>
+<h2 id="easyconfig-yaml-format">EasyConfig YAML format<a class="headerlink" href="#easyconfig-yaml-format" title="Permanent link">&para;</a></h2>
+<p>YAML is a human readable format that uses white space indentation to represent levels and rows to represent list and dictionary items.
+See <a href="https://yaml.org">yaml.org</a>.</p>
+<h3 id="full-easyconfig-yaml-template">Full EasyConfig YAML template<a class="headerlink" href="#full-easyconfig-yaml-template" title="Permanent link">&para;</a></h3>
+<div class="highlight"><span class="filename">full easyconfig template</span><pre><span></span><code><span class="nt">faultinject</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">activation</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># optional, default is True</span>
+<span class="w">    </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="c1"># optional</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SymmericQuantization</span>
+<span class="w">      </span><span class="nt">dynamic_range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span>
+<span class="w">      </span><span class="nt">layerwise</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">      </span><span class="nt">bit_width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">    </span><span class="nt">selector</span><span class="p">:</span><span class="w"> </span><span class="c1"># optional. If not specified, all value will be selected</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RandomPositionByRate</span>
+<span class="w">      </span><span class="nt">poisson</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># optional because it&#39;s a optional argument of method RandomPositionByRate</span>
+<span class="w">      </span><span class="nt">rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e-3</span>
+<span class="w">    </span><span class="nt">error_mode</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IntSignBitFlip</span>
+<span class="w">      </span><span class="nt">bit_width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+
+<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conv</span><span class="w"> </span><span class="c1"># Match layers that contain these name</span>
+<span class="w">    </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Conv2d</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">Linear</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># Or match layers contain these typename</span>
+<span class="w">    </span><span class="nt">module_fullname</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">fc1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">fc2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">layer1.0.conv1</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># Or do exact match</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">weight</span>
+<span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">weight</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">bias</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># optional, default is &quot;weight&quot;</span>
+
+<span class="w">    </span><span class="nt">error_mode</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SetValue</span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conv</span>
+
+<span class="nt">oberve</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">method</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MinMax</span>
+<span class="w">    </span><span class="nt">position</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span><span class="w">  </span><span class="c1"># optional, default is &quot;after&quot;</span>
+<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fc</span><span class="w"> </span>
+</code></pre></div>
+<p>An easyconfg YAML file has 4 levels:</p>
+<div class="codehilite"><pre><span></span><code>1 The first level begin with `faultinject:` or `observe:`.
+  2 List of injectors and observers definition, each block begin with `-`.
+    3 Properties of fault injectors and observers, and execution modules(quantization, selector, error_mode).    
+      4 Properties and parameters of execution modules.
+</code></pre></div>
+
+<h3 id="injector-properties">Injector properties<a class="headerlink" href="#injector-properties" title="Permanent link">&para;</a></h3>
+<p>Each fault injector definition(level 3) can have following properties:</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>value</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>one of <code>"activation_in"</code>,<code>"activation_out"</code> or <code>"weight"</code></td>
+<td>Which place will the fault injection to be performed. Set <code>activation</code> stands for <code>activation_in</code>.</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>optional, default is True</td>
+<td>Enable this fault injection by default.</td>
+</tr>
+<tr>
+<td>quantization</td>
+<td><code>Dict</code>of properties</td>
+<td>Optional. If not specified, Will not make quantization.</td>
+</tr>
+<tr>
+<td>selector</td>
+<td><code>Dict</code>of properties</td>
+<td>Optional. If not specified, all tensor values will be selected, which may be slow for large tensors.</td>
+</tr>
+<tr>
+<td>error_mode</td>
+<td><code>Dict</code>of properties</td>
+<td></td>
+</tr>
+<tr>
+<td>module_name</td>
+<td><code>str</code> or <code>list[str]</code></td>
+<td>Match layer or module by name. For example, layer "block1.conv1" will be matched by str "conv".</td>
+</tr>
+<tr>
+<td>module_type</td>
+<td><code>str</code> or <code>list[str]</code></td>
+<td>Match layer or module by name. For example, layer with typename "Conv2d" will be matched by str "Conv".</td>
+</tr>
+<tr>
+<td>module_fullname</td>
+<td><code>str</code> or <code>list[str]</code></td>
+<td>Select layer or module by full name. Layer "block1.conv1" won't be matched by str "conv1", only full name work.</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>optional, <code>str</code> or <code>list[str]</code>, default is <code>"weight"</code></td>
+<td>When fault injection on weight, specify which weight name will be selected to inject.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="injector-execution-module-properties">Injector execution module properties<a class="headerlink" href="#injector-execution-module-properties" title="Permanent link">&para;</a></h3>
+<p>Each execution module properties(level 4) have "method" field. Other parameter fields are corresponding to each method.
+For example, <code>RandomPositionByRate</code> is a selecter function defined in <code>mrfi.selector</code>, 
+whose signature is <code>RandomPositionByRate(shape, rate=0.0001, poisson=True)</code>. 
+We can set <code>rate: 1e-3</code> here in easyconfig. 
+The optional argument can be emitted and use the default value in function definition.</p>
+<p>Special: "layerwise" is optional field in quantization indicate MRFI to quantize the full tensor, default is True. 
+If set to False, only the positions selected by selector will be quantized.</p>
+<h3 id="observer-properties">Observer properties<a class="headerlink" href="#observer-properties" title="Permanent link">&para;</a></h3>
+<p>Each observer definition(level 3) has "method", "position" field. </p>
+<p>"position" is a optional field that can be one of <code>pre</code> or <code>after</code>. 
+This indicates whether MRFI observes values from the input or output of the layer.
+Default is <code>after</code>.</p>
+<p>The "module_name", "module_type", "module_fullname" field have the same meaning as injector properties.</p>
+<h2 id="class-easyconfig">Class EasyConfig<a class="headerlink" href="#class-easyconfig" title="Permanent link">&para;</a></h2>
+<p>EasyConfig is an editable Dict-like object in Python.
+That means you can modify it before give it to MRFI for expanding.</p>
+<p>The following code modify a default EasyConfig without change a YAML file.</p>
+<div class="highlight"><pre><span></span><code><span class="n">econfig</span> <span class="o">=</span> <span class="n">EasyConfig</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;easyconfigs/default_fi.yaml&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set error_mode method to &#39;IntRandomBitFlip&#39;.</span>
+<span class="n">econfig</span><span class="o">.</span><span class="n">faultinject</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;error_mode&#39;</span><span class="p">][</span><span class="s1">&#39;method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;IntRandomBitFlip&#39;</span>
+<span class="c1"># &#39;set_error_mode()&#39; can do the same thing</span>
+<span class="n">econfig</span><span class="o">.</span><span class="n">set_error_mode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span><span class="s1">&#39;IntRandomBitFlip&#39;</span><span class="p">},</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Set layer and moudle to be matched</span>
+<span class="n">econfig</span><span class="o">.</span><span class="n">faultinject</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;module_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BatchNorm&#39;</span><span class="p">,</span> <span class="s1">&#39;Linear&#39;</span><span class="p">]</span>
+<span class="c1"># &#39;set_module_used()&#39; can do the same thing</span>
+<span class="n">econfig</span><span class="o">.</span><span class="n">set_module_used</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">module_type</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BatchNorm&#39;</span><span class="p">,</span> <span class="s1">&#39;Linear&#39;</span><span class="p">])</span>
+
+<span class="c1"># Finally load it</span>
+<span class="n">fi_model</span> <span class="o">=</span> <span class="n">MRFI</span><span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">trained</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">econfig</span><span class="p">)</span>
+</code></pre></div>
+<p>Method of EasyConfig:</p>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mrfi.mrfi.EasyConfig" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">mrfi</span><span class="o">.</span><span class="n">mrfi</span><span class="o">.</span><span class="n">EasyConfig</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#mrfi.mrfi.EasyConfig" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents first">
+
+  
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.faultinject" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">faultinject</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;faultinject&#39;</span><span class="p">,</span> <span class="p">[])</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#mrfi.mrfi.EasyConfig.faultinject" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.observe" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">observe</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;observe&#39;</span><span class="p">,</span> <span class="p">[])</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#mrfi.mrfi.EasyConfig.observe" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.__repr__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__repr__</span><span class="p">()</span></code>
+
+<a href="#mrfi.mrfi.EasyConfig.__repr__" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.load_file" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#mrfi.mrfi.EasyConfig.load_file" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.load_string" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_string</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#mrfi.mrfi.EasyConfig.load_string" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.set_quantization" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">set_quantization</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">content_dict</span><span class="p">,</span> <span class="n">update_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#mrfi.mrfi.EasyConfig.set_quantization" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.set_selector" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">set_selector</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">content_dict</span><span class="p">,</span> <span class="n">update_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#mrfi.mrfi.EasyConfig.set_selector" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.set_error_mode" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">set_error_mode</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">content_dict</span><span class="p">,</span> <span class="n">update_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#mrfi.mrfi.EasyConfig.set_error_mode" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.set_module_used" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">set_module_used</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">module_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">module_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">module_fullname</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#mrfi.mrfi.EasyConfig.set_module_used" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "content.code.copy"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../function_table/">
+        <link rel="prev" href="../basic_faultinjection/">
       
       
-        <link rel="next" href="../basic_faultinjection/">
+        <link rel="next" href="../mrfi/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
     
     
       
-        <title>Basic observation on LeNet - MRFI documention</title>
+        <title>Object detection model inject - MRFI documention</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#basic-observation-on-lenet" class="md-skip">
+        <a href="#object-detection-model-inject" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Basic observation on LeNet
+              Object detection model inject
             
           </span>
         </div>
@@ -364,66 +364,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Basic observation on LeNet
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../basic_observe/" class="md-nav__link">
         Basic observation on LeNet
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mrfi.experiment.get_activation_info" class="md-nav__link">
-    get_activation_info()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mrfi.experiment.get_weight_info" class="md-nav__link">
-    get_weight_info()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#observing-by-interactive-python-program" class="md-nav__link">
-    Observing by interactive Python program
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -447,11 +392,21 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../example_yolov8/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Object detection model inject
       </a>
+      
     </li>
   
 
@@ -604,35 +559,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mrfi.experiment.get_activation_info" class="md-nav__link">
-    get_activation_info()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mrfi.experiment.get_weight_info" class="md-nav__link">
-    get_weight_info()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#observing-by-interactive-python-program" class="md-nav__link">
-    Observing by interactive Python program
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -649,155 +575,34 @@
   
 
 
-<h1 id="basic-observation-on-lenet">Basic observation on LeNet<a class="headerlink" href="#basic-observation-on-lenet" title="Permanent link">&para;</a></h1>
-<p>Let's observe network variable by two utility functions <code>get_activation_info</code> and <code>get_weight_info</code> in <code>mrfi.experiment</code>.</p>
+<h1 id="object-detection-model-inject">Object detection model inject<a class="headerlink" href="#object-detection-model-inject" title="Permanent link">&para;</a></h1>
+<p>MRFI can directly inject errors into a object detection model. We use <a href="https://docs.ultralytics.com/modes/val/">Ultralytics YOLOv8</a> as an example.</p>
+<p>YOLOv8n official model has 168 layers with complex structure.
+We test it on coco128 dataset with <code>default_fi.yaml</code> configuration.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Validate fault injection to yolov8 by one line config</span>
+<span class="c1"># Following yolov8&#39;s official docs https://docs.ultralytics.com/modes/val/</span>
+<span class="kn">from</span> <span class="nn">ultralytics</span> <span class="kn">import</span> <span class="n">YOLO</span>
+<span class="kn">from</span> <span class="nn">mrfi</span> <span class="kn">import</span> <span class="n">MRFI</span><span class="p">,</span> <span class="n">EasyConfig</span>
 
+<span class="c1"># Load a model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">YOLO</span><span class="p">(</span><span class="s1">&#39;experiments/yolov8n.pt&#39;</span><span class="p">)</span>  <span class="c1"># load an official model</span>
+<span class="c1"># YOLO.model is true PyTorch model, so provide model.model to MRFI here</span>
+<span class="n">fi_model</span> <span class="o">=</span> <span class="n">MRFI</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">EasyConfig</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;easyconfigs/default_fi.yaml&#39;</span><span class="p">))</span> 
+<span class="c1"># fi_model.save_config(&#39;detailconfigs/yolov8n_dt.yaml&#39;) # save detail config</span>
 
-<div class="doc doc-object doc-module">
+<span class="c1"># Validate the model using YOLO&#39;s function.</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">val</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;coco128.yaml&#39;</span><span class="p">)</span> <span class="c1"># 128 images</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mAP0.5:&#39;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">map50</span><span class="p">)</span> <span class="c1"># got 0.03~0.05</span>
 
-
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h3 id="mrfi.experiment.get_activation_info" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_activation_info</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;MinMax&#39;</span><span class="p">,</span> <span class="n">pre_hook</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
-
-<a href="#mrfi.experiment.get_activation_info" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Observe model activations without fault injection.</p>
-
-  <p>Parameters:</p>
-  <ul>
-      <li class="field-body">
-        <b>fi_model</b>
-            (<code><a class="autorefs autorefs-internal" title="mrfi.mrfi.MRFI" href="../mrfi/#mrfi.mrfi.MRFI">MRFI</a></code>)
-        – <p>Target model.</p>
-      </li>
-      <li class="field-body">
-        <b>input_data</b>
-            (<code><span title="typing.Union">Union</span>[torch.<span title="torch.Tensor">Tensor</span>, <span title="torch.utils.data.DataLoader">DataLoader</span>]</code>)
-        – <p>A input tensor or a dataloader.</p>
-      </li>
-      <li class="field-body">
-        <b>method</b>
-            (<code>str</code>)
-        – <p>Name of the basic observer in <code>mrfi.observer</code>.</p>
-      </li>
-      <li class="field-body">
-        <b>pre_hook</b>
-            (<code>bool</code>)
-        – <p>Observer value in module input, not output.</p>
-      </li>
-      <li class="field-body">
-        <b>**kwargs</b>
-            (<code>dict</code>)
-        – <p>Target module to observe, <code>module_type</code>, <code>module_name</code> or <code>module_fullname</code></p>
-      </li>
-  </ul>
-
-  <p>Returns:</p>
-  <ul>
-      <li class="field-body">
-            <code>dict</code>
-        – <p>Dictionary of observer result, keys are activation observation name and values are result of <code>observer.result()</code>.</p>
-      </li>
-  </ul>
-
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h3 id="mrfi.experiment.get_weight_info" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_weight_info</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;MinMax&#39;</span><span class="p">,</span> <span class="n">weight_name</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
-
-<a href="#mrfi.experiment.get_weight_info" class="headerlink" title="Permanent link">&para;</a></h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Observe model weights.</p>
-
-  <p>Parameters:</p>
-  <ul>
-      <li class="field-body">
-        <b>model</b>
-            (<code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="mrfi.mrfi.MRFI" href="../mrfi/#mrfi.mrfi.MRFI">MRFI</a>, torch.<span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span>]</code>)
-        – <p>Target model.</p>
-      </li>
-      <li class="field-body">
-        <b>method</b>
-            (<code>str</code>)
-        – <p>Name of the basic observer in <code>mrfi.observer</code>.</p>
-      </li>
-      <li class="field-body">
-        <b>weight_name</b>
-            (<code><span title="typing.Union">Union</span>[str, <span title="typing.List">List</span>[str]]</code>)
-        – <p>Target weight name.</p>
-      </li>
-      <li class="field-body">
-        <b>**kwargs</b>
-            (<code>dict</code>)
-        – <p>Target module to observe, <code>module_type</code>, <code>module_name</code> or <code>module_fullname</code></p>
-      </li>
-  </ul>
-
-  <p>Returns:</p>
-  <ul>
-      <li class="field-body">
-            <code>dict</code>
-        – <p>Dictionary of observer result, keys are weight observation and values are result of <code>observer.result()</code>.</p>
-      </li>
-  </ul>
-
-  </div>
-
-</div>
-
-
-
-  </div>
-
-  </div>
-
-</div><h2 id="observing-by-interactive-python-program">Observing by interactive Python program<a class="headerlink" href="#observing-by-interactive-python-program" title="Permanent link">&para;</a></h2>
-<p>In a jupyter environment, we obtain these information of each layer in LeNet:</p>
-<ol>
-<li>Shape of weights and activaitons</li>
-<li>Min/Max range of weights and activations</li>
-<li>Standard deviation of weights and activations</li>
-<li>Sampling value in tensor and visualize its distribution</li>
-<li>Visualize its feature map</li>
-</ol>
-<iframe 
-scrolling = "auto"
-height=3000
-width=100% 
-src="lenet_basic_observe_ipynb.html"  
-allowfullscreen>
-</iframe>
+<span class="k">with</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">golden_run</span><span class="p">():</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">val</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;coco128.yaml&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mAP0.5:&#39;</span><span class="p">,</span> <span class="n">metrics</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">map50</span><span class="p">)</span> <span class="c1"># got 0.60</span>
+</code></pre></div>
+<p>The mAP0.5 metric drop to 0.035 from 0.605.</p>
+<p>Golden run prediction:
+<img alt="yolov8_golden" src="../assets/yolov8_golden.jpg" /></p>
+<p>Fault inject prediction:
+<img alt="yolov8_fi" src="../assets/yolov8_fi.jpg" /></p>
 
 
 
