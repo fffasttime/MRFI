@@ -21,7 +21,7 @@ For convenience, we also provide some utility functions in `mrfi.experiment` tha
 
 See complete exmpale of [basic fault injection on LeNet](basic_faultinjection.md).
 
-### EasyConfig object
+### EasyConfig usage
 
 We provide some template of easyconfig file in folder `easyconfigs/`. 
 You can modify these configuration files according to your needs and load it by  `EasyConfig.load_file()`.
@@ -51,8 +51,9 @@ The order of these config blocks in same level is not important because YAML reg
 Let's look one parameter. `rate` is a parameter of selector `RandomPositionByRate` indicate the indicate the probability of each tensor value being selected.
 Here, we set  `rate: 1e-3` to significantly indicate that error injection is working, which is a relative high error rate for fault injection.
 
-You can use the commonly used methods already provided by MRFI as the execution module, or you can customize new methods. 
-Note that each method can have different parameter names, specified by their definition.
+You can use the commonly used methods already provided by MRFI as the execution module(i.e. observer, selector, error_mode or quantization), 
+see all methods in [MRFI function table](function_table.md). 
+You can also customize new methods based on their interfaces. See [Custom Method/Arguments in MRFI](usage_custom.md).
 
 The last two lines indicate the layers that require fault injection. 
 MRFI will try to match all layers specified by `module_name` or `module_type` and set fault injection above.
@@ -64,7 +65,6 @@ you can also load a custom EasyConfig yaml from python string by `EasyConfig.loa
 or modify EasyConfig object by python code directly before create a MRFI object.
 
 See [EasyConfig Usage](usage_easyconfig.md) to learn more usage and special rules of EasyConfig,
-
 
 ### Observing variables
 

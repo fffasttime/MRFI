@@ -16,7 +16,7 @@ def parse_module(name, argparser = None):
             if doc is None:
                 doc='\n'
 
-            link = f'/{name}/#mrfi.{name}.{k}'
+            link = f'../{name}/#mrfi.{name}.{k}'
             arg_str = argparser(v) if argparser else ''
             print(f"|[`{k}`]({link})|{doc.splitlines()[0]}|{arg_str}|")
     print('\n')

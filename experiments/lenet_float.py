@@ -7,7 +7,7 @@ econfig = EasyConfig.load_file('easyconfigs/default_fi.yaml')
 econfig.faultinject[0]['error_mode']['method'] = 'IntRandomBitFlip'
 fi_model = MRFI(Net(trained=True), econfig)
 
-selector_cfg = fi_model.get_configs('', 'activation.0.selector', False)
+selector_cfg = fi_model.get_activation_configs('selector')
 
 BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, make_testloader(1000, batch_size = 128), logspace_density(-6, -3, 3))
 
@@ -17,8 +17,8 @@ plt.plot(BER, Acc)
 econfig = EasyConfig.load_file('easyconfigs/float_fi.yaml')
 fi_model = MRFI(Net(trained=True), econfig)
 
-selector_cfg = fi_model.get_configs('', 'activation.0.selector', False)
-error_mode_cfg = fi_model.get_configs('', 'activation.0.error_mode.args', False)
+selector_cfg = fi_model.get_activation_configs('selector')
+error_mode_cfg = fi_model.get_activation_configs('error_mode.args')
 
 error_mode_cfg.floattype = 'float16'
 BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, make_testloader(1000, batch_size = 128), logspace_density(-6, -3, 3))

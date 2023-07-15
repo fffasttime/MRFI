@@ -12,8 +12,8 @@ econfig.faultinject[0]['error_mode']['floattype'] = 'float16'
 econfig.faultinject[0]['error_mode']['bit'] = 31
 fi_model = MRFI(resnet18(pretrained = True).cuda().eval(), econfig)
 
-selector_cfg = fi_model.get_configs('activation.0.selector')
-errormode_cfg = fi_model.get_configs('activation.0.error_mode.args')
+selector_cfg = fi_model.get_activation_configs('selector')
+errormode_cfg = fi_model.get_activation_configs('error_mode.args')
 
 batch_size = 128
 n_images = 10000

@@ -43,7 +43,8 @@ def add_function(name: str, function_object: Callable[..., Any]) -> None:
         function_object: A callable object consists with implementions of observers, quantization, selector, error_mode.
     Examples:
         >>> mrfi.add_function('my_empty_selector', lambda shape: [])
-        Then you can use this empty selector by setting selector.method to 'my_empty_selector' in .yaml config file.
+        Then you can use this empty selector by setting selector.method \n
+        to 'my_empty_selector' in .yaml config file.
     """
     named_functions[name] = function_object
 
@@ -628,13 +629,16 @@ class MRFI:
                 result.append(fi_config)
         return result
     
-    def get_activation_configs(self, fi_configname: str = None, strict: bool = False, activation_id: int = 0, out: bool = False, **kwargs: dict):
+    def get_activation_configs(self, fi_configname: str = None, strict: bool = False, activation_id: int = 0, is_out: bool = False, **kwargs: dict):
         """A convenient function of `get_configs` to get activation config.
 
-        Equivalent to call `get_configs('activation.0.{fi_configname}')` or `get_configs('activation_out.0.{fi_configname}').`
+        Equivalent to call `get_configs('activation.0.{fi_configname}')` or `get_configs('activation_out.0.{fi_configname}').` when activation_id=0.
+
+        If first parameter `fi_configname` is not specified, 
+        return the root nodes of FI_CONFIG, usually used for  setting`enabled`.
         """
         fi_configname = '' if fi_configname is None else '.' + fi_configname
-        if out:
+        if is_out:
             return self.get_configs('activation_out.' + str(activation_id) + fi_configname, strict, **kwargs)
         else:
             return self.get_configs('activation.' + str(activation_id) + fi_configname, strict, **kwargs)
@@ -642,7 +646,10 @@ class MRFI:
     def get_weights_configs(self, fi_configname: str = None, strict: bool = False, weight_id: int = 0, **kwargs: dict):
         """A convenient function of `get_configs` to get weights config.
 
-        Equivalent to call `get_configs('weights.0.{fi_configname}')`
+        Equivalent to call `get_configs('weights.0.{fi_configname}')` when weight_id=0.
+        
+        If first parameter `fi_configname` is not specified, 
+        return the root nodes of FI_CONFIG, usually used for  setting`enabled`.
         """
         fi_configname = '' if fi_configname is None else '.' + fi_configname
         return self.get_configs('weights.' + str(weight_id) + fi_configname, strict, **kwargs)

@@ -9,10 +9,14 @@ nav:
   - usage_easyconfig.md
   - usage_finegrained.md
   - usage_advanced.md
+  - usage_custom.md
   - function_table.md
 - Examples:
   - basic_observe.md
   - basic_faultinjection.md
+  - example_layerwise.md
+  - example_datatype.md
+  - example_channel_pixel.md
   - example_yolov8.md
 - Documents:
   - mrfi.md

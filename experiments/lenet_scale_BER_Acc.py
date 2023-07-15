@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 econfig = EasyConfig.load_file('easyconfigs/default_fi.yaml')
 fi_model = MRFI(Net(trained=True), econfig)
 
-selector_cfg = fi_model.get_configs('', 'activation.0.selector', False)
-quantization_args = fi_model.get_configs('', 'activation.0.quantization.args', False)
+selector_cfg = fi_model.get_activation_configs('selector')
+quantization_args = fi_model.get_activation_configs('quantization.args')
 
 print(selector_cfg, quantization_args)
 legend = []

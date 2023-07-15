@@ -153,4 +153,4 @@ We can also set a block with 4 layers in ResNet18 with different injection rate.
 
 By this way, we can set a batch of any other configuration(e.g. scale factor of quantization), too.
 
-See more about how to these two functions in [`MRFI.get_configs()`](/mrfi/#mrfi.mrfi.MRFI.get_configs).
+See more about how to these two functions in [`MRFI.get_configs()`](../mrfi/#mrfi.mrfi.MRFI.get_configs).

@@ -30,8 +30,8 @@ faultinject:
 """
 
 fi_model = MRFI(resnet18(pretrained = True).cuda().eval(), EasyConfig.load_string(config))
-selector_cfg = fi_model.get_activation_configs('selector', out=True)
-activation_cfg = fi_model.get_activation_configs(out=True)
+selector_cfg = fi_model.get_activation_configs('selector', is_out=True)
+activation_cfg = fi_model.get_activation_configs(is_out=True)
 
 activation_cfg.enabled = False
 

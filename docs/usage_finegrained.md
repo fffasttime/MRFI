@@ -1,6 +1,6 @@
 # Fine-grained config
 
-A [config tree](/mrfi/#mrfi.mrfi.ConfigTree) has recursion structure:
+A [config tree](../mrfi/#mrfi.mrfi.ConfigTree) has recursion structure:
 
     MODULE
         FI_LIST (e.g. activation_in, weights)

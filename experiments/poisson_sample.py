@@ -1,3 +1,4 @@
+'''Compare speed of poisson_sample'''
 from dataset.imagenet import make_testloader
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import BER_Acc_experiment, logspace_density, Acc_golden
@@ -10,8 +11,8 @@ econfig = EasyConfig.load_file('easyconfigs/float_fi.yaml')
 econfig.faultinject[0]['error_mode']={'method':'FloatFixBitFlip', 'floattype':'float32', 'bit':30}
 fi_model = MRFI(resnet18(pretrained = True).cuda().eval(), econfig)
 
-selector_cfg = fi_model.get_configs('activation.0.selector')
-errormode_cfg = fi_model.get_configs('activation.0.error_mode.args')
+selector_cfg = fi_model.get_activation_configs('selector')
+errormode_cfg = fi_model.get_activation_configs('error_mode.args')
 
 batch_size = 128
 n_images = 10000
@@ -67,7 +68,7 @@ econfig.faultinject[0]['selector'] = {'method': 'RandomPositionByRate_classic', 
 
 fi_model = MRFI(resnet18(pretrained = True).cuda().eval(), econfig)
 
-selector_cfg = fi_model.get_configs('activation.0.selector')
+selector_cfg = fi_model.get_activation_configs('selector')
 
 start_time = time.time()
 BER, Acc_GT = BER_Acc_experiment(fi_model, selector_cfg, fake_testloader, [1e-7])

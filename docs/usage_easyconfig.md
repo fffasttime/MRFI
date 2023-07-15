@@ -57,7 +57,7 @@ Each fault injector definition(level 3) can have following properties:
 |name|value|description|
 |-|-|-|
 |type|one of `"activation_in"`,`"activation_out"` or `"weight"`|Which place will the fault injection to be performed. Set `activation` stands for `activation_in`.|
-|enabled|optional, default is True|Enable this fault injection by default.|
+|enabled|optional, default is `True`|Enable this fault injection by default.|
 |quantization|`Dict`of properties|Optional. If not specified, Will not make quantization.|
 |selector|`Dict`of properties|Optional. If not specified, all tensor values will be selected, which may be slow for large tensors.|
 |error_mode|`Dict`of properties||
@@ -87,9 +87,9 @@ Default is `after`.
 
 The "module_name", "module_type", "module_fullname" field have the same meaning as injector properties.
 
-## Class EasyConfig
+## Python Class EasyConfig
 
-EasyConfig is an editable Dict-like object in Python.
+[Class EasyConfig](../mrfi/#mrfi.mrfi.EasyConfig) is an editable dict-like object in Python.
 That means you can modify it before give it to MRFI for expanding.
 
 The following code modify a default EasyConfig without change a YAML file.

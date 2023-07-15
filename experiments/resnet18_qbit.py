@@ -11,8 +11,8 @@ econfig.set_error_mode(0, {'method':'IntFixedBitFlip', 'bit':16, 'bit_width': 17
 econfig.set_quantization(0, {'integer_bit':4, 'decimal_bit':12}, True)
 fi_model = MRFI(resnet18(pretrained = True).cuda().eval(), econfig)
 
-selector_cfg = fi_model.get_configs('activation.0.selector')
-errormode_cfg = fi_model.get_configs('activation.0.error_mode.args')
+selector_cfg = fi_model.get_activation_configs('selector')
+errormode_cfg = fi_model.get_activation_configs('error_mode.args')
 
 batch_size = 128
 n_images = 10000

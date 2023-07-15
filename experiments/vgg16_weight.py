@@ -12,14 +12,14 @@ range = logspace_density(-9, -3)
 econfig = EasyConfig.load_file('easyconfigs/float_weight_fi.yaml')
 fi_model = MRFI(vgg16(pretrained = True).cuda().eval(), econfig)
 print('golden_Acc', Acc_golden(fi_model, make_testloader(n_images, batch_size = batch_size)))
-selector_cfg = fi_model.get_configs('weights.0.selector')
+selector_cfg = fi_model.get_weights_configs('selector')
 BER, fl32 = BER_Acc_experiment(fi_model, selector_cfg, make_testloader(n_images, batch_size = batch_size), range, bit_width=32)
 
 econfig = EasyConfig.load_file('easyconfigs/weight_fi.yaml')
 econfig.faultinject[0]['error_mode']['method'] = 'IntRandomBitFlip'
 econfig.faultinject[0]['quantization']['scale_factor'] = 2
 fi_model = MRFI(vgg16(pretrained = True).cuda().eval(), econfig)
-selector_cfg = fi_model.get_configs('weights.0.selector')
+selector_cfg = fi_model.get_weights_configs('selector')
 BER, Qlw = BER_Acc_experiment(fi_model, selector_cfg, make_testloader(n_images, batch_size = batch_size), range)
 
 
@@ -28,9 +28,9 @@ del econfig.faultinject[0]['module_name']
 econfig.faultinject[0]['module_type'] = ['Conv2d', 'Linear']
 fi_model = MRFI(vgg16(pretrained = True).cuda().eval(), econfig)
 
-selector_cfg = fi_model.get_configs('weights.0.selector')
-quantization_cfg = fi_model.get_configs('weights.0.quantization.args')
-errormode_cfg = fi_model.get_configs('weights.0.error_mode.args')
+selector_cfg = fi_model.get_weights_configs('selector')
+quantization_cfg = fi_model.get_weights_configs('quantization.args')
+errormode_cfg = fi_model.get_weights_configs('error_mode.args')
 
 print(get_weight_info(fi_model, weight_name=['weight', 'bias']))
 

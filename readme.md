@@ -13,20 +13,20 @@ Multi-Resolution Fault Injector is a **powerful** neural network fault injector 
 
 Compared with previous network-level fault injection frameworks, the biggest feature is that MRFI can flexibly adjust different injection configurations for different experimental needs. 
 Injection config and observations on each layer can be set **independently** by one clear config file. 
-MRFI also provides a large number of commonly used error injection methods and error models, and allows customization.
+MRFI also provides a large number of commonly used fault injection methods and error models, and allows customization.
 In preliminary experiments, we may not want to face complex experimental configurations. MRFI also provide simple API for course-grained fault injection experiment.
 
 Read detail usage on [MRFI Documents >>](https://fffasttime.github.io/MRFI/)
 
 ![Overview Pic](/docs/assets/overviewpic.png)
 
-Fault injection is a classic method for studying reliability. 
+Fault injection is an important classic method for studying reliability. 
 This is crucial for the design and deployment of neural networks for security critical applications.
-The low-level hardware based error injection methods are time-consuming, 
+The low-level hardware based fault injection methods are time-consuming, 
 while the high-level network model based methods usually neglect details.
-MRFI is designed to be an efficient and highly configurable multi-resolution network-level fault injection tool.
+Therefore, MRFI is designed to be an efficient and highly configurable multi-resolution network-level fault injection tool.
 
-Learn more from our [paper of MRFI on Arxiv](https://arxiv.org/pdf/2306.11758.pdf). For other level fault injection tool, see also [MR-Neural-Network-Reliability-Analysis-Toolbox](https://github.com/fffasttime/MR-Neural-Network-Reliability-Analysis-Toolbox).
+Learn more from our [paper of MRFI on Arxiv](https://arxiv.org/pdf/2306.11758.pdf). For other level fault injection tool, see also [Neural-Network-Reliability-Analysis-Toolbox](https://github.com/fffasttime/Neural-Network-Reliability-Analysis-Toolbox).
 
 ## Basic Example
 
@@ -79,6 +79,10 @@ faultinject:
     module_name: [conv, fc] # Match layers that contain these name
     module_type: [Conv2d, Linear] # Or match layers contain these typename
 ```
+
+For detail usage, see [MRFI Doc - Usage](https://fffasttime.github.io/MRFI/usage/).
+
+Explore MRFI internal functions in [MRFI Doc - function table](https://fffasttime.github.io/MRFI/function_table/).
 
 ## Supported Features
 
@@ -136,7 +140,6 @@ faultinject:
 - [ ] More fault tolerance method may be support later (e.g. fault tolerant retrain, range-based filter)
 
 
-
 ## Developing
 
 Code in `mrfi/` are tested to ensure correctness. Test case are under `test/`.
@@ -158,3 +161,8 @@ mkdocs build
 mkdocs serve
 mkdocs gh-deploy
 ```
+
+### Bug Report
+
+I tried to conduct thorough testing for MRFI, but due to the many features, there may still be potential issues. 
+If you find a problem, please provide sufficient code and configuration in the issue to analyze the cause, or submit a pull request to fix the problem.

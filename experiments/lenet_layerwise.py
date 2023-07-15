@@ -3,7 +3,7 @@ from dataset.lenet_cifar import testset, Net
 from mrfi import MRFI, EasyConfig
 import sys
 
-configfilename = 'default_fi'
+configfilename = 'weight_fi'
 if len(sys.argv)>1:
     configfilename = sys.argv[1]
 
@@ -19,12 +19,11 @@ else:
 # method 1
 testloader = torch.utils.data.DataLoader(testset, batch_size=8, shuffle=False)
 
-acc_golden, acc_fi = 0, 0
-
-cfg = fi_model.get_configs('', 'weights.0.selector', False)
+cfg = fi_model.get_weights_configs()
 print(cfg)
 
-for i in range(5):
+for i in range(5): # eac
+    acc_golden, acc_fi = 0, 0
     cfg.enabled = False
     cfg[i].enabled = True
     fi_model.observers_reset()

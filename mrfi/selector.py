@@ -185,7 +185,9 @@ def _get_pos_with_mask(shape, n, dimmasks, inverse = True):
 def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     """Select n positions after specifed dimensions are masked.
     
-    For a 2-d tensor, it is equivalent to selecting on a submatrix
+    Use a list to indicate which values on a certain dimension are not selected.
+
+    For a 2-D tensor, it is equivalent to selecting on a submatrix
     where some rows and cols are masked.
 
     Tip:
@@ -201,15 +203,15 @@ def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     Args:
         n (int): number of position to select.
         **kwargs:
-            instance `list[int]`: dim = 0\n
-            channel `list[int]`: dim = 1\n
-            height `list[int]`: dim = 2\n
-            width `list[int]`: dim = 3\n
-            out_channel `list[int]`: dim = 0\n
-            in_channel `list[int]`: dim = 1\n
-            out `list[int]`: dim = 0\n
-            in `list[int]`: dim = 1\n
-            neuron `list[int]`: dim = 1
+            instance(dim = 0), type `list[int]`\n
+            channel(dim = 1), type  `list[int]`\n
+            height(dim = 2), type  `list[int]`\n
+            width(dim = 3), type  `list[int]`\n
+            out_channel(dim = 0), type  `list[int]`\n
+            in_channel(dim = 1), type  `list[int]`\n
+            out(dim = 0), type  `list[int]`\n
+            in(dim = 1), type  `list[int]`\n
+            neuron(dim = 1), type  `list[int]`
     """
     dimmasks = _get_mask_kwargs(shape, kwargs)
     return _get_pos_with_mask(shape, n, dimmasks)
@@ -217,7 +219,8 @@ def MaskedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
 def SelectedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
     """Select n positions on selected coordinate.
 
-    For argument list, please refer `MaskedDimRandomPositionByNumber`.\n
+    For argument list, please refer 
+    [`MaskedDimRandomPositionByNumber`](#mrfi.selector.MaskedDimRandomPositionByNumber).\n
     Note if one dimension selection list is not specified, 
     it stands for all of this dimension are possible selected.
     """
@@ -227,7 +230,8 @@ def SelectedDimRandomPositionByNumber(shape, n: int = 1, **kwargs: dict):
 def MaskedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs: dict):
     """Select by rate where some coordinate are masked.
 
-    For argument list, please refer `MaskedDimRandomPositionByNumber`.
+    For argument list, please refer 
+    [`MaskedDimRandomPositionByNumber`](#mrfi.selector.MaskedDimRandomPositionByNumber).
     """
     rate = float(rate)
     if _check_rate_zero(rate): return []
@@ -241,7 +245,8 @@ def MaskedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kw
 def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **kwargs: dict):
     """Select on some coordinate by rate.
 
-    For argument list, please refer `MaskedDimRandomPositionByNumber`.\n
+    For argument list, please refer 
+    [`MaskedDimRandomPositionByNumber`](#mrfi.selector.MaskedDimRandomPositionByNumber).\n
     Note if one dimension selection list is not specified, 
     it stands for all of this dimension are possible selected.
     """
@@ -256,12 +261,14 @@ def SelectedDimRandomPositionByRate(shape, rate: float, poisson: bool = True, **
 
 
 def FixedPixelByNumber(shape, n: int, pixel: Union[int, tuple], per_instance: bool = False):
-    """Select random channel on one fixed pixel (i.e. H * W dimension).
+    """Select n random channel on one fixed pixel.
+
+    Pixel is on H * W dimension.
 
     Args:
         n: number of positions
         pixel: An 2-d coordinate tuple specified target pixel
-        per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0).
+        per_instance: if `True`, perform n inject on per instance (i.e. ignore dim 0)
     """
     if len(shape) != 4:
         raise ValueError('FixedPixelByNumber requires 4-D feature map')
