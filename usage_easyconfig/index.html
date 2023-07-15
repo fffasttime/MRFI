@@ -348,11 +348,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#class-easyconfig" class="md-nav__link">
-    Class EasyConfig
+  <a href="#python-class-easyconfig" class="md-nav__link">
+    Python Class EasyConfig
   </a>
   
-    <nav class="md-nav" aria-label="Class EasyConfig">
+    <nav class="md-nav" aria-label="Python Class EasyConfig">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -394,6 +394,13 @@
           <li class="md-nav__item">
   <a href="#mrfi.mrfi.EasyConfig.load_string" class="md-nav__link">
     load_string()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_preset" class="md-nav__link">
+    load_preset()
   </a>
   
 </li>
@@ -479,6 +486,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../usage_custom/" class="md-nav__link">
+        Custom method/arguments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../function_table/" class="md-nav__link">
         MRFI function table
       </a>
@@ -546,6 +567,48 @@
     <li class="md-nav__item">
       <a href="../basic_faultinjection/" class="md-nav__link">
         Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_layerwise/" class="md-nav__link">
+        Layerwise experiment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_datatype/" class="md-nav__link">
+        Datatype/bit experiemt
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_channel_pixel/" class="md-nav__link">
+        Channel/Pixel experiment
       </a>
     </li>
   
@@ -761,11 +824,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#class-easyconfig" class="md-nav__link">
-    Class EasyConfig
+  <a href="#python-class-easyconfig" class="md-nav__link">
+    Python Class EasyConfig
   </a>
   
-    <nav class="md-nav" aria-label="Class EasyConfig">
+    <nav class="md-nav" aria-label="Python Class EasyConfig">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -807,6 +870,13 @@
           <li class="md-nav__item">
   <a href="#mrfi.mrfi.EasyConfig.load_string" class="md-nav__link">
     load_string()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_preset" class="md-nav__link">
+    load_preset()
   </a>
   
 </li>
@@ -930,7 +1000,7 @@ See <a href="https://yaml.org">yaml.org</a>.</p>
 </tr>
 <tr>
 <td>enabled</td>
-<td>optional, default is True</td>
+<td>optional, default is <code>True</code></td>
 <td>Enable this fault injection by default.</td>
 </tr>
 <tr>
@@ -984,8 +1054,8 @@ If set to False, only the positions selected by selector will be quantized.</p>
 This indicates whether MRFI observes values from the input or output of the layer.
 Default is <code>after</code>.</p>
 <p>The "module_name", "module_type", "module_fullname" field have the same meaning as injector properties.</p>
-<h2 id="class-easyconfig">Class EasyConfig<a class="headerlink" href="#class-easyconfig" title="Permanent link">&para;</a></h2>
-<p>EasyConfig is an editable Dict-like object in Python.
+<h2 id="python-class-easyconfig">Python Class EasyConfig<a class="headerlink" href="#python-class-easyconfig" title="Permanent link">&para;</a></h2>
+<p><a href="../mrfi/#mrfi.mrfi.EasyConfig">Class EasyConfig</a> is an editable dict-like object in Python.
 That means you can modify it before give it to MRFI for expanding.</p>
 <p>The following code modify a default EasyConfig without change a YAML file.</p>
 <div class="highlight"><pre><span></span><code><span class="n">econfig</span> <span class="o">=</span> <span class="n">EasyConfig</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;easyconfigs/default_fi.yaml&#39;</span><span class="p">)</span>
@@ -1020,6 +1090,32 @@ That means you can modify it before give it to MRFI for expanding.</p>
 
   
 
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>config</code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[dict]</code>
+          </td>
+          <td><p>if <code>dict</code>, load the dict config.</p>
+<p>if <code>None</code>, make a empty EasyConfig.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
 
   
@@ -1121,6 +1217,27 @@ That means you can modify it before give it to MRFI for expanding.</p>
   </span>
 
 <a href="#mrfi.mrfi.EasyConfig.load_string" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.load_preset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_preset</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#mrfi.mrfi.EasyConfig.load_preset" class="headerlink" title="Permanent link">&para;</a></h4>
 
 
   <div class="doc doc-contents ">

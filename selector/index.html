@@ -313,6 +313,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../usage_custom/" class="md-nav__link">
+        Custom method/arguments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../function_table/" class="md-nav__link">
         MRFI function table
       </a>
@@ -380,6 +394,48 @@
     <li class="md-nav__item">
       <a href="../basic_faultinjection/" class="md-nav__link">
         Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_layerwise/" class="md-nav__link">
+        Layerwise experiment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_datatype/" class="md-nav__link">
+        Datatype/bit experiemt
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_channel_pixel/" class="md-nav__link">
+        Channel/Pixel experiment
       </a>
     </li>
   
@@ -1067,7 +1123,8 @@ it needs to be additionally divided by the bit width.</p>
   <div class="doc doc-contents ">
   
       <p>Select n positions after specifed dimensions are masked.</p>
-<p>For a 2-d tensor, it is equivalent to selecting on a submatrix
+<p>Use a list to indicate which values on a certain dimension are not selected.</p>
+<p>For a 2-D tensor, it is equivalent to selecting on a submatrix
 where some rows and cols are masked.</p>
 
 <details class="tip" open>
@@ -1120,15 +1177,15 @@ including instance-wise, channel-wise and spatial-wise.</p>
           <td>
                 <code>dict</code>
           </td>
-          <td><p>instance <code>list[int]</code>: dim = 0</p>
-<p>channel <code>list[int]</code>: dim = 1</p>
-<p>height <code>list[int]</code>: dim = 2</p>
-<p>width <code>list[int]</code>: dim = 3</p>
-<p>out_channel <code>list[int]</code>: dim = 0</p>
-<p>in_channel <code>list[int]</code>: dim = 1</p>
-<p>out <code>list[int]</code>: dim = 0</p>
-<p>in <code>list[int]</code>: dim = 1</p>
-<p>neuron <code>list[int]</code>: dim = 1</p></td>
+          <td><p>instance(dim = 0), type <code>list[int]</code></p>
+<p>channel(dim = 1), type  <code>list[int]</code></p>
+<p>height(dim = 2), type  <code>list[int]</code></p>
+<p>width(dim = 3), type  <code>list[int]</code></p>
+<p>out_channel(dim = 0), type  <code>list[int]</code></p>
+<p>in_channel(dim = 1), type  <code>list[int]</code></p>
+<p>out(dim = 0), type  <code>list[int]</code></p>
+<p>in(dim = 1), type  <code>list[int]</code></p>
+<p>neuron(dim = 1), type  <code>list[int]</code></p></td>
           <td>
                 <code>{}</code>
           </td>
@@ -1153,7 +1210,8 @@ including instance-wise, channel-wise and spatial-wise.</p>
   <div class="doc doc-contents ">
   
       <p>Select n positions on selected coordinate.</p>
-<p>For argument list, please refer <code>MaskedDimRandomPositionByNumber</code>.</p>
+<p>For argument list, please refer 
+<a href="#mrfi.selector.SelectedDimRandomPositionByNumber--mrfi.selector.MaskedDimRandomPositionByNumber"><code>MaskedDimRandomPositionByNumber</code></a>.</p>
 <p>Note if one dimension selection list is not specified, 
 it stands for all of this dimension are possible selected.</p>
 
@@ -1174,7 +1232,8 @@ it stands for all of this dimension are possible selected.</p>
   <div class="doc doc-contents ">
   
       <p>Select by rate where some coordinate are masked.</p>
-<p>For argument list, please refer <code>MaskedDimRandomPositionByNumber</code>.</p>
+<p>For argument list, please refer 
+<a href="#mrfi.selector.MaskedDimRandomPositionByRate--mrfi.selector.MaskedDimRandomPositionByNumber"><code>MaskedDimRandomPositionByNumber</code></a>.</p>
 
   </div>
 
@@ -1193,7 +1252,8 @@ it stands for all of this dimension are possible selected.</p>
   <div class="doc doc-contents ">
   
       <p>Select on some coordinate by rate.</p>
-<p>For argument list, please refer <code>MaskedDimRandomPositionByNumber</code>.</p>
+<p>For argument list, please refer 
+<a href="#mrfi.selector.SelectedDimRandomPositionByRate--mrfi.selector.MaskedDimRandomPositionByNumber"><code>MaskedDimRandomPositionByNumber</code></a>.</p>
 <p>Note if one dimension selection list is not specified, 
 it stands for all of this dimension are possible selected.</p>
 
@@ -1213,7 +1273,8 @@ it stands for all of this dimension are possible selected.</p>
 
   <div class="doc doc-contents ">
   
-      <p>Select random channel on one fixed pixel (i.e. H * W dimension).</p>
+      <p>Select n random channel on one fixed pixel.</p>
+<p>Pixel is on H * W dimension.</p>
 
   <p><strong>Parameters:</strong></p>
   <table>
@@ -1251,7 +1312,7 @@ it stands for all of this dimension are possible selected.</p>
           <td>
                 <code>bool</code>
           </td>
-          <td><p>if <code>True</code>, perform n inject on per instance (i.e. ignore dim 0).</p></td>
+          <td><p>if <code>True</code>, perform n inject on per instance (i.e. ignore dim 0)</p></td>
           <td>
                 <code>False</code>
           </td>

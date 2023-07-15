@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../basic_observe/">
+        <link rel="prev" href="../example_datatype/">
       
       
-        <link rel="next" href="../example_layerwise/">
+        <link rel="next" href="../example_yolov8/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
     
     
       
-        <title>Fault injection on LeNet - MRFI documention</title>
+        <title>Channel/Pixel experiment - MRFI documention</title>
       
     
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fault-injection-on-lenet" class="md-skip">
+        <a href="#channelpixel-experiment" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Fault injection on LeNet
+              Channel/Pixel experiment
             
           </span>
         </div>
@@ -392,52 +392,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Fault injection on LeNet
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../basic_faultinjection/" class="md-nav__link">
         Fault injection on LeNet
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#a-coarse-grained-configuation-fault-inject-experiment" class="md-nav__link">
-    A coarse-grained configuation fault inject experiment
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -475,11 +434,59 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../example_channel_pixel/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Channel/Pixel experiment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Channel/Pixel experiment
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#channelwise-injection" class="md-nav__link">
+    Channelwise injection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pixelwise-injection" class="md-nav__link">
+    Pixelwise injection
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -653,8 +660,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#a-coarse-grained-configuation-fault-inject-experiment" class="md-nav__link">
-    A coarse-grained configuation fault inject experiment
+  <a href="#channelwise-injection" class="md-nav__link">
+    Channelwise injection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pixelwise-injection" class="md-nav__link">
+    Pixelwise injection
   </a>
   
 </li>
@@ -677,38 +691,97 @@
   
 
 
-<h1 id="fault-injection-on-lenet">Fault injection on LeNet<a class="headerlink" href="#fault-injection-on-lenet" title="Permanent link">&para;</a></h1>
-<h2 id="a-coarse-grained-configuation-fault-inject-experiment">A coarse-grained configuation fault inject experiment<a class="headerlink" href="#a-coarse-grained-configuation-fault-inject-experiment" title="Permanent link">&para;</a></h2>
-<p>For example, the following code perform a quantized random integer bit flip injection on LeNet.</p>
-<div class="highlight"><span class="filename">Setup LeNet default fault injection</span><pre><span></span><code><span class="kn">from</span> <span class="nn">dataset.lenet_cifar</span> <span class="kn">import</span> <span class="n">make_testloader</span><span class="p">,</span> <span class="n">LeNet</span>
-<span class="kn">from</span> <span class="nn">mrfi</span> <span class="kn">import</span> <span class="n">MRFI</span><span class="p">,</span> <span class="n">EasyConfig</span>
-<span class="kn">from</span> <span class="nn">mrfi.experiment</span> <span class="kn">import</span> <span class="n">Acc_experiment</span><span class="p">,</span> <span class="n">Acc_golden</span><span class="p">,</span> <span class="n">BER_Acc_experiment</span>
+<h1 id="channelpixel-experiment">Channel/Pixel experiment<a class="headerlink" href="#channelpixel-experiment" title="Permanent link">&para;</a></h1>
+<p>The following code segments conduct channelwise and pixelwise injection on VGGNet-11.
+The selector method used are <code>SelectedDimRandomPositionByNumber</code> and <code>FixedPixelByNumber</code>.</p>
+<p>We select some layers for experimet and conduct experiment along all channel/pixel, 
+so this will be a bit time-consuming.</p>
+<p>The visualized result can be seen in our paper.</p>
+<h2 id="channelwise-injection">Channelwise injection<a class="headerlink" href="#channelwise-injection" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">econfig</span> <span class="o">=</span> <span class="n">EasyConfig</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;easyconfigs/default_fi.yaml&#39;</span><span class="p">)</span>
+<span class="n">econfig</span><span class="o">.</span><span class="n">set_module_used</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Conv&#39;</span><span class="p">)</span>
+<span class="n">econfig</span><span class="o">.</span><span class="n">set_selector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span><span class="s1">&#39;SelectedDimRandomPositionByNumber&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="n">batch_size</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]})</span>
 
-<span class="n">testloader</span> <span class="o">=</span> <span class="n">make_testloader</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span> <span class="c1"># test on 1000 cifar-10 images</span>
-
-<span class="c1"># Create fault inject model</span>
-<span class="n">fi_model</span> <span class="o">=</span> <span class="n">MRFI</span><span class="p">(</span><span class="n">LeNet</span><span class="p">(</span><span class="n">trained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">(),</span> 
-                <span class="n">EasyConfig</span><span class="o">.</span><span class="n">load_preset</span><span class="p">(</span><span class="s1">&#39;default_fi&#39;</span><span class="p">))</span>
-
-<span class="c1"># fi_model can be used as regular PyTorch model</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">fi_model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><span class="filename">Simple fault injection acccuracy experiment</span><pre><span></span><code><span class="c1"># Test accuracy under fault injection with select rate = 1e-3,</span>
-<span class="c1">#  which specified in &quot;easyconfigs/default_fi&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;FI Acc: &#39;</span><span class="p">,</span> <span class="n">Acc_experiment</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">))</span>
-
-<span class="c1"># Test accuracy w/o fault inject</span>
-<span class="k">with</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">golden_run</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;golden run Acc: &#39;</span><span class="p">,</span> <span class="n">Acc_experiment</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">))</span>
-<span class="c1"># Another way to get golden run accuracy </span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;golden run Acc: &#39;</span><span class="p">,</span> <span class="n">Acc_golden</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">))</span>
-</code></pre></div>
-<p>Find the relation between bit error rate (BER) and classification accuracy.</p>
-<div class="highlight"><span class="filename">BER_Acc_experiment</span><pre><span></span><code><span class="c1"># Get selector handler because BER_Acc_experiment needs to modify selection rate in experiment</span>
+<span class="n">fi_model</span> <span class="o">=</span> <span class="n">MRFI</span><span class="p">(</span><span class="n">vgg11</span><span class="p">(</span><span class="n">pretrained</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span><span class="o">.</span><span class="n">eval</span><span class="p">(),</span> <span class="n">econfig</span><span class="p">)</span>
 <span class="n">selector_cfg</span> <span class="o">=</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">get_activation_configs</span><span class="p">(</span><span class="s1">&#39;selector&#39;</span><span class="p">)</span>
-<span class="n">BER</span><span class="p">,</span> <span class="n">Acc</span> <span class="o">=</span> <span class="n">BER_Acc_experiment</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">selector_cfg</span><span class="p">,</span> 
-                              <span class="n">make_testloader</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">),</span> 
-                              <span class="p">[</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">])</span>
+<span class="n">action_cfg</span> <span class="o">=</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">get_activation_configs</span><span class="p">()</span>
+
+<span class="n">action_cfg</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">shapes</span> <span class="o">=</span> <span class="n">get_activation_info</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">make_testloader</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Shape&#39;</span><span class="p">,</span> <span class="n">module_type</span> <span class="o">=</span> <span class="s1">&#39;Conv&#39;</span><span class="p">,</span> <span class="n">pre_hook</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span>
+<span class="n">shapes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">shapes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">action_cfg</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">action_cfg</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">channels</span> <span class="o">=</span> <span class="n">shapes</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">rmses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">channels</span><span class="p">,))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+        <span class="n">selector_cfg</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">rmse</span> <span class="o">=</span> <span class="n">observeFI_experiment_plus</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">make_testloader</span><span class="p">(</span><span class="n">n_images</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">),</span> <span class="n">module_fullname</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">rmse</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rmse</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+        <span class="n">rmses</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmse</span>
+
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;conv</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">layer</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmses</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="s1">&#39;result/vgg11_channelwise.npz&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">results</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="pixelwise-injection">Pixelwise injection<a class="headerlink" href="#pixelwise-injection" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">config</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">faultinject:</span>
+<span class="s2">  - type: activation_out</span>
+<span class="s2">    quantization:</span>
+<span class="s2">      method: SymmericQuantization</span>
+<span class="s2">      dynamic_range: auto</span>
+<span class="s2">      bit_width: 16</span>
+<span class="s2">    enabled: True</span>
+<span class="s2">    selector:</span>
+<span class="s2">      method: FixedPixelByNumber</span>
+<span class="s2">      pixel: (0,0)</span>
+<span class="s2">      n: 10</span>
+<span class="s2">      per_instance: True</span>
+<span class="s2">    error_mode:</span>
+<span class="s2">      method: IntSignBitFlip</span>
+<span class="s2">      bit_width: 16</span>
+
+<span class="s2">    module_name: features</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">fi_model</span> <span class="o">=</span> <span class="n">MRFI</span><span class="p">(</span><span class="n">vgg11</span><span class="p">(</span><span class="n">pretrained</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span><span class="o">.</span><span class="n">eval</span><span class="p">(),</span> <span class="n">EasyConfig</span><span class="o">.</span><span class="n">load_string</span><span class="p">(</span><span class="n">config</span><span class="p">))</span>
+<span class="n">selector_cfg</span> <span class="o">=</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">get_activation_configs</span><span class="p">(</span><span class="s1">&#39;selector&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">activation_cfg</span> <span class="o">=</span> <span class="n">fi_model</span><span class="o">.</span><span class="n">get_activation_configs</span><span class="p">(</span><span class="n">is_out</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">activation_cfg</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">shapes</span> <span class="o">=</span> <span class="n">get_activation_info</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">make_testloader</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Shape&#39;</span><span class="p">,</span> <span class="n">module_type</span> <span class="o">=</span> <span class="s1">&#39;Conv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shapes</span><span class="p">)</span>
+<span class="n">shapes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">shapes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+    <span class="n">activation_cfg</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">activation_cfg</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">shapes</span><span class="p">[</span><span class="n">layer</span><span class="p">])</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="n">shapes</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">shapes</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">rmses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pixels</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pixels</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+          <span class="n">selector_cfg</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">pixel</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+          <span class="n">rmse</span> <span class="o">=</span> <span class="n">observeFI_experiment_plus</span><span class="p">(</span><span class="n">fi_model</span><span class="p">,</span> <span class="n">make_testloader</span><span class="p">(</span><span class="n">n_images</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span><span class="p">),</span> <span class="n">module_fullname</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+          <span class="n">rmse</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rmse</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+          <span class="n">rmses</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmse</span>
+
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;conv</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">layer</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmses</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="s1">&#39;result/vgg11_pixelwise_o.npz&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">results</span><span class="p">)</span>
 </code></pre></div>
 
 

@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../usage_advanced/">
+        <link rel="prev" href="../usage_custom/">
       
       
         <link rel="next" href="../basic_observe/">
@@ -313,6 +313,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../usage_custom/" class="md-nav__link">
+        Custom method/arguments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -451,6 +465,48 @@
     <li class="md-nav__item">
       <a href="../basic_faultinjection/" class="md-nav__link">
         Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_layerwise/" class="md-nav__link">
+        Layerwise experiment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_datatype/" class="md-nav__link">
+        Datatype/bit experiemt
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_channel_pixel/" class="md-nav__link">
+        Channel/Pixel experiment
       </a>
     </li>
   
@@ -689,49 +745,49 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.logspace_density"><code>logspace_density</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.logspace_density"><code>logspace_density</code></a></td>
 <td>Similar as np.logspace but the datapoint always contains <span class="arithmatex"><span class="MathJax_Preview">10^{-n}</span><script type="math/tex">10^{-n}</script></span></td>
-<td><code>low</code>,<code>high</code>,<code>density</code></td>
+<td><code>low</code>,<code>high</code>,<code>density</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.Acc_experiment"><code>Acc_experiment</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.Acc_experiment"><code>Acc_experiment</code></a></td>
 <td>Return classification accuracy on dataset.</td>
-<td><code>model</code>,<code>dataloader</code></td>
+<td><code>model</code>,<code>dataloader</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.observeFI_experiment"><code>observeFI_experiment</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.observeFI_experiment"><code>observeFI_experiment</code></a></td>
 <td>Run fault inject experiment and return internal oberver results.</td>
-<td><code>fi_model</code>,<code>input_data</code>,<code>use_golden</code>,<code>observers_dict</code></td>
+<td><code>fi_model</code>,<code>input_data</code>,<code>use_golden</code>,<code>observers_dict</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.BER_Acc_experiment"><code>BER_Acc_experiment</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.BER_Acc_experiment"><code>BER_Acc_experiment</code></a></td>
 <td>Conduct a series of experimet under different bit error rate and get accuracy.</td>
-<td><code>fi_model</code>,<code>fi_selectors</code>,<code>dataloader</code>,<code>BER_range</code>,<code>bit_width</code></td>
+<td><code>fi_model</code>,<code>fi_selectors</code>,<code>dataloader</code>,<code>BER_range</code>,<code>bit_width</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.BER_observe_experiment"><code>BER_observe_experiment</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.BER_observe_experiment"><code>BER_observe_experiment</code></a></td>
 <td>Conduct a series of experimet under different bit error rate and get all observers result.</td>
-<td><code>fi_model</code>,<code>fi_selectors</code>,<code>dataloader</code>,<code>BER_range</code>,<code>bit_width</code>,<code>use_golden</code></td>
+<td><code>fi_model</code>,<code>fi_selectors</code>,<code>dataloader</code>,<code>BER_range</code>,<code>bit_width</code>,<code>use_golden</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.Acc_golden"><code>Acc_golden</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.Acc_golden"><code>Acc_golden</code></a></td>
 <td>Evaluate model accuracy without error injection.</td>
-<td><code>fi_model</code>,<code>dataloader</code>,<code>disable_quantization</code></td>
+<td><code>fi_model</code>,<code>dataloader</code>,<code>disable_quantization</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.observeFI_experiment_plus"><code>observeFI_experiment_plus</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.observeFI_experiment_plus"><code>observeFI_experiment_plus</code></a></td>
 <td>Run fault injection experiment and observe its internal effect.</td>
-<td><code>fi_model</code>,<code>input_data</code>,<code>method</code>,<code>pre_hook</code>,<code>kwargs</code></td>
+<td><code>fi_model</code>,<code>input_data</code>,<code>method</code>,<code>pre_hook</code>,<code>kwargs</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.get_activation_info"><code>get_activation_info</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.get_activation_info"><code>get_activation_info</code></a></td>
 <td>Observe model activations without fault injection.</td>
-<td><code>fi_model</code>,<code>input_data</code>,<code>method</code>,<code>pre_hook</code>,<code>kwargs</code></td>
+<td><code>fi_model</code>,<code>input_data</code>,<code>method</code>,<code>pre_hook</code>,<code>kwargs</code>,<code>return</code></td>
 </tr>
 <tr>
-<td><a href="/experiment/#mrfi.experiment.get_weight_info"><code>get_weight_info</code></a></td>
+<td><a href="../experiment/#mrfi.experiment.get_weight_info"><code>get_weight_info</code></a></td>
 <td>Observe model weights.</td>
-<td><code>model</code>,<code>method</code>,<code>weight_name</code>,<code>kwargs</code></td>
+<td><code>model</code>,<code>method</code>,<code>weight_name</code>,<code>kwargs</code>,<code>return</code></td>
 </tr>
 </tbody>
 </table>
@@ -746,57 +802,57 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="/observer/#mrfi.observer.BaseObserver"><code>BaseObserver</code></a></td>
+<td><a href="../observer/#mrfi.observer.BaseObserver"><code>BaseObserver</code></a></td>
 <td>Basement of observers.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.MinMax"><code>MinMax</code></a></td>
+<td><a href="../observer/#mrfi.observer.MinMax"><code>MinMax</code></a></td>
 <td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Observe min/max range of tensors.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.RMSE"><code>RMSE</code></a></td>
+<td><a href="../observer/#mrfi.observer.RMSE"><code>RMSE</code></a></td>
 <td><img alt="🛠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f6e0.svg" title=":hammer_and_wrench:" /> Root Mean Square Error metric between golden run and fault inject run.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.SaveLast"><code>SaveLast</code></a></td>
-<td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Simply save last inference internal tensor. This will be helpful when visualize NN feature maps.</td>
+<td><a href="../observer/#mrfi.observer.SaveLast"><code>SaveLast</code></a></td>
+<td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Simply save last inference internal tensor.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.MaxAbs"><code>MaxAbs</code></a></td>
+<td><a href="../observer/#mrfi.observer.MaxAbs"><code>MaxAbs</code></a></td>
 <td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Observe max abs range of tensors.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.MeanAbs"><code>MeanAbs</code></a></td>
+<td><a href="../observer/#mrfi.observer.MeanAbs"><code>MeanAbs</code></a></td>
 <td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Mean of abs, a metric of scale of values</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.Std"><code>Std</code></a></td>
+<td><a href="../observer/#mrfi.observer.Std"><code>Std</code></a></td>
 <td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Standard deviation of zero-mean values.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.Shape"><code>Shape</code></a></td>
+<td><a href="../observer/#mrfi.observer.Shape"><code>Shape</code></a></td>
 <td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Simply record tensor shape of last inference</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.MAE"><code>MAE</code></a></td>
+<td><a href="../observer/#mrfi.observer.MAE"><code>MAE</code></a></td>
 <td><img alt="🛠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f6e0.svg" title=":hammer_and_wrench:" /> Mean Absolute Error between golden run and fault inject run.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.EqualRate"><code>EqualRate</code></a></td>
+<td><a href="../observer/#mrfi.observer.EqualRate"><code>EqualRate</code></a></td>
 <td><img alt="🛠️" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f6e0.svg" title=":hammer_and_wrench:" /> Compare how many value unchanged between golden run and fault inject run.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/observer/#mrfi.observer.UniformSampling"><code>UniformSampling</code></a></td>
+<td><a href="../observer/#mrfi.observer.UniformSampling"><code>UniformSampling</code></a></td>
 <td><img alt="🔍" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/svg/1f50d.svg" title=":mag:" /> Uniform sampling from tensors between all inference, up to 10000 samples.</td>
 <td></td>
 </tr>
@@ -813,58 +869,58 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="/selector/#mrfi.selector.EmptySelector"><code>EmptySelector</code></a></td>
+<td><a href="../selector/#mrfi.selector.EmptySelector"><code>EmptySelector</code></a></td>
 <td>No position selected by this, for debug or special use.</td>
 <td></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.FixPosition"><code>FixPosition</code></a></td>
+<td><a href="../selector/#mrfi.selector.FixPosition"><code>FixPosition</code></a></td>
 <td>Select fixed <em>one</em> position by coordinate.</td>
 <td><code>position</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.FixPositions"><code>FixPositions</code></a></td>
+<td><a href="../selector/#mrfi.selector.FixPositions"><code>FixPositions</code></a></td>
 <td>Select a list of fixed positions by coordinate.</td>
 <td><code>positions</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.RandomPositionByNumber"><code>RandomPositionByNumber</code></a></td>
+<td><a href="../selector/#mrfi.selector.RandomPositionByNumber"><code>RandomPositionByNumber</code></a></td>
 <td>Select n random positions.</td>
 <td><code>n</code>,<code>per_instance</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.RandomPositionByRate"><code>RandomPositionByRate</code></a></td>
+<td><a href="../selector/#mrfi.selector.RandomPositionByRate"><code>RandomPositionByRate</code></a></td>
 <td>Select random positions by rate.</td>
 <td><code>rate</code>,<code>poisson</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.RandomPositionByRate_classic"><code>RandomPositionByRate_classic</code></a></td>
+<td><a href="../selector/#mrfi.selector.RandomPositionByRate_classic"><code>RandomPositionByRate_classic</code></a></td>
 <td>Select random positions by rate.</td>
 <td><code>rate</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.MaskedDimRandomPositionByNumber"><code>MaskedDimRandomPositionByNumber</code></a></td>
+<td><a href="../selector/#mrfi.selector.MaskedDimRandomPositionByNumber"><code>MaskedDimRandomPositionByNumber</code></a></td>
 <td>Select n positions after specifed dimensions are masked.</td>
 <td><code>n</code>,<code>kwargs</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.SelectedDimRandomPositionByNumber"><code>SelectedDimRandomPositionByNumber</code></a></td>
+<td><a href="../selector/#mrfi.selector.SelectedDimRandomPositionByNumber"><code>SelectedDimRandomPositionByNumber</code></a></td>
 <td>Select n positions on selected coordinate.</td>
-<td><code>n</code></td>
+<td><code>n</code>,<code>kwargs</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.MaskedDimRandomPositionByRate"><code>MaskedDimRandomPositionByRate</code></a></td>
+<td><a href="../selector/#mrfi.selector.MaskedDimRandomPositionByRate"><code>MaskedDimRandomPositionByRate</code></a></td>
 <td>Select by rate where some coordinate are masked.</td>
-<td><code>rate</code>,<code>poisson</code></td>
+<td><code>rate</code>,<code>poisson</code>,<code>kwargs</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.SelectedDimRandomPositionByRate"><code>SelectedDimRandomPositionByRate</code></a></td>
+<td><a href="../selector/#mrfi.selector.SelectedDimRandomPositionByRate"><code>SelectedDimRandomPositionByRate</code></a></td>
 <td>Select on some coordinate by rate.</td>
-<td><code>rate</code>,<code>poisson</code></td>
+<td><code>rate</code>,<code>poisson</code>,<code>kwargs</code></td>
 </tr>
 <tr>
-<td><a href="/selector/#mrfi.selector.FixedPixelByNumber"><code>FixedPixelByNumber</code></a></td>
-<td>Select random channel on one fixed pixel(height x weight dimension).</td>
+<td><a href="../selector/#mrfi.selector.FixedPixelByNumber"><code>FixedPixelByNumber</code></a></td>
+<td>Select random channel on one fixed pixel (i.e. H * W dimension).</td>
 <td><code>n</code>,<code>pixel</code>,<code>per_instance</code></td>
 </tr>
 </tbody>
@@ -880,68 +936,68 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.IntSignBitFlip"><code>IntSignBitFlip</code></a></td>
+<td><a href="../error_mode/#mrfi.error_mode.IntSignBitFlip"><code>IntSignBitFlip</code></a></td>
 <td>Flip integer tensor on sign bit</td>
 <td><code>x_in</code>,<code>bit_width</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.IntRandomBitFlip"><code>IntRandomBitFlip</code></a></td>
+<td><a href="../error_mode/#mrfi.error_mode.IntRandomBitFlip"><code>IntRandomBitFlip</code></a></td>
 <td>Flip integer tensor on random bit</td>
 <td><code>x_in</code>,<code>bit_width</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.IntFixedBitFlip"><code>IntFixedBitFlip</code></a></td>
-<td>Flip integer tensor on a specified bit</td>
+<td><a href="../error_mode/#mrfi.error_mode.IntFixedBitFlip"><code>IntFixedBitFlip</code></a></td>
+<td>Flip integer tensor on specified bit</td>
 <td><code>x_in</code>,<code>bit_width</code>,<code>bit</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.SetZero"><code>SetZero</code></a></td>
+<td><a href="../error_mode/#mrfi.error_mode.SetZero"><code>SetZero</code></a></td>
 <td>Fault inject selected value to zero</td>
 <td><code>x</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.SetValue"><code>SetValue</code></a></td>
+<td><a href="../error_mode/#mrfi.error_mode.SetValue"><code>SetValue</code></a></td>
 <td>Fault inject value to specified value(s)</td>
 <td><code>x</code>,<code>value</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.FloatRandomBitFlip"><code>FloatRandomBitFlip</code></a></td>
+<td><a href="../error_mode/#mrfi.error_mode.FloatRandomBitFlip"><code>FloatRandomBitFlip</code></a></td>
 <td>Flip bit randomly on float values</td>
 <td><code>x_in</code>,<code>floattype</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.FloatFixedBitFlip"><code>FloatFixedBitFlip</code></a></td>
+<td><a href="../error_mode/#mrfi.error_mode.FloatFixedBitFlip"><code>FloatFixedBitFlip</code></a></td>
 <td>Flip specific bit on float values</td>
 <td><code>x_in</code>,<code>bit</code>,<code>floattype</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.IntRandom"><code>IntRandom</code></a></td>
-<td>Set fault injection value to integer in range <code>[low, high)</code> with uniform probability</td>
+<td><a href="../error_mode/#mrfi.error_mode.IntRandom"><code>IntRandom</code></a></td>
+<td>Uniformly set to random integer in range.</td>
 <td><code>low</code>,<code>high</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.IntRandomBit"><code>IntRandomBit</code></a></td>
-<td>Set fault injection value to random <code>bit_width</code>-bit integer</td>
+<td><a href="../error_mode/#mrfi.error_mode.IntRandomBit"><code>IntRandomBit</code></a></td>
+<td>Set fault value to a random <code>bit_width</code>-bit integer.</td>
 <td><code>bit_width</code>,<code>signed</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.UniformRandom"><code>UniformRandom</code></a></td>
-<td>Set fault injection value to float number in <code>[low, high]</code> with uniform probability</td>
+<td><a href="../error_mode/#mrfi.error_mode.UniformRandom"><code>UniformRandom</code></a></td>
+<td>Uniform set to float number in range.</td>
 <td><code>low</code>,<code>high</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.NormalRandom"><code>NormalRandom</code></a></td>
-<td>Set fault injection value to a normal distribution with specified <code>mean</code>, <code>std</code></td>
+<td><a href="../error_mode/#mrfi.error_mode.NormalRandom"><code>NormalRandom</code></a></td>
+<td>Set fault injection value to a normal distribution.</td>
 <td><code>mean</code>,<code>std</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.UniformDisturb"><code>UniformDisturb</code></a></td>
-<td>Add uniform distribution noise to current value</td>
+<td><a href="../error_mode/#mrfi.error_mode.UniformDisturb"><code>UniformDisturb</code></a></td>
+<td>Add uniform distribution noise to current value.</td>
 <td><code>low</code>,<code>high</code></td>
 </tr>
 <tr>
-<td><a href="/error_mode/#mrfi.error_mode.NormalDisturb"><code>NormalDisturb</code></a></td>
-<td>Add normal distribution noise to current value</td>
+<td><a href="../error_mode/#mrfi.error_mode.NormalDisturb"><code>NormalDisturb</code></a></td>
+<td>Add normal distribution noise to current value.</td>
 <td><code>std</code>,<code>bias</code></td>
 </tr>
 </tbody>
@@ -957,19 +1013,19 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="/quantization/#mrfi.quantization.SymmericQuantization"><code>SymmericQuantization</code></a></td>
+<td><a href="../quantization/#mrfi.quantization.SymmericQuantization"><code>SymmericQuantization</code></a></td>
 <td>Simple symmeric quantization.</td>
 <td><code>dynamic_range</code>,<code>scale_factor</code></td>
 </tr>
 <tr>
-<td><a href="/quantization/#mrfi.quantization.PositiveQuantization"><code>PositiveQuantization</code></a></td>
+<td><a href="../quantization/#mrfi.quantization.PositiveQuantization"><code>PositiveQuantization</code></a></td>
 <td>Simple positive quantization.</td>
 <td><code>dynamic_range</code>,<code>scale_factor</code></td>
 </tr>
 <tr>
-<td><a href="/quantization/#mrfi.quantization.FixPointQuantization"><code>FixPointQuantization</code></a></td>
+<td><a href="../quantization/#mrfi.quantization.FixPointQuantization"><code>FixPointQuantization</code></a></td>
 <td>Fixpoint quantization.</td>
-<td></td>
+<td><code>decimal_bit</code></td>
 </tr>
 </tbody>
 </table>

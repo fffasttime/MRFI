@@ -313,6 +313,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../usage_custom/" class="md-nav__link">
+        Custom method/arguments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../function_table/" class="md-nav__link">
         MRFI function table
       </a>
@@ -380,6 +394,48 @@
     <li class="md-nav__item">
       <a href="../basic_faultinjection/" class="md-nav__link">
         Fault injection on LeNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_layerwise/" class="md-nav__link">
+        Layerwise experiment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_datatype/" class="md-nav__link">
+        Datatype/bit experiemt
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example_channel_pixel/" class="md-nav__link">
+        Channel/Pixel experiment
       </a>
     </li>
   
@@ -496,6 +552,13 @@
           <li class="md-nav__item">
   <a href="#mrfi.mrfi.EasyConfig.load_string" class="md-nav__link">
     load_string()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_preset" class="md-nav__link">
+    load_preset()
   </a>
   
 </li>
@@ -797,6 +860,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#mrfi.mrfi.EasyConfig.load_preset" class="md-nav__link">
+    load_preset()
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1015,6 +1085,7 @@
 
   
       <p>EasyConfig object.</p>
+<p>Use classmethod <code>EasyConfig.load_[file|string|preset]()</code> to construct a EasyConfig.</p>
 
 <details class="properties" open>
   <summary>Properties</summary>
@@ -1023,6 +1094,33 @@
 <li><code>observe</code>: List of observers.</li>
 </ul>
 </details>
+  
+      <p>Load a dict-like configuration or a EasyConfig preset.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>config</code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[dict]</code>
+          </td>
+          <td><p>if <code>dict</code>, load the dict config.</p>
+<p>if <code>None</code>, make a empty EasyConfig.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
 
   
@@ -1076,6 +1174,28 @@
   <div class="doc doc-contents ">
   
       <p>Load EasyConfig from a yaml string.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="mrfi.mrfi.EasyConfig.load_preset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_preset</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#mrfi.mrfi.EasyConfig.load_preset" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load EasyConfig from presets.</p>
 
   </div>
 
@@ -1555,7 +1675,7 @@
 
 
 <h4 id="mrfi.mrfi.MRFI.get_activation_configs" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_activation_configs</span><span class="p">(</span><span class="n">fi_configname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">activation_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">get_activation_configs</span><span class="p">(</span><span class="n">fi_configname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">activation_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">is_out</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#mrfi.mrfi.MRFI.get_activation_configs" class="headerlink" title="Permanent link">&para;</a></h4>
 
@@ -1563,7 +1683,9 @@
   <div class="doc doc-contents ">
   
       <p>A convenient function of <code>get_configs</code> to get activation config.</p>
-<p>Equivalent to call <code>get_configs('activation.0.{fi_configname}')</code> or <code>get_configs('activation_out.0.{fi_configname}').</code></p>
+<p>Equivalent to call <code>get_configs('activation.0.{fi_configname}')</code> or <code>get_configs('activation_out.0.{fi_configname}').</code> when activation_id=0.</p>
+<p>If first parameter <code>fi_configname</code> is not specified, 
+return the root nodes of FI_CONFIG, usually used for  setting<code>enabled</code>.</p>
 
   </div>
 
@@ -1582,7 +1704,9 @@
   <div class="doc doc-contents ">
   
       <p>A convenient function of <code>get_configs</code> to get weights config.</p>
-<p>Equivalent to call <code>get_configs('weights.0.{fi_configname}')</code></p>
+<p>Equivalent to call <code>get_configs('weights.0.{fi_configname}')</code> when weight_id=0.</p>
+<p>If first parameter <code>fi_configname</code> is not specified, 
+return the root nodes of FI_CONFIG, usually used for  setting<code>enabled</code>.</p>
 
   </div>
 
@@ -1743,8 +1867,9 @@
 
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">mrfi</span><span class="o">.</span><span class="n">add_function</span><span class="p">(</span><span class="s1">&#39;my_empty_selector&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">shape</span><span class="p">:</span> <span class="p">[])</span>
-<span class="go">Then you can use this empty selector by setting selector.method to &#39;my_empty_selector&#39; in .yaml config file.</span>
+<span class="go">Then you can use this empty selector by setting selector.method </span>
 </code></pre></div>
+    <p>to 'my_empty_selector' in .yaml config file.</p>
 
   </div>
 
