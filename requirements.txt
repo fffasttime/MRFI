@@ -1,4 +1,4 @@
-torchvision>=0.11
+torchvision>=0.8
 numpy>=1.21
 PyYAML
 scipy

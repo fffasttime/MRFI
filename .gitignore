@@ -9,3 +9,5 @@ site
 .ipynb_checkpoints
 .coverage
 runs
+dist
+*.egg-info

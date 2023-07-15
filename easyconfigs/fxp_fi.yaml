@@ -13,5 +13,5 @@ faultinject:
       method: IntSignBitFlip
       bit_width: 16
 
-    module_name: conv
-    module_type: Conv2d
+    module_name: [conv, fc]
+    module_type: [Conv2d, Linear]

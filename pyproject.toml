@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "MRFI"
+authors = [{name="fffasttime", email="fffasttime@outlook.com"}]
+description = "A multi-resolution DNN fault injection tool"
+readme = "readme_pypi.md"
+license = {text = "MIT"}
+keywords = ["PyTorch","reliability","FaultInjection","FaultTolerance"]
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "torchvision>=0.8",
+    "numpy>=1.21",
+    "PyYAML",
+    "scipy",
+    "torch>=1.9",
+]
+version = "2.0.0"
+
+[tool.setuptools]
+packages = ["mrfi"]
+
+[project.urls]
+Homepage = "https://github.com/fffasttime/MRFI"
+Documentation = "https://fffasttime.github.io/MRFI"
+Repository = "https://github.com/fffasttime/MRFI.git"

@@ -1,13 +1,14 @@
 # Multi-Resolution Fault Injector
 
 <p dir="auto" align="center">
-<img src="docs/assets/logo_name.png" width=350)>
+<img src="docs/assets/logo_name.png" alt="MRFI Logo" width=350)>
 </p>
 
 ## MRFI Overview
 [![GitHub license](https://img.shields.io/github/license/fffasttime/MRFI)](https://github.com/fffasttime/MRFI/blob/master/LICENSE)
 [![Test](https://github.com/fffasttime/MRFI/actions/workflows/codecov.yml/badge.svg)](https://github.com/fffasttime/MRFI/actions/workflows/codecov.yml)
 [![Codecov](https://codecov.io/gh/fffasttime/MRFI/branch/main/graph/badge.svg)](https://codecov.io/gh/fffasttime/MRFI)
+[![PyPI](https://img.shields.io/pypi/v/MRFI)](https://pypi.org/project/MRFI/)
 
 Multi-Resolution Fault Injector is a **powerful** neural network fault injector tool based on PyTorch.
 
@@ -30,6 +31,17 @@ Learn more from our [paper of MRFI on Arxiv](https://arxiv.org/pdf/2306.11758.pd
 
 ## Basic Example
 
+### Install MRFI
+
+```bash
+# Install by pip
+pip install MRFI
+
+# Or download from github
+git clone https://github.com/fffasttime/MRFI.git
+pip install -r requirements.txt
+```
+
 ### A coarse-grained configuation fault inject experiment
 The following code perform a quantized random integer bit flip injection on LeNet, 
 and find the relation between bit error rate (BER) and classification accuracy.
@@ -42,22 +54,31 @@ from mrfi.experiment import Acc_experiment, Acc_golden, BER_Acc_experiment
 testloader = make_testloader(1000, batch_size = 128) # test on 1000 cifar-10 images
 
 # Create fault inject model
-fi_model = MRFI(network = LeNet(trained=True).eval(), 
-                EasyConfig.load_file('easyconfigs/default_fi.yaml'))
+fi_model = MRFI(LeNet(trained=True).eval(), 
+                EasyConfig.load_preset('default_fi'))
 
 ################### A Simple acccuracy experiment #####################
-# Test accuracy under fault injection with select rate = 1e-3 which specified in "default_fi.yaml"
-print('FI Acc: ', Acc_experiment(fi_model, dataloader))
+# Test accuracy under fault injection with select rate = 1e-3 which specified in "default_fi"
+print('FI Acc: ', Acc_experiment(fi_model, testloader))
 # Test accuracy w/o fault inject
 with fi_model.golden_run():
-    print('golden run Acc: ', Acc_experiment(fi_model, dataloader))
+    print('golden run Acc: ', Acc_experiment(fi_model, testloader))
 
 ######################## BER_Acc_experiment ###########################
 # Get selector handler because BER_Acc_experiment needs to modify selection rate in experiment
-selector_cfg = fi_model.get_configs('activation.0.selector')
-BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, testloader, [1e-6, 1e-5, 1e-4, 1e-3])
+selector_cfg = fi_model.get_activation_configs('selector')
+BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, 
+                              make_testloader(1000, batch_size = 128), 
+                              [1e-6, 1e-5, 1e-4, 1e-3])
 print('Bit error rate and accuracy: ', BER, Acc)
 ```
+
+A possible output should like is:
+> FI Acc:  0.597
+> 
+> golden run Acc:  0.638
+>
+> Bit error rate and accuracy:  [1.e-06 1.e-05 1.e-04 1.e-03] [0.637 0.624 0.539 0.247]
 
 The content of corresponding EasyConfig file `default_fi.yaml`:
 ```yaml

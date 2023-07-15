@@ -10,6 +10,7 @@ import yaml
 
 import torch
 from torch import nn
+from .easyconfig_presets import easyconfig_presets
 
 named_functions = {}
 
@@ -69,12 +70,20 @@ def _write_config(config: dict, filename: str) -> None:
 
 class EasyConfig:
     """EasyConfig object.
-    
+
+    Use classmethod `EasyConfig.load_[file|string|preset]()` to construct a EasyConfig.
+
     Properties:
         - `faultinject`: List of fault injectors.
         - `observe`: List of observers.
     """
     def __init__(self, config: Optional[dict] = None):
+        """Load a dict-like configuration or a EasyConfig preset.
+        Args:
+            config:
+                if `dict`, load the dict config.\n
+                if `None`, make a empty EasyConfig.
+        """
         if config is None: config = {}
         self.faultinject = config.get('faultinject', [])
         self.observe = config.get('observe', [])
@@ -92,6 +101,11 @@ class EasyConfig:
         """Load EasyConfig from a yaml string."""
         return cls(yaml.full_load(string))
     
+    @classmethod
+    def load_preset(cls, name: str):
+        """Load EasyConfig from presets."""
+        return cls(yaml.full_load(easyconfig_presets[name]))
+
     def set_quantization(self, idx: int, content_dict, update_only = False) -> None:
         if update_only:
             self.faultinject[idx]['quantization'].update(content_dict)

@@ -11,8 +11,8 @@ from mrfi.experiment import Acc_experiment, Acc_golden, BER_Acc_experiment
 testloader = make_testloader(1000, batch_size = 128) # test on 1000 cifar-10 images
 
 # Create fault inject model
-fi_model = MRFI(network = LeNet(trained=True).eval(), 
-                EasyConfig.load_file('easyconfigs/default_fi.yaml'))
+fi_model = MRFI(LeNet(trained=True).eval(), 
+                EasyConfig.load_preset('default_fi'))
 
 # fi_model can be used as regular PyTorch model
 print(fi_model(torch.zeros(1,3,32,32)).shape)
@@ -20,7 +20,7 @@ print(fi_model(torch.zeros(1,3,32,32)).shape)
 
 ```python title="Simple fault injection acccuracy experiment"
 # Test accuracy under fault injection with select rate = 1e-3,
-#  which specified in "easyconfigs/default_fi.yaml"
+#  which specified in "easyconfigs/default_fi"
 print('FI Acc: ', Acc_experiment(fi_model, dataloader))
 
 # Test accuracy w/o fault inject
@@ -34,7 +34,8 @@ Find the relation between bit error rate (BER) and classification accuracy.
 
 ```python title="BER_Acc_experiment"
 # Get selector handler because BER_Acc_experiment needs to modify selection rate in experiment
-selector_cfg = fi_model.get_configs('activation.0.selector')
-BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, testloader, [1e-6, 1e-5, 1e-4, 1e-3])
-print('Bit error rate and accuracy: ', BER, Acc)
+selector_cfg = fi_model.get_activation_configs('selector')
+BER, Acc = BER_Acc_experiment(fi_model, selector_cfg, 
+                              make_testloader(1000, batch_size = 128), 
+                              [1e-6, 1e-5, 1e-4, 1e-3])
 ```
