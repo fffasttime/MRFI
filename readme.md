@@ -73,7 +73,7 @@ BER, Acc = BER_Acc_experiment(fi_model, selector_cfg,
 print('Bit error rate and accuracy: ', BER, Acc)
 ```
 
-A possible output should like is:
+A possible output should like this:
 > FI Acc:  0.597
 > 
 > golden run Acc:  0.638

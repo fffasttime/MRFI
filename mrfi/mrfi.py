@@ -576,7 +576,7 @@ class MRFI:
 
             for i, name in enumerate(names):
                 if not hasattr(module, name):
-                    logging.warning('warning: no weight mode "%s" in current module, ignore', name)
+                    logging.warning('mrfi.__config_fi: no weight mode "%s" in current module, ignore', name)
                     continue
                 ficopy = copy.deepcopy(fi)
                 ficopy['name'] = name
@@ -641,6 +641,10 @@ class MRFI:
                 fi_config = fi_config[tname]
             else:
                 result.append(fi_config)
+
+        if named_modules and not result:
+            logging.warning('mrfi.get_configs: no ConfigTree node matched with current configname, please check\n current configname = %s', configname)
+
         return result
     
     def get_activation_configs(self, fi_configname: str = None, strict: bool = False, activation_id: int = 0, is_out: bool = False, **kwargs: dict):

@@ -6,14 +6,15 @@ As a starting point, you can give a **PyTorch model** (`torch.nn.Module` type) a
 
 ```python
 from mrfi import MRFI, EasyConfig
-from mymodel import Model  # custom model
-from torchvision.models import resnet18  # model from torchvision
+from mymodel import Model  # A custom model
+from torchvision.models import resnet18  # A model from torchvision
 
 fi_model = MRFI(Model(), EasyConfig.load_file('easyconfigs/default_fi.yaml'))
-fi_resnet18 = MRFI(resnet18(), EasyConfig.load_file('easyconfigs/default_fi.yaml'))
+fi_resnet18 = MRFI(resnet18(), EasyConfig.load_preset('default_fi'))
 ```
 
-Then, you can use `fi_model` as a regular PyTorch model for inference, and the output of model is affected by fault injection. 
+Then, you can use `fi_model` or `fi_resnet18` as a regular PyTorch model for inference, 
+and the output of model will be affected by fault injection. 
 More exactly, the hooks inserted by MRFI will conduct fault injection automatically according to the configuration in **EasyConfig**.
 
 To test accuracy of a classification model, you may write a loop to compare the outputs and labels. 
@@ -102,7 +103,7 @@ out_golden = fi_model(input_data)
 MRFI allows different error injection methods and parameters to be configured on each layer, as it has a tree like detailed configuration **ConfigTree** inside. 
 *In fact, when we created MRFI objects from EasyConfig earlier, the configuration was automatically copied to all matching layers and modules to create ConfigTree.*
 
-To execute different error injection parameters on different layers, one way is to write several injection configuration in **EasyConfig** and let MRFI to expand then to distinct layers.
+To execute different error injection parameters on different layers, one way is to write several injection configuration in **EasyConfig** and let MRFI to expand them to distinct layers.
 However, a more flexible approach is to directly modify **ConfigTree**. 
 
 It is possible to manually modify the ConfigTree YAML configuration file and then load it. 

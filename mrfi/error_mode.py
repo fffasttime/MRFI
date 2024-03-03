@@ -120,7 +120,8 @@ def _get_float_type(x_in, floattype = None):
     return bit_width, nptype, npinttype
 
 def FloatRandomBitFlip(x_in: torch.Tensor, 
-                       floattype: Optional[Union[np.float16, np.float32, np.float64]] = None):
+                       floattype: Optional[Union[np.float16, np.float32, np.float64]] = None,
+                       suppress_invalid: bool = False):
     """Flip bit randomly on float values
     
     Flip random bit when regards the values as IEEE-754 float type.
@@ -129,6 +130,9 @@ def FloatRandomBitFlip(x_in: torch.Tensor,
         floattype: 
             Should be one of "float16", "float32", "float64".
             if `None`, use the input tensor type, usually is "float32".
+        
+        suppress_invalid:
+            if `True`, set flipped inf/nan value to 0.
     """
     bit_width, nptype, npinttype = _get_float_type(x_in, floattype)
     bit = torch.randint_like(x_in, 0, bit_width)
@@ -142,11 +146,18 @@ def FloatRandomBitFlip(x_in: torch.Tensor,
     np_value ^= bitmask
     np_value.dtype = nptype
 
-    return torch.tensor(np_value, dtype=x_in.dtype, device=x_in.device)
+    res = torch.tensor(np_value, dtype=x_in.dtype, device=x_in.device)
+
+    if suppress_invalid:
+        res[torch.isnan(res)] = 0
+        res[torch.isinf(res)] = 0
+
+    return res
 
 def FloatFixedBitFlip(x_in: torch.Tensor, 
                     bit: Union[int, Sized], 
-                    floattype: Optional[Union[np.float16, np.float32, np.float64]] = None):
+                    floattype: Optional[Union[np.float16, np.float32, np.float64]] = None,
+                    suppress_invalid: bool = False):
     """Flip specific bit on float values
     
     Flip specified bit when regards the values as IEEE-754 float type.
@@ -161,6 +172,9 @@ def FloatFixedBitFlip(x_in: torch.Tensor,
         floattype: 
             Should be one of "float16", "float32", "float64".
             if `None`, use the input tensor type, usually is "float32".
+
+        suppress_invalid:
+            if `True`, set flipped inf/nan value to 0.
     """
     bit_width, nptype, npinttype = _get_float_type(x_in, floattype)
 
@@ -181,7 +195,13 @@ def FloatFixedBitFlip(x_in: torch.Tensor,
     np_value ^= bitmask
     np_value.dtype = nptype
 
-    return torch.tensor(np_value, dtype=x_in.dtype, device=x_in.device)
+    res = torch.tensor(np_value, dtype=x_in.dtype, device=x_in.device)
+
+    if suppress_invalid:
+        res[torch.isnan(res)] = 0
+        res[torch.isinf(res)] = 0
+
+    return res
 
 def IntRandom(x_in, low: int = 0, high: int = 128):
     """Uniformly set to random integer in range.

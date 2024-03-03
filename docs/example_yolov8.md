@@ -1,6 +1,6 @@
 # Object detection model inject
 
-MRFI can directly inject errors into a object detection model. We use [Ultralytics YOLOv8](https://docs.ultralytics.com/modes/val/) as an example.
+MRFI can directly inject errors into a object detection modxel. We use [Ultralytics YOLOv8](https://docs.u  ltralytics.com/modes/val/) as an example.
 
 YOLOv8n official model has 168 layers with complex structure.
 We test it on coco128 dataset with `default_fi.yaml` configuration.

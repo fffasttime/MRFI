@@ -5,7 +5,11 @@ from mrfi import MRFI, EasyConfig
 
 # Load a model
 model = YOLO('experiments/yolov8n.pt')  # load an official model
-fi_model = MRFI(model.model, EasyConfig.load_file('easyconfigs/default_fi.yaml')) # YOLO.model is real pytorch model
+econfig = EasyConfig.load_file('easyconfigs/default_fi.yaml')
+# econfig.faultinject[0]['error_mode']['method'] = 'IntRandomBitFlip'
+# econfig.faultinject[0]['quantization']['scale_factor'] = 1
+# econfig.faultinject[0]['selector']['rate'] = 1.6e-4
+fi_model = MRFI(model.model, econfig) # YOLO.model is real pytorch model
 # fi_model.save_config('detailconfigs/yolov8n_dt.yaml') # save detail config
 
 # Validate the model
