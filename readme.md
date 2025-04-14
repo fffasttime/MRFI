@@ -27,7 +27,7 @@ The low-level hardware based fault injection methods are time-consuming,
 while the high-level network model based methods usually neglect details.
 Therefore, MRFI is designed to be an efficient and highly configurable multi-resolution network-level fault injection tool.
 
-Learn more from our [paper of MRFI on Arxiv](https://arxiv.org/pdf/2306.11758.pdf). For other level fault injection tool, see also [Neural-Network-Reliability-Analysis-Toolbox](https://github.com/fffasttime/Neural-Network-Reliability-Analysis-Toolbox).
+Learn more from our [paper of MRFI on IEEE-TVLSI](https://ieeexplore.ieee.org/document/10494993) (DOI: 10.1109/TVLSI.2024.3384404). For other level fault injection tool, see also [Neural-Network-Reliability-Analysis-Toolbox](https://github.com/fffasttime/Neural-Network-Reliability-Analysis-Toolbox).
 
 ## Basic Example
 
@@ -187,3 +187,5 @@ mkdocs gh-deploy
 
 I tried to conduct thorough testing for MRFI, but due to the many features, there may still be potential issues. 
 If you find a problem, please provide sufficient code and configuration in the issue to analyze the cause, or submit a pull request to fix the problem.
+
+## 
