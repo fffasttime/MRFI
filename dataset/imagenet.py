@@ -17,6 +17,8 @@ tf=transforms.Compose([
 testset = None
 
 def get_testset(folder = '~/dataset/val'):
+    import os
+    folder = os.path.expanduser(folder)
     global testset
     if testset is None:
         testset = datasets.ImageFolder(folder, tf)

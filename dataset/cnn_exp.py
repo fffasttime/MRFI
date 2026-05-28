@@ -9,9 +9,16 @@ transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
  
-trainset = torchvision.datasets.CIFAR10(root='./_data', train=True,
+try:
+    import os
+    datapath = os.environ['DATASETS'] + '/cifar10'
+except Exception:
+    import os
+    datapath = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), '_data')
+
+trainset = torchvision.datasets.CIFAR10(root=datapath, train=True,
                                         download=False, transform=transform)
-testset = torchvision.datasets.CIFAR10(root='./_data', train=False,
+testset = torchvision.datasets.CIFAR10(root=datapath, train=False,
                                        download=False, transform=transform)
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -101,14 +108,18 @@ def train():
     
     print('Finished Training')
 
-    torch.save(net.state_dict(), 'cifar_vgg.pth')
+    import os
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    torch.save(net.state_dict(), os.path.join(dir_path, 'cifar_vgg.pth'))
 
 def test():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     net = Net()
     testloader = torch.utils.data.DataLoader(testset, batch_size=4,
                                             shuffle=False)
-    net.load_state_dict(torch.load('cifar_vgg.pth'))
+    import os
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    net.load_state_dict(torch.load(os.path.join(dir_path, 'cifar_vgg.pth')))
     net.eval()
 
     correct = 0
