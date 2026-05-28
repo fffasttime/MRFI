@@ -407,7 +407,10 @@ def _FI_weight(config, weight):
         modifier = named_functions[config.error_mode.method]
         modifier_args = config.error_mode.args.raw_dict
 
-        values = weight.view(-1)[error_list]
+        error_idx = error_list.to(weight.device)
+
+
+        values = weight.view(-1)[error_idx]
 
         if fi_quantization: 
             quantization_method.quantize(values, **quantization_args)
@@ -417,7 +420,7 @@ def _FI_weight(config, weight):
         if fi_quantization: 
             quantization_method.dequantize(fi_value, **quantization_args)
 
-        weight.view(-1)[error_list] = fi_value
+        weight.view(-1)[error_idx] = fi_value
 
     if layerwise_quantization:
         quantization_method.dequantize(weight, **quantization_args)
@@ -520,7 +523,19 @@ class MRFI:
         if isinstance(config, EasyConfig):
             self.config = self.__expand_config(config)
         elif isinstance(config, str):
-            self.config = ConfigTree(_read_config(config), self)
+            treedict = self.__empty_configtree(self.model)
+            user_config = _read_config(config)
+
+            def update_dict(d, u):
+                for k, v in u.items():
+                    if isinstance(v, dict) and isinstance(d.get(k, None), dict):
+                        update_dict(d[k], v)
+                    else:
+                        d[k] = v
+            
+            update_dict(treedict, user_config)
+            self.config = ConfigTree(treedict, self)
+            self.__add_moduleconfig(self.config, self.model)
         else:
             raise TypeError(config)
 
