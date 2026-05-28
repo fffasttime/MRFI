@@ -335,7 +335,9 @@ def _FI_activation(config, act):
         modifier = named_functions[config.error_mode.method]
         modifier_args = config.error_mode.args.raw_dict
 
-        values = act.view(-1)[error_list]
+        error_idx = error_list.to(act.device)
+
+        values = act.view(-1)[error_idx]
 
         if fi_quantization: 
             quantization_method.quantize(values, **quantization_args)
@@ -345,7 +347,7 @@ def _FI_activation(config, act):
         if fi_quantization: 
             quantization_method.dequantize(fi_value, **quantization_args)
 
-        act.view(-1)[error_list] = fi_value
+        act.view(-1)[error_idx] = fi_value
 
     if layerwise_quantization:
         quantization_method.dequantize(act, **quantization_args)
