@@ -14,7 +14,8 @@ try:
     import os
     datapath = os.environ['DATASETS'] + '/cifar10'
 except Exception:
-    datapath = './_data'
+    import os
+    datapath = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), '_data')
 
 trainset = torchvision.datasets.CIFAR10(root=datapath, train=True,
                                         download=True, transform=transform)
@@ -43,7 +44,9 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(120,84)
         self.fc3 = nn.Linear(84,10)
         if trained:
-            self.load_state_dict(torch.load('./dataset/lenet_cifar10.pth'))
+            import os
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            self.load_state_dict(torch.load(os.path.join(dir_path, 'lenet_cifar10.pth')))
 
     def forward(self,x):
         x = F.max_pool2d(F.relu(self.conv1(x)),(2,2))
@@ -90,13 +93,17 @@ def train():
     
     print('Finished Training')
 
-    torch.save(net.state_dict(), 'cifar10.pth')
+    import os
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    torch.save(net.state_dict(), os.path.join(dir_path, 'cifar10.pth'))
 
 def test():
     net=Net()
     testloader = torch.utils.data.DataLoader(testset, batch_size=4,
                                             shuffle=False)
-    net.load_state_dict(torch.load('cifar10.pth'))
+    import os
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    net.load_state_dict(torch.load(os.path.join(dir_path, 'cifar10.pth')))
     net.eval()
 
     correct = 0

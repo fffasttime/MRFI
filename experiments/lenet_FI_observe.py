@@ -1,4 +1,4 @@
-from dataset.lenet_cifar import make_testloader, LeNet
+from mrfi_dataset.lenet_cifar import make_testloader, LeNet
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import observeFI_experiment, observeFI_experiment_plus
 import matplotlib.pyplot as plt

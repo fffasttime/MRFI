@@ -1,5 +1,5 @@
 
-from dataset.imagenet import make_testloader
+from mrfi_dataset.imagenet import make_testloader
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import get_activation_info, observeFI_experiment_plus, Acc_experiment
 from torchvision.models import vgg11

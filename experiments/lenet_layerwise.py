@@ -1,5 +1,5 @@
 import torch
-from dataset.lenet_cifar import testset, Net
+from mrfi_dataset.lenet_cifar import testset, Net
 from mrfi import MRFI, EasyConfig
 import sys
 

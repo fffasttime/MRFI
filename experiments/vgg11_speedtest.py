@@ -1,5 +1,5 @@
 
-from dataset.imagenet import make_testloader
+from mrfi_dataset.imagenet import make_testloader
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import Acc_experiment, Acc_golden
 from torchvision.models import vgg11

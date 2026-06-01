@@ -1,4 +1,4 @@
-from dataset.lenet_cifar import make_testloader, Net
+from mrfi_dataset.lenet_cifar import make_testloader, Net
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import BER_Acc_experiment, logspace_density
 import matplotlib.pyplot as plt
