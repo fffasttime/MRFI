@@ -3,7 +3,7 @@ from pprint import pprint
 import matplotlib.pyplot as plt
 import torch
 
-from dataset.lenet_cifar import LeNet, make_testloader
+from mrfi_dataset.lenet_cifar import LeNet, make_testloader
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import get_activation_info, get_weight_info
 

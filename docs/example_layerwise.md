@@ -9,7 +9,7 @@ Additionally, if the GPU is available, the following code automatically uses CUD
 
 ```python
 import torch
-from dataset.lenet_cifar import testset, Net
+from mrfi_dataset.lenet_cifar import testset, Net
 from mrfi import MRFI, EasyConfig
 import sys
 

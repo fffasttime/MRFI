@@ -1,4 +1,4 @@
-from dataset.lenet_cifar import make_testloader, LeNet, testset
+from mrfi_dataset.lenet_cifar import make_testloader, LeNet, testset
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import get_activation_info, observeFI_experiment_plus, Acc_golden, Acc_experiment
 import matplotlib.pyplot as plt

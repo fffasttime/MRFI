@@ -4,7 +4,7 @@
 For example, the following code perform a quantized random integer bit flip injection on LeNet.
 
 ```python title="Setup LeNet default fault injection"
-from dataset.lenet_cifar import make_testloader, LeNet
+from mrfi_dataset.lenet_cifar import make_testloader, LeNet
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import Acc_experiment, Acc_golden, BER_Acc_experiment
 

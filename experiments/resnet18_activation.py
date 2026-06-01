@@ -1,7 +1,7 @@
 '''
 Conduct BER_Acc experiemnt on resnet18 with different datatype.
 '''
-from dataset.imagenet import make_testloader
+from mrfi_dataset.imagenet import make_testloader
 from mrfi import MRFI, EasyConfig
 from mrfi.experiment import BER_Acc_experiment, logspace_density, Acc_golden, get_activation_info
 from torchvision.models import resnet18

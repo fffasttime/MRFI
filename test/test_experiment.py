@@ -3,7 +3,7 @@ import sys
 sys.path.append('.')
 from mrfi import experiment
 import torch
-from dataset.lenet_cifar import make_testloader, Net
+from mrfi_dataset.lenet_cifar import make_testloader, Net
 from mrfi import MRFI, EasyConfig
 
 def test_00():

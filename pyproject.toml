@@ -25,7 +25,7 @@ dependencies = [
 version = "2.1.0"
 
 [tool.setuptools]
-packages = ["mrfi", "dataset"]
+packages = ["mrfi", "mrfi_dataset"]
 
 [project.urls]
 Homepage = "https://github.com/fffasttime/MRFI"
