@@ -335,7 +335,7 @@ def _FI_activation(config, act):
         modifier = named_functions[config.error_mode.method]
         modifier_args = config.error_mode.args.raw_dict
 
-        error_idx = error_list.to(act.device)
+        error_idx = error_list.to(act.device) if isinstance(error_list, torch.Tensor) else error_list
 
         values = act.view(-1)[error_idx]
 
@@ -407,8 +407,7 @@ def _FI_weight(config, weight):
         modifier = named_functions[config.error_mode.method]
         modifier_args = config.error_mode.args.raw_dict
 
-        error_idx = error_list.to(weight.device)
-
+        error_idx = error_list.to(weight.device) if isinstance(error_list, torch.Tensor) else error_list
 
         values = weight.view(-1)[error_idx]
 
