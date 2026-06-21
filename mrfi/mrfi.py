@@ -517,6 +517,8 @@ class MRFI:
     """MRFI core object, a wrapper of network module."""
     def __init__(self, model: nn.Module, config: Union[str, EasyConfig]) -> None:   
         self.model = model
+        self._hook_handles = []
+        self._closed = False
         assert not hasattr(model, 'FI_config'), 'This model instance is used twice for MRFI, please create a new.'
 
         if isinstance(config, EasyConfig):
@@ -544,8 +546,27 @@ class MRFI:
 
     def __add_hooks(self):
         for _, module in self.model.named_modules():
-            module.register_forward_pre_hook(lambda mod, input: _pre_hook_func(mod.FI_config, mod, input))
-            module.register_forward_hook(lambda mod, input, output: _after_hook_func(mod.FI_config, mod, input, output))
+            self._hook_handles.append(
+                module.register_forward_pre_hook(lambda mod, input: _pre_hook_func(mod.FI_config, mod, input))
+            )
+            self._hook_handles.append(
+                module.register_forward_hook(lambda mod, input, output: _after_hook_func(mod.FI_config, mod, input, output))
+            )
+
+    def remove_hooks(self):
+        """Remove all PyTorch hooks registered by this MRFI wrapper."""
+        while self._hook_handles:
+            self._hook_handles.pop().remove()
+
+    def close(self):
+        """Remove MRFI instrumentation from the wrapped model."""
+        if self._closed:
+            return
+        self.remove_hooks()
+        for module in self.model.modules():
+            if hasattr(module, 'FI_config'):
+                delattr(module, 'FI_config')
+        self._closed = True
 
     def __empty_configtree(self, module: torch.nn.Module):
         curdict = {
